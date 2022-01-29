@@ -8,26 +8,26 @@ The idea is to create multiple types of bingo games and share a game with indivi
   1. Updates ?
 
 # Use Cases
-Anonymous: Visit the site and see options/overview
-Anonymous: Signup / Signin
+* Anonymous: Visit the site and see options/overview
+* Anonymous: Signup / Signin
 
-A user can update their board with a 'completion'
-A user can have an alias / profile
-A user can list games they are members of
+* A user can update their board with a 'completion'
+* A user can have an alias / profile
+* A user can list games they are members of
 
-A board has a randomly selected options from the category
+* A board has a randomly selected options from the category
 
-The admin, selects a board size
-The admin, invites anonymous (not registered users)
+* The admin, selects a board size
+* The admin, invites anonymous (not registered users)
   * This may be a backend workflow which doesn't care. It either adds an existing user or sends an invitation
-The admin, adds players (consider security rammifications of revealing information)
-The admin can view all boards
-The admin can find users or do they have to know e-mail addresses?
+* The admin, adds players (consider security rammifications of revealing information)
+* The admin can view all boards
+* The admin can find users or do they have to know e-mail addresses?
 
-Players can view their board
-Players can send a link to their board
-Players can view others boards?
-Players can see updates to the game feed (assume no secret states)
+* Players can view their board
+* Players can send a link to their board
+* Players can view others boards?
+* Players can see updates to the game feed (assume no secret states)
 
 
 # Goals
