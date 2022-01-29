@@ -17,15 +17,12 @@ export const user = readable(auth.user(), (set) => {
 });
 
 // TODO: it'd be useful to generate types/interfaces from tables
-export const games = {
+export const objectives = {
 	async all() {
-		const { data, error } = await supabase.from('games').select();
-		if (error) throw new Error(error.message);
-		return data;
-	},
-	async insert(game) {
-		const { data, error } = await supabase.from('games').insert([game]);
-		if (error) throw new Error(error.message);
+		const { data, error } = await supabase.from('objectives').select();
+		if (error) {
+			throw new Error(error.message);
+		}
 		return data;
 	}
 };

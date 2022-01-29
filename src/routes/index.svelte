@@ -3,8 +3,8 @@
 
 	export async function load() {
 		try {
-			const games = await db.games.all();
-			return { props: { games } };
+			const objectives = await db.objectives.all();
+			return { props: { objectives } };
 		} catch (error) {
 			return { error };
 		}
@@ -14,13 +14,13 @@
 <script lang="ts">
 	import { auth, user } from '$lib/db';
 
-	export let games;
+	export let objectives;
 
-	let newGame = { title: '' };
+	let newObjective = { label: '' };
 
 	async function onSubmit() {
 		try {
-			await db.games.insert(newGame);
+			await db.objectives.insert(newObjective);
 		} catch (error) {
 			console.error(error);
 		}
@@ -37,16 +37,16 @@
 		</nav>
 	{/if}
 
-	<h1>My Favorite Games</h1>
+	<h1>My Favorite Objectives</h1>
 
 	<ul>
-		{#each games as game}
-			<li>{game.title}</li>
+		{#each objectives as objective}
+			<li>{objective.label}</li>
 		{/each}
 	</ul>
 
 	<form on:submit|preventDefault={onSubmit}>
-		<input type="text" bind:value={newGame.title} />
+		<input type="text" bind:value={newObjective.label} />
 		<button>Submit</button>
 	</form>
 </main>
