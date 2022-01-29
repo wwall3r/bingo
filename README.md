@@ -1,5 +1,46 @@
+# Vision
+The idea is to create multiple types of bingo games and share a game with individuals.
+
+1. Different categories of bingo
+  1. Enumerate all the different options in that category
+  1. Generate a board from those options
+1. Shared games ?
+  1. Updates ?
+
+# Use Cases
+Anonymous: Visit the site and see options/overview
+Anonymous: Signup / Signin
+
+A user can update their board with a 'completion'
+A user can have an alias / profile
+A user can list games they are members of
+
+A board has a randomly selected options from the category
+
+The admin, selects a board size
+The admin, invites anonymous (not registered users)
+  * This may be a backend workflow which doesn't care. It either adds an existing user or sends an invitation
+The admin, adds players (consider security rammifications of revealing information)
+The admin can view all boards
+The admin can find users or do they have to know e-mail addresses?
+
+Players can view their board
+Players can send a link to their board
+Players can view others boards?
+Players can see updates to the game feed (assume no secret states)
+
+
 # Goals
 1. Write an example that exercises the features in supabase.io
+
+# Tasks/Next Steps
+
+
+# Questions
+1. How are migrations handled?
+2. How are updates shared? A restart of a local development instance had all the data go away.
+3. Native psql connection? This is listed in the docs.
+
 
 # create-svelte
 
