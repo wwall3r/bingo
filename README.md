@@ -8,27 +8,41 @@ The idea is to create multiple types of bingo games and share a game with indivi
   1. Updates ?
 
 # Use Cases
-Anonymous: Visit the site and see options/overview
-Anonymous: Signup / Signin
 
-A user can update their board with a 'completion'
-A user can have an alias / profile
-A user can list games they are members of
+## Roles
+* anon: An unauthenticated user
+* player: An authenticated user
+* director: manages a game instance.
+* admin: a bingo maintainer and administrator with full control of all APIs and data
 
-A board has a randomly selected options from the category
+anon: Visit the site and see options/overview
+anon: Signup / Signin
 
-The admin, selects a board size
-The admin, invites anonymous (not registered users)
-  * This may be a backend workflow which doesn't care. It either adds an existing user or sends an invitation
-The admin, adds players (consider security rammifications of revealing information)
-The admin can view all boards
-The admin can find users or do they have to know e-mail addresses?
+The admin, can disable players
+The admin, can approve/CRUD a category
+The admin, can approve/CRUD objectives to a category
 
-Players can view their board
+A director, creates a game instance
+A director, selects a board size
+A director, selects the category and filters objectives appropriate for the game instance
+A director, invites players or anonymous
+  * This may be a backend workflow which doesn't care. It either adds an existing player or sends an invitation
+  * consider security rammifications of revealing information)
+  * can find players or do they have to know e-mail addresses?
+A director can view all board instances for their game instances
+A director can promote players to directors for a game instance
+
+Players can have an alias / profile
+Players can view their board instances
 Players can send a link to their board
-Players can view others boards?
+Players can view others boards in a game instance
 Players can see updates to the game feed (assume no secret states)
+Players can proposes categories and objectives 
+Players can update their board with a 'completion' of an objective
+Players can list games they are members of
 
+# Concepts
+1. Categories are just tags on objectives. This allow reuse of objectives.
 
 # Goals
 1. Write an example that exercises the features in supabase.io
