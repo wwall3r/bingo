@@ -27,7 +27,7 @@
 * id
 * user_id
 * game_id
-* 1**objectives
+* 1**n objectives
 * completed_date
 * created_date
 * updated_date
@@ -37,5 +37,6 @@
 * game_id
 * user_id
 * message
+* created_at
 
 A board has a randomly selected options from the category
