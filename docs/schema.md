@@ -1,4 +1,4 @@
-### objective
+### objectives
 * id
 * display_name
 * description
