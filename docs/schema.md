@@ -1,43 +1,36 @@
-objective
-  uuid
-  display_name
-  description
-  1**n tags
-  created_date
-  updated_date
+### objective
+* id
+* display_name
+* description
+* 1**n tags
+* created_date
+* updated_date
 
-game_instance
-  uuid
-  display_name
-  description
-  board_size
-  1**n directors_player_uuid
-  1**n board_instances
-  1**n objectives
-  1**n game_feed
-  expiration_date
-  completed_date
-  created_date
-  updated_date
-  
-board_instance
-  uuid
-  uuid_player
-  uuid_game_instance
-  1**objectives
-  created_date
-  updated_date
+### tags
+* id
+* label
 
-profile
-  uuid
-  display_name
-  description
-  avatar
-  created_date
-  updated_date
+### games
+* id
+* display_name
+* description
+* board_size
+* 1**n users
+* 1**n boards
+* 1**n objectives
+* 1**n feed
+* expiration_date
+* created_date
+* updated_date
 
-
-
+### boards
+* id
+* user_id
+* game_id
+* 1**objectives
+* completed_date
+* created_date
+* updated_date
 
 
 A board has a randomly selected options from the category
