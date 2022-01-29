@@ -32,5 +32,10 @@
 * created_date
 * updated_date
 
+### feed
+* id
+* game_id
+* user_id
+* message
 
 A board has a randomly selected options from the category
