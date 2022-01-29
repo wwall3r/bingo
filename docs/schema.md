@@ -1,6 +1,6 @@
 ### objectives
 * id
-* display_name
+* label
 * description
 * 1**n tags
 * created_date
@@ -12,7 +12,7 @@
 
 ### games
 * id
-* display_name
+* label
 * description
 * board_size
 * 1**n users
