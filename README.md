@@ -1,12 +1,6 @@
 # Vision
 The idea is to create multiple types of bingo games and share a game with individuals.
 
-1. Different categories of bingo
-  1. Enumerate all the different options in that category
-  1. Generate a board from those options
-1. Shared games ?
-  1. Updates ?
-
 # Roles
 * anon: An unauthenticated user
 * player: An authenticated user
@@ -54,10 +48,33 @@ The idea is to create multiple types of bingo games and share a game with indivi
 # Tasks/Next Steps
 
 # Questions
-1. How are migrations handled?
-2. How are updates shared? A restart of a local development instance had all the data go away.
+1. How are migrations handled? The migrations are created by making changes to the database and running `supabase db commit` which will create a new sql file in the migrations folder.
+2. How are updates shared? A restart of a local development instance had all the data go away. A seed data script was created to recreate data for testing. It can be run applying the sql.
 3. Native psql connection? This is listed in the docs.
 
+# Starting the application
+1. `supabase start` start the database
+1. `supabase db reset` recreates the database
+1. `psql 'postgresql://postgres:postgres@localhost:54322/postgres' < supabase/seed_data/data.sql` load the seed data. Use [postgresql-client](https://www.postgresql.org/download/linux/ubuntu/)
+1. `npm run dev` to start the application
+
+## local developer locations
+1. [supabase](http://localhost:54323/project/default)
+1. [app](http://localhost:3000)
+
+
+# Database 
+
+## navigation
+* `\?` : help
+* `\dt`  : list tables, views, sequences
+* `SET search_path TO auth;` : set schema to auth
+* `\dn` : list schemas
+
+## databackup
+* `pg_dump --data-only --table public.objectives 'postgresql://postgres:postgres@localhost:54322/postgres' > supabase/seed_data/data.sql`
+
+-----
 
 # create-svelte
 
