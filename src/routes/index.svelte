@@ -12,6 +12,8 @@
 </script>
 
 <script lang="ts">
+	import { auth, user } from '$lib/db';
+
 	export let objectives;
 
 	let newObjective = { label: '' };
@@ -19,7 +21,6 @@
 	async function onSubmit() {
 		try {
 			await db.objectives.insert(newObjective);
-			objectives = await db.objectives.all();
 		} catch (error) {
 			console.error(error);
 		}
@@ -27,7 +28,16 @@
 </script>
 
 <main>
-	<h1>Objectives</h1>
+	{#if $user}
+		<p>You are signed in as {$user.email}</p>
+		<button on:click={() => auth.signOut()}>Sign out</button>
+	{:else}
+		<nav>
+			<a href="/sign-in">Sign in</a>
+		</nav>
+	{/if}
+
+	<h1>My Favorite Objectives</h1>
 
 	<ul>
 		{#each objectives as objective}
@@ -35,7 +45,6 @@
 		{/each}
 	</ul>
 
-	<h3>Add Objective</h3>
 	<form on:submit|preventDefault={onSubmit}>
 		<input type="text" bind:value={newObjective.label} />
 		<button>Submit</button>

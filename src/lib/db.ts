@@ -1,7 +1,5 @@
-import { parse as cookieParse } from 'cookie-es';
 import { createClient } from '@supabase/supabase-js';
-import '$lib/cookie-change';
-import { browser } from '$app/env';
+import { readable } from 'svelte/store';
 
 export const supabase = createClient(
 	import.meta.env.VITE_SUPABASE_URL as string,
@@ -10,30 +8,21 @@ export const supabase = createClient(
 
 export const { auth } = supabase;
 
-if (browser) {
-	const update = () => {
-		const cookies: Record<string, string> = cookieParse(document.cookie);
-		if (cookies.access_token) {
-			auth.setAuth(cookies.access_token);
+export const user = readable(auth.user(), (set) => {
+	auth.onAuthStateChange((event) => {
+		if (event == 'SIGNED_OUT') {
+			set(null);
 		}
-	};
-
-	document.addEventListener('cookiechange', update);
-	update();
-}
+	});
+});
 
 // TODO: it'd be useful to generate types/interfaces from tables
 export const objectives = {
 	async all() {
 		const { data, error } = await supabase.from('objectives').select();
-		if (error) throw new Error(error.message);
-		return data;
-	},
-	async insert(objective) {
-		const { data, error } = await supabase
-			.from('objectives')
-			.insert(Array.isArray(objective) ? objective : [objective]);
-		if (error) throw new Error(error.message);
+		if (error) {
+			throw new Error(error.message);
+		}
 		return data;
 	}
 };

@@ -61,8 +61,8 @@ The idea is to create multiple types of bingo games and share a game with indivi
 
 # Tasks/Next Steps
 
-[ ] Login: CSRF handling
-[ ] Login: Progressive enhancement
+- [ ] Login: CSRF handling
+- [ ] Login: Progressive enhancement
 
 # Questions
 
