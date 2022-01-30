@@ -1,63 +1,73 @@
 # Vision
+
 The idea is to create multiple types of bingo games and share a game with individuals.
 
 1. Different categories of bingo
-  1. Enumerate all the different options in that category
-  1. Generate a board from those options
+1. Enumerate all the different options in that category
+1. Generate a board from those options
 1. Shared games ?
-  1. Updates ?
+1. Updates ?
 
 # Roles
-* anon: An unauthenticated user
-* player: An authenticated user
-* director: manages a game instance.
-* admin: a bingo maintainer and administrator with full control of all APIs and data
+
+- anon: An unauthenticated user
+- player: An authenticated user
+- director: manages a game instance.
+- admin: a bingo maintainer and administrator with full control of all APIs and data
 
 # Use Cases
 
 ## anon
-* Visit the site and see options/overview
-* Signup / Signin
+
+- Visit the site and see options/overview
+- Signup / Signin
 
 ## admin
-* can disable players
-* can approve/CRUD a category
-* can approve/CRUD objectives to a category
+
+- can disable players
+- can approve/CRUD a category
+- can approve/CRUD objectives to a category
 
 ## director
-* creates a game instance
-* selects a board size
-* selects the category and filters objectives appropriate for the game instance
-* invites players or anonymous
-  * This may be a backend workflow which doesn't care. It either adds an existing player or sends an invitation
-  * consider security rammifications of revealing information)
-  * can find players or do they have to know e-mail addresses?
-* can view all board instances for their game instances
-* can promote players to directors for a game instance
+
+- creates a game instance
+- selects a board size
+- selects the category and filters objectives appropriate for the game instance
+- invites players or anonymous
+  - This may be a backend workflow which doesn't care. It either adds an existing player or sends an invitation
+  - consider security rammifications of revealing information)
+  - can find players or do they have to know e-mail addresses?
+- can view all board instances for their game instances
+- can promote players to directors for a game instance
 
 ## players
-* have an alias / profile
-* view their board instances
-* send a link to their board
-* view others boards in a game instance
-* see updates to the game feed (assume no secret states)
-* proposes categories and objectives 
-* update their board with a 'completion' of an objective
-* list games they are members of
+
+- have an alias / profile
+- view their board instances
+- send a link to their board
+- view others boards in a game instance
+- see updates to the game feed (assume no secret states)
+- proposes categories and objectives
+- update their board with a 'completion' of an objective
+- list games they are members of
 
 # Concepts
+
 1. Categories are just tags on objectives. This allow reuse of objectives.
 
 # Goals
+
 1. Write an example that exercises the features in supabase.io
 
 # Tasks/Next Steps
+[ ] Login: CSRF handling
+[ ] Login: Progressive enhancement
 
 # Questions
+
 1. How are migrations handled?
 2. How are updates shared? A restart of a local development instance had all the data go away.
 3. Native psql connection? This is listed in the docs.
-
 
 # create-svelte
 
