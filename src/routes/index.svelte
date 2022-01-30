@@ -1,9 +1,9 @@
 <script lang="ts" context="module">
-	import * as db from '$lib/db';
+	import Objectives from '$lib/db/objectives';
 
 	export async function load() {
 		try {
-			const objectives = await db.objectives.all();
+			const objectives = await Objectives.all();
 			return { props: { objectives } };
 		} catch (error) {
 			return { error };
@@ -12,7 +12,7 @@
 </script>
 
 <script lang="ts">
-	import { auth, user } from '$lib/db';
+	import LogInOutFormExample from '$lib/auth/LogInOutFormExample.svelte';
 
 	export let objectives;
 
@@ -20,7 +20,7 @@
 
 	async function onSubmit() {
 		try {
-			await db.objectives.insert(newObjective);
+			await Objectives.insert(newObjective);
 		} catch (error) {
 			console.error(error);
 		}
@@ -28,15 +28,7 @@
 </script>
 
 <main>
-	{#if $user}
-		<p>You are signed in as {$user.email}</p>
-		<button on:click={() => auth.signOut()}>Sign out</button>
-	{:else}
-		<nav>
-			<a href="/sign-in">Sign in</a>
-		</nav>
-	{/if}
-
+	<LogInOutFormExample/>
 	<h1>My Favorite Objectives</h1>
 
 	<ul>
