@@ -21,8 +21,9 @@ SET row_security = off;
 --
 
 COPY auth.users (instance_id, id, aud, role, email, encrypted_password, email_confirmed_at, invited_at, confirmation_token, confirmation_sent_at, recovery_token, recovery_sent_at, email_change_token_new, email_change, email_change_sent_at, last_sign_in_at, raw_app_meta_data, raw_user_meta_data, is_super_admin, created_at, updated_at, phone, phone_confirmed_at, phone_change, phone_change_token, phone_change_sent_at, email_change_token_current, email_change_confirm_status) FROM stdin;
-00000000-0000-0000-0000-000000000000	d67d9d66-7686-401d-a340-0fe8a22fbdf1		authenticated	joe@email.com	$2a$10$DP6RYW5KIddUKL0isAP0NuImt7Z2B0qClWDQz.FFFUNo0IdbLbAN6	2022-02-04 21:00:13.096429+00	\N		\N		\N			\N	2022-02-04 21:00:13.099098+00	{"provider": "email", "providers": ["email"]}	{}	f	2022-02-04 21:00:13.089273+00	2022-02-04 21:00:13.089326+00	\N	\N			\N		0
 00000000-0000-0000-0000-000000000000	b915af1d-bef1-4e6d-bc47-cf430d36258b		authenticated	jane@email.com	$2a$10$ynMXZF3r4mdAugBhY8DrwOM3DCHJ84UVQlOsvES8ESRUyYlZzYjye	2022-02-04 21:01:29.154819+00	\N		\N		\N			\N	2022-02-04 21:01:29.157148+00	{"provider": "email", "providers": ["email"]}	{}	f	2022-02-04 21:01:29.150638+00	2022-02-04 21:01:29.150646+00	\N	\N			\N		0
+00000000-0000-0000-0000-000000000000	d67d9d66-7686-401d-a340-0fe8a22fbdf1		authenticated	joe@email.com	$2a$10$DP6RYW5KIddUKL0isAP0NuImt7Z2B0qClWDQz.FFFUNo0IdbLbAN6	2022-02-04 21:00:13.096429+00	\N		\N		\N			\N	2022-02-04 21:03:50.289936+00	{"provider": "email", "providers": ["email"]}	{}	f	2022-02-04 21:00:13.089273+00	2022-02-04 21:00:13.089326+00	\N	\N			\N		0
+00000000-0000-0000-0000-000000000000	be7dd07d-47dd-4118-b28f-9a9709a9c779		authenticated	admin@email.com	$2a$10$ghgFcmPvUP0YVGPGMTZnPuXrJ5uy79DAIbNeTSRAJJbs6XUxvan/O	2022-02-04 21:16:55.663081+00	\N		\N		\N			\N	2022-02-04 22:06:26.459779+00	{"provider": "email", "providers": ["email"]}	{}	f	2022-02-04 21:16:55.655554+00	2022-02-04 21:16:55.655562+00	\N	\N			\N		0
 \.
 
 
@@ -33,15 +34,15 @@ COPY auth.users (instance_id, id, aud, role, email, encrypted_password, email_co
 COPY auth.identities (id, user_id, identity_data, provider, last_sign_in_at, created_at, updated_at) FROM stdin;
 d67d9d66-7686-401d-a340-0fe8a22fbdf1	d67d9d66-7686-401d-a340-0fe8a22fbdf1	{"sub": "d67d9d66-7686-401d-a340-0fe8a22fbdf1"}	email	2022-02-04 21:00:13.093623+00	2022-02-04 21:00:13.09368+00	2022-02-04 21:00:13.093683+00
 b915af1d-bef1-4e6d-bc47-cf430d36258b	b915af1d-bef1-4e6d-bc47-cf430d36258b	{"sub": "b915af1d-bef1-4e6d-bc47-cf430d36258b"}	email	2022-02-04 21:01:29.152875+00	2022-02-04 21:01:29.152916+00	2022-02-04 21:01:29.15292+00
+be7dd07d-47dd-4118-b28f-9a9709a9c779	be7dd07d-47dd-4118-b28f-9a9709a9c779	{"sub": "be7dd07d-47dd-4118-b28f-9a9709a9c779"}	email	2022-02-04 21:16:55.658985+00	2022-02-04 21:16:55.659057+00	2022-02-04 21:16:55.659066+00
 \.
 
 
 --
--- Data for Name: games; Type: TABLE DATA; Schema: public; Owner: postgres
+-- Data for Name: boards; Type: TABLE DATA; Schema: public; Owner: postgres
 --
 
-COPY public.games (id, label, description, board_size, created_at, updated_at) FROM stdin;
-408957cc-06bc-42a6-a005-4d48693ce578	The Running Man	A Bingo Game for Runners	5	2022-01-30 14:27:50+00	2022-01-30 14:27:50+00
+COPY public.boards (id, created_at, updated_at, user_id) FROM stdin;
 \.
 
 
@@ -79,10 +80,35 @@ c1df10ad-107c-4b95-b1b6-911a7fed0897	2022-01-30 04:20:57+00	2022-01-30 04:20:57+
 
 
 --
--- Data for Name: games_objectives_assoc; Type: TABLE DATA; Schema: public; Owner: postgres
+-- Data for Name: completions; Type: TABLE DATA; Schema: public; Owner: postgres
 --
 
-COPY public.games_objectives_assoc (game_id, objective_id) FROM stdin;
+COPY public.completions (id, created_at, updated_at, objective_id, state, notes) FROM stdin;
+\.
+
+
+--
+-- Data for Name: boards_completions; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.boards_completions (board_id, completion_id) FROM stdin;
+\.
+
+
+--
+-- Data for Name: games; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.games (id, label, description, board_size, created_at, updated_at) FROM stdin;
+408957cc-06bc-42a6-a005-4d48693ce578	The Running Man	A Bingo Game for Runners	5	2022-01-30 14:27:50+00	2022-01-30 14:27:50+00
+\.
+
+
+--
+-- Data for Name: games_objectives; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.games_objectives (game_id, objective_id) FROM stdin;
 408957cc-06bc-42a6-a005-4d48693ce578	2e569ed6-93a6-4cd4-9ffa-3864b790bd49
 408957cc-06bc-42a6-a005-4d48693ce578	e4144e0e-253e-4f07-bf96-50bcb2f2f126
 408957cc-06bc-42a6-a005-4d48693ce578	b5940194-457b-40ed-99dd-6e0011a78d91
@@ -121,10 +147,10 @@ COPY public.tags (id, label, created_at, updated_at) FROM stdin;
 
 
 --
--- Data for Name: tags_objectives_assoc; Type: TABLE DATA; Schema: public; Owner: postgres
+-- Data for Name: tags_objectives; Type: TABLE DATA; Schema: public; Owner: postgres
 --
 
-COPY public.tags_objectives_assoc (tag_id, objective_id) FROM stdin;
+COPY public.tags_objectives (tag_id, objective_id) FROM stdin;
 37fd9162-c822-44c4-a0ad-2c745656ca9d	2e569ed6-93a6-4cd4-9ffa-3864b790bd49
 37fd9162-c822-44c4-a0ad-2c745656ca9d	e4144e0e-253e-4f07-bf96-50bcb2f2f126
 37fd9162-c822-44c4-a0ad-2c745656ca9d	b5940194-457b-40ed-99dd-6e0011a78d91

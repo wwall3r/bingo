@@ -63,6 +63,7 @@ The idea is to create multiple types of bingo games and share a game with indivi
 
 - [ ] Login: CSRF handling
 - [ ] Login: Progressive enhancement
+- [ ] Logout
 
 # Questions
 
@@ -77,6 +78,7 @@ The idea is to create multiple types of bingo games and share a game with indivi
 1. `psql 'postgresql://postgres:postgres@localhost:54322/postgres' < supabase/seed_data/data.sql` load the seed data. Use [postgresql-client](https://www.postgresql.org/download/linux/ubuntu/)
 1. `npm run dev` to start the application
 1. Test users - Password is `password`
+   1. admin@email.com
    1. joe@email.com
    1. jane@email.com
 
@@ -101,8 +103,11 @@ pg_dump --data-only \
   --table public.objectives \
   --table public.games \
   --table public.tags \
-  --table tags_objectives_assoc \
-  --table games_objectives_assoc \
+  --table public.boards \
+  --table public.completions \
+  --table public.boards_completions \
+  --table public.games_objectives \
+  --table public.tags_objectives \
   --table auth.identities \
   --table auth.users \
 'postgresql://postgres:postgres@localhost:54322/postgres' > supabase/seed_data/data.sql
