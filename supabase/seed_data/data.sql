@@ -17,6 +17,26 @@ SET client_min_messages = warning;
 SET row_security = off;
 
 --
+-- Data for Name: users; Type: TABLE DATA; Schema: auth; Owner: supabase_auth_admin
+--
+
+COPY auth.users (instance_id, id, aud, role, email, encrypted_password, email_confirmed_at, invited_at, confirmation_token, confirmation_sent_at, recovery_token, recovery_sent_at, email_change_token_new, email_change, email_change_sent_at, last_sign_in_at, raw_app_meta_data, raw_user_meta_data, is_super_admin, created_at, updated_at, phone, phone_confirmed_at, phone_change, phone_change_token, phone_change_sent_at, email_change_token_current, email_change_confirm_status) FROM stdin;
+00000000-0000-0000-0000-000000000000	d67d9d66-7686-401d-a340-0fe8a22fbdf1		authenticated	joe@email.com	$2a$10$DP6RYW5KIddUKL0isAP0NuImt7Z2B0qClWDQz.FFFUNo0IdbLbAN6	2022-02-04 21:00:13.096429+00	\N		\N		\N			\N	2022-02-04 21:00:13.099098+00	{"provider": "email", "providers": ["email"]}	{}	f	2022-02-04 21:00:13.089273+00	2022-02-04 21:00:13.089326+00	\N	\N			\N		0
+00000000-0000-0000-0000-000000000000	b915af1d-bef1-4e6d-bc47-cf430d36258b		authenticated	jane@email.com	$2a$10$ynMXZF3r4mdAugBhY8DrwOM3DCHJ84UVQlOsvES8ESRUyYlZzYjye	2022-02-04 21:01:29.154819+00	\N		\N		\N			\N	2022-02-04 21:01:29.157148+00	{"provider": "email", "providers": ["email"]}	{}	f	2022-02-04 21:01:29.150638+00	2022-02-04 21:01:29.150646+00	\N	\N			\N		0
+\.
+
+
+--
+-- Data for Name: identities; Type: TABLE DATA; Schema: auth; Owner: supabase_auth_admin
+--
+
+COPY auth.identities (id, user_id, identity_data, provider, last_sign_in_at, created_at, updated_at) FROM stdin;
+d67d9d66-7686-401d-a340-0fe8a22fbdf1	d67d9d66-7686-401d-a340-0fe8a22fbdf1	{"sub": "d67d9d66-7686-401d-a340-0fe8a22fbdf1"}	email	2022-02-04 21:00:13.093623+00	2022-02-04 21:00:13.09368+00	2022-02-04 21:00:13.093683+00
+b915af1d-bef1-4e6d-bc47-cf430d36258b	b915af1d-bef1-4e6d-bc47-cf430d36258b	{"sub": "b915af1d-bef1-4e6d-bc47-cf430d36258b"}	email	2022-02-04 21:01:29.152875+00	2022-02-04 21:01:29.152916+00	2022-02-04 21:01:29.15292+00
+\.
+
+
+--
 -- Data for Name: games; Type: TABLE DATA; Schema: public; Owner: postgres
 --
 
