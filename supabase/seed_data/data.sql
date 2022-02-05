@@ -3,7 +3,7 @@
 --
 
 -- Dumped from database version 14.1 (Debian 14.1-1.pgdg110+1)
--- Dumped by pg_dump version 14.1 (Ubuntu 14.1-2.pgdg20.04+1)
+-- Dumped by pg_dump version 14.1 (Debian 14.1-1.pgdg110+1)
 
 SET statement_timeout = 0;
 SET lock_timeout = 0;
@@ -99,8 +99,16 @@ COPY public.boards_completions (board_id, completion_id) FROM stdin;
 -- Data for Name: games; Type: TABLE DATA; Schema: public; Owner: postgres
 --
 
-COPY public.games (id, label, description, board_size, created_at, updated_at) FROM stdin;
-408957cc-06bc-42a6-a005-4d48693ce578	The Running Man	A Bingo Game for Runners	5	2022-01-30 14:27:50+00	2022-01-30 14:27:50+00
+COPY public.games (id, label, description, board_size, created_at, updated_at, expires_at) FROM stdin;
+408957cc-06bc-42a6-a005-4d48693ce578	The Running Man	A Bingo Game for Runners	5	2022-01-30 14:27:50+00	2022-01-30 14:27:50+00	2022-05-06 13:28:13.296031+00
+\.
+
+
+--
+-- Data for Name: games_boards; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.games_boards (game_id, board_id) FROM stdin;
 \.
 
 
@@ -134,6 +142,14 @@ COPY public.games_objectives (game_id, objective_id) FROM stdin;
 408957cc-06bc-42a6-a005-4d48693ce578	1a0cc435-2cb1-4022-8224-84057d8e4d29
 408957cc-06bc-42a6-a005-4d48693ce578	c1df10ad-107c-4b95-b1b6-911a7fed0897
 408957cc-06bc-42a6-a005-4d48693ce578	29d90ab1-1ab7-4b35-80db-c3a05f12070b
+\.
+
+
+--
+-- Data for Name: games_users; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.games_users (game_id, user_id) FROM stdin;
 \.
 
 
@@ -176,6 +192,17 @@ COPY public.tags_objectives (tag_id, objective_id) FROM stdin;
 37fd9162-c822-44c4-a0ad-2c745656ca9d	1a0cc435-2cb1-4022-8224-84057d8e4d29
 37fd9162-c822-44c4-a0ad-2c745656ca9d	c1df10ad-107c-4b95-b1b6-911a7fed0897
 37fd9162-c822-44c4-a0ad-2c745656ca9d	29d90ab1-1ab7-4b35-80db-c3a05f12070b
+\.
+
+
+--
+-- Data for Name: user_profiles; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.user_profiles (id, user_id, created_at, updated_at, display_name) FROM stdin;
+8ea819b8-c4b5-41e5-8f40-451f0eed9acf	b915af1d-bef1-4e6d-bc47-cf430d36258b	2022-02-05 13:47:29+00	2022-02-05 13:47:29+00	Jane, Eater of Worlds
+2760facd-8c61-4473-b04f-d28a6ae189c7	d67d9d66-7686-401d-a340-0fe8a22fbdf1	2022-02-05 13:48:24+00	2022-02-05 13:48:24+00	Joe the Destroyer
+f65eae14-ecaa-4ece-bb64-0772fdb1caa3	be7dd07d-47dd-4118-b28f-9a9709a9c779	2022-02-05 13:49:16+00	2022-02-05 13:49:16+00	Administrator
 \.
 
 

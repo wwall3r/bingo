@@ -31,7 +31,7 @@ Completions are the state of a board that maintain what objectives have been com
 - label
 - description
 - board_size
-- 1\*\*n users
+- 1\*\*n users -- the audience...those that can view or play the game. Consider that this association table may be where the user's role is defined.
 - 1\*\*n boards -- A game owns its boards. When a game is deleted/expired it should delete the boards
 - 1\*\*n objectives -- A game can have more objectives than board spaces to allow players to have different boards
 - expires_at -- expiration indicates when a game is to be finished. There should probably be a one year limit on games. They can then be removed at some time + expires_at
