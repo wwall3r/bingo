@@ -75,7 +75,8 @@ The idea is to create multiple types of bingo games and share a game with indivi
 
 1. `supabase start` start the database
 1. `supabase db reset` recreates the database
-1. `psql 'postgresql://postgres:postgres@localhost:54322/postgres' < supabase/seed_data/data.sql` load the seed data. Use [postgresql-client](https://www.postgresql.org/download/linux/ubuntu/)
+1. `scripts/seed_data.sh` loads the seed data. Requires PGHOST, PGPORT, PGDATABASE, PGUSER, PGPASSWORD in .env
+   1. Alternatively: `psql 'postgresql://postgres:postgres@localhost:54322/postgres' < supabase/seed_data/data.sql` load the seed data. Use [postgresql-client](https://www.postgresql.org/download/linux/ubuntu/)
 1. `npm run dev` to start the application
 1. Test users - Password is `password`
    1. admin@email.com
@@ -98,20 +99,22 @@ The idea is to create multiple types of bingo games and share a game with indivi
 
 ## databackup
 
-```
-pg_dump --data-only \
-  --table public.objectives \
-  --table public.games \
-  --table public.tags \
-  --table public.boards \
-  --table public.completions \
-  --table public.boards_completions \
-  --table public.games_objectives \
-  --table public.tags_objectives \
-  --table auth.identities \
-  --table auth.users \
-'postgresql://postgres:postgres@localhost:54322/postgres' > supabase/seed_data/data.sql
-```
+- Commit the changes `supabase db commit 'migration_name'`
+- Get the data
+  ```
+  pg_dump --data-only \
+    --table public.objectives \
+    --table public.games \
+    --table public.tags \
+    --table public.boards \
+    --table public.completions \
+    --table public.boards_completions \
+    --table public.games_objectives \
+    --table public.tags_objectives \
+    --table auth.identities \
+    --table auth.users \
+  'postgresql://postgres:postgres@localhost:54322/postgres' > supabase/seed_data/data.sql
+  ```
 
 # create-svelte
 
