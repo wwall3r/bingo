@@ -1,48 +1,66 @@
-import {parse as cookieParse} from 'cookie-es';
+import { parse as cookieParse } from 'cookie-es';
+
+/**
+ * @typedef {{
+ *    method: string,
+ *    headers: Record<string, string | string[]>,
+ *    cookies: Record<string, string | string[]>,
+ * }} ExpressRequestLike
+ */
+
+/**
+ * @typedef {{
+ *    body: Object,
+ *    getHeader: (header: string) => string | string[],
+ *    setHeader: (header: string, value: string | string[]) => void,
+ *    status: (_) => {json: (_) => void },
+ * }} ExpressResponseLike
+ */
 
 /**
  * Converts a SvelteKit request to a Express compatible request.
  * Supabase expects the cookies to be parsed.
- * @param {import('@sveltejs/kit).End} req
- * @returns Express.Request
+ * @param {Request} req
+ * @returns {ExpressRequestLike}
  */
-export function toExpressRequest(req) {
-  return {
-    method: req.method,
-    headers: headersToObject(req.headers),
-    cookies: cookieParse((req.headers instanceof Headers
-      ? req.headers.get('cookie')
-      : req.headers.cookie ) || '')
-  };
-}
+export const toExpressRequest = (req) => {
+	const cookies = req.headers.get('cookie') || '';
+	return {
+		method: req.method,
+		headers: headersToObject(req.headers),
+		cookies: cookieParse(Array.isArray(cookies) ? cookies.join('') : cookies)
+	};
+};
 
 /**
- * @param {headers: Headers | Record<string|string>}
- * @return {Record<string, string>}
+ * @param {Headers | Record<string, string | string[]>} headers
+ * @return {Record<string, string | string[]>}
  */
 const headersToObject = (headers) => {
-  if (headers instanceof Headers) {
-    const result = {};
-    for (const pair of headers.entries()) {
-      result[pair[0]] = pair[1];
-    }
-    return result;
-  }
+	if (headers instanceof Headers) {
+		/** @type {Record<string, string | string[]>} */
+		const result = {};
+		for (const pair of headers.entries()) {
+			result[pair[0]] = pair[1];
+		}
 
-  return Object.assign({}, headers);
-}
+		return result;
+	}
+
+	return Object.assign({}, headers);
+};
 
 /**
  * Converts a SvelteKit response into an Express compatible response.
- * @param {Response | import('@sveltejs/kit).EndpointOutput} resp
- * @returns Express.Response
+ * @param {Response | import('@sveltejs/kit').EndpointOutput} resp
+ * @returns {Promise<ExpressResponseLike>}
  */
-export async function toExpressResponse(resp) {
-  const headers = headersToObject(resp.headers);
-  return {
-    body: resp instanceof Response ? await resp.json(): resp.body,
-    getHeader: (header) => headers[header.toLowerCase()],
-    setHeader: (header, value) => headers[header.toLowerCase()] = value,
-    status: (_) => ({ json: (_) => {} })
-  };
-}
+export const toExpressResponse = async (resp) => {
+	const headers = headersToObject(resp.headers);
+	return {
+		body: resp instanceof Response ? await resp.json() : resp.body,
+		getHeader: (header) => headers[header.toLowerCase()],
+		setHeader: (header, value) => (headers[header.toLowerCase()] = value),
+		status: (_) => ({ json: (_) => {} })
+	};
+};

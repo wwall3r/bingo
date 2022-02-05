@@ -1,4 +1,4 @@
-import {toExpressRequest} from '$lib/auth/expressify';
+import { toExpressRequest } from '$lib/auth/expressify';
 import supabase from '$lib/db';
 
 /** @type {import('@sveltejs/kit').Handle} */
@@ -11,9 +11,7 @@ export const handle = async ({ event, resolve }) => {
 	locals.token = expressRequest.cookies['sb:token'] || undefined;
 	locals.user = user || false;
 
-	if (locals.token) {
-		supabase.auth.setAuth(locals.token);
-	}
+	supabase.auth.setAuth(locals.token);
 
 	return resolve(event);
 };

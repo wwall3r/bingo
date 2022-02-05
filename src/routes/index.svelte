@@ -6,6 +6,7 @@
 			const objectives = await Objectives.all();
 			return { props: { objectives } };
 		} catch (error) {
+			console.log(error);
 			return { error };
 		}
 	}
@@ -28,7 +29,7 @@
 </script>
 
 <main>
-	<LogInOutFormExample/>
+	<LogInOutFormExample />
 	<h1>My Favorite Objectives</h1>
 
 	<ul>
