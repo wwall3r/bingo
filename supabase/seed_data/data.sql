@@ -24,7 +24,8 @@ COPY auth.users (instance_id, id, aud, role, email, encrypted_password, email_co
 00000000-0000-0000-0000-000000000000	d67d9d66-7686-401d-a340-0fe8a22fbdf1		authenticated	joe@email.com	$2a$10$DP6RYW5KIddUKL0isAP0NuImt7Z2B0qClWDQz.FFFUNo0IdbLbAN6	2022-02-04 21:00:13.096429+00	\N		\N		\N			\N	2022-02-04 21:03:50.289936+00	{"provider": "email", "providers": ["email"]}	{}	f	2022-02-04 21:00:13.089273+00	2022-02-04 21:00:13.089326+00	\N	\N			\N		0
 00000000-0000-0000-0000-000000000000	b915af1d-bef1-4e6d-bc47-cf430d36258b		authenticated	jane@email.com	$2a$10$ynMXZF3r4mdAugBhY8DrwOM3DCHJ84UVQlOsvES8ESRUyYlZzYjye	2022-02-04 21:01:29.154819+00	\N		\N		\N			\N	2022-02-06 19:00:25.724571+00	{"provider": "email", "providers": ["email"]}	{}	f	2022-02-04 21:01:29.150638+00	2022-02-04 21:01:29.150646+00	\N	\N			\N		0
 00000000-0000-0000-0000-000000000000	be7dd07d-47dd-4118-b28f-9a9709a9c779		authenticated	admin@email.com	$2a$10$ghgFcmPvUP0YVGPGMTZnPuXrJ5uy79DAIbNeTSRAJJbs6XUxvan/O	2022-02-04 21:16:55.663081+00	\N		\N		\N			\N	2022-02-06 19:00:38.214309+00	{"provider": "email", "providers": ["email"]}	{}	f	2022-02-04 21:16:55.655554+00	2022-02-04 21:16:55.655562+00	\N	\N			\N		0
-00000000-0000-0000-0000-000000000000	8e4a7b91-27e3-4eaf-98eb-2be5523457cc		authenticated	will@email.com	$2a$10$7I7ygr9Gtndgnr4Z9CIR/ekLso2R.iJMw/puDUTPxQsmQmZ4zZtxm	2022-02-06 19:00:58.300254+00	\N		\N		\N			\N	2022-02-06 19:00:58.30278+00	{"provider": "email", "providers": ["email"]}	{}	f	2022-02-06 19:00:58.29736+00	2022-02-06 19:00:58.297365+00	\N	\N			\N		0
+00000000-0000-0000-0000-000000000000	0f3609c8-b32a-40dc-860d-e047b89a5a6f		authenticated	jason@email.com	$2a$10$FP0fz2iaHU1F2wVnTnLjUuHSmMje48ojyurszcmnm93P23Vb1Ra7S	2022-02-06 23:20:35.504237+00	\N		\N		\N			\N	2022-02-06 23:20:35.50667+00	{"provider": "email", "providers": ["email"]}	{}	f	2022-02-06 23:20:35.495725+00	2022-02-06 23:20:35.495733+00	\N	\N			\N		0
+00000000-0000-0000-0000-000000000000	0630ec75-0c45-4e8d-9406-2964bd2ff25d		authenticated	will@email.com	$2a$10$mdaWzWuo996Wr94fbiH7UuLFY.LFJ68K1zvfx1SnHjQ4aS./G1DU2	2022-02-06 23:22:05.118988+00	\N		\N		\N			\N	2022-02-06 23:22:05.121956+00	{"provider": "email", "providers": ["email"]}	{}	f	2022-02-06 23:22:05.1153+00	2022-02-06 23:22:05.115307+00	\N	\N			\N		0
 \.
 
 
@@ -36,7 +37,21 @@ COPY auth.identities (id, user_id, identity_data, provider, last_sign_in_at, cre
 d67d9d66-7686-401d-a340-0fe8a22fbdf1	d67d9d66-7686-401d-a340-0fe8a22fbdf1	{"sub": "d67d9d66-7686-401d-a340-0fe8a22fbdf1"}	email	2022-02-04 21:00:13.093623+00	2022-02-04 21:00:13.09368+00	2022-02-04 21:00:13.093683+00
 b915af1d-bef1-4e6d-bc47-cf430d36258b	b915af1d-bef1-4e6d-bc47-cf430d36258b	{"sub": "b915af1d-bef1-4e6d-bc47-cf430d36258b"}	email	2022-02-04 21:01:29.152875+00	2022-02-04 21:01:29.152916+00	2022-02-04 21:01:29.15292+00
 be7dd07d-47dd-4118-b28f-9a9709a9c779	be7dd07d-47dd-4118-b28f-9a9709a9c779	{"sub": "be7dd07d-47dd-4118-b28f-9a9709a9c779"}	email	2022-02-04 21:16:55.658985+00	2022-02-04 21:16:55.659057+00	2022-02-04 21:16:55.659066+00
-8e4a7b91-27e3-4eaf-98eb-2be5523457cc	8e4a7b91-27e3-4eaf-98eb-2be5523457cc	{"sub": "8e4a7b91-27e3-4eaf-98eb-2be5523457cc"}	email	2022-02-06 19:00:58.299182+00	2022-02-06 19:00:58.299215+00	2022-02-06 19:00:58.299219+00
+0f3609c8-b32a-40dc-860d-e047b89a5a6f	0f3609c8-b32a-40dc-860d-e047b89a5a6f	{"sub": "0f3609c8-b32a-40dc-860d-e047b89a5a6f"}	email	2022-02-06 23:20:35.500441+00	2022-02-06 23:20:35.500474+00	2022-02-06 23:20:35.500477+00
+0630ec75-0c45-4e8d-9406-2964bd2ff25d	0630ec75-0c45-4e8d-9406-2964bd2ff25d	{"sub": "0630ec75-0c45-4e8d-9406-2964bd2ff25d"}	email	2022-02-06 23:22:05.117338+00	2022-02-06 23:22:05.117389+00	2022-02-06 23:22:05.117392+00
+\.
+
+
+--
+-- Data for Name: user_profiles; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.user_profiles (id, user_id, created_at, updated_at, display_name) FROM stdin;
+8ea819b8-c4b5-41e5-8f40-451f0eed9acf	b915af1d-bef1-4e6d-bc47-cf430d36258b	2022-02-05 13:47:29+00	2022-02-05 13:47:29+00	Jane, Eater of Worlds
+2760facd-8c61-4473-b04f-d28a6ae189c7	d67d9d66-7686-401d-a340-0fe8a22fbdf1	2022-02-05 13:48:24+00	2022-02-05 13:48:24+00	Joe the Destroyer
+f65eae14-ecaa-4ece-bb64-0772fdb1caa3	be7dd07d-47dd-4118-b28f-9a9709a9c779	2022-02-05 13:49:16+00	2022-02-05 13:49:16+00	Administrator
+dd33d505-98bc-4f85-8fa2-f1261ff1fb03	0f3609c8-b32a-40dc-860d-e047b89a5a6f	2022-02-06 23:20:35.378+00	2022-02-06 23:20:35.378+00	JasonTheMighty
+9a6f304e-e9b7-4b04-9f51-54ad278baf70	0630ec75-0c45-4e8d-9406-2964bd2ff25d	2022-02-06 23:22:05.039+00	2022-02-06 23:22:05.039+00	Will
 \.
 
 
@@ -44,7 +59,7 @@ be7dd07d-47dd-4118-b28f-9a9709a9c779	be7dd07d-47dd-4118-b28f-9a9709a9c779	{"sub"
 -- Data for Name: boards; Type: TABLE DATA; Schema: public; Owner: postgres
 --
 
-COPY public.boards (id, created_at, updated_at, user_id) FROM stdin;
+COPY public.boards (id, created_at, updated_at, user_id, profile_id) FROM stdin;
 \.
 
 
@@ -151,9 +166,9 @@ COPY public.games_objectives (game_id, objective_id) FROM stdin;
 -- Data for Name: games_users; Type: TABLE DATA; Schema: public; Owner: postgres
 --
 
-COPY public.games_users (game_id, user_id) FROM stdin;
-408957cc-06bc-42a6-a005-4d48693ce578	b915af1d-bef1-4e6d-bc47-cf430d36258b
-408957cc-06bc-42a6-a005-4d48693ce578	d67d9d66-7686-401d-a340-0fe8a22fbdf1
+COPY public.games_users (game_id, user_id, profile_id) FROM stdin;
+408957cc-06bc-42a6-a005-4d48693ce578	b915af1d-bef1-4e6d-bc47-cf430d36258b	8ea819b8-c4b5-41e5-8f40-451f0eed9acf
+408957cc-06bc-42a6-a005-4d48693ce578	d67d9d66-7686-401d-a340-0fe8a22fbdf1	2760facd-8c61-4473-b04f-d28a6ae189c7
 \.
 
 
@@ -196,17 +211,6 @@ COPY public.tags_objectives (tag_id, objective_id) FROM stdin;
 37fd9162-c822-44c4-a0ad-2c745656ca9d	1a0cc435-2cb1-4022-8224-84057d8e4d29
 37fd9162-c822-44c4-a0ad-2c745656ca9d	c1df10ad-107c-4b95-b1b6-911a7fed0897
 37fd9162-c822-44c4-a0ad-2c745656ca9d	29d90ab1-1ab7-4b35-80db-c3a05f12070b
-\.
-
-
---
--- Data for Name: user_profiles; Type: TABLE DATA; Schema: public; Owner: postgres
---
-
-COPY public.user_profiles (id, user_id, created_at, updated_at, display_name) FROM stdin;
-8ea819b8-c4b5-41e5-8f40-451f0eed9acf	b915af1d-bef1-4e6d-bc47-cf430d36258b	2022-02-05 13:47:29+00	2022-02-05 13:47:29+00	Jane, Eater of Worlds
-2760facd-8c61-4473-b04f-d28a6ae189c7	d67d9d66-7686-401d-a340-0fe8a22fbdf1	2022-02-05 13:48:24+00	2022-02-05 13:48:24+00	Joe the Destroyer
-f65eae14-ecaa-4ece-bb64-0772fdb1caa3	be7dd07d-47dd-4118-b28f-9a9709a9c779	2022-02-05 13:49:16+00	2022-02-05 13:49:16+00	Administrator
 \.
 
 
