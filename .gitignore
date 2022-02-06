@@ -6,6 +6,8 @@ node_modules
 .env
 .env.*
 !.env.example
+# generated types
+src/lib/db/types.ts
 
 # Supabase
 **/supabase/.branches
