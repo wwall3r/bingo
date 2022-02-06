@@ -1,20 +1,16 @@
 import supabase from '../db';
+import wrap from './wrap';
 
 const table = 'objectives';
 
 export default {
 	async all() {
-		const { data, error } = await supabase.from(table).select();
-		if (error) throw new Error(error.message);
-		return data;
+		return wrap(await supabase.from(table).select());
 	},
 
 	async insert(objectives) {
-		const { data, error } = await supabase
-			.from(table)
-			.insert(Array.isArray(objectives) ? objectives : [objectives]);
-		if (error) throw new Error(error.message);
-		return data;
+		return wrap(
+			await supabase.from(table).insert(Array.isArray(objectives) ? objectives : [objectives])
+		);
 	}
 };
-
