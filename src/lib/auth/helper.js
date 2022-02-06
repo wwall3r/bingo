@@ -37,9 +37,12 @@ export const validateRedirect = (redirect) => /^\/\w?/.test(redirect);
 
 /**
  * @param {URL} url
- * @return {string}
+ * @return {string} the path to use for redirect through /auth endpoints and pages
  */
-export const getRelativePath = (url) => url.toString().substring(url.origin.length);
+export const getRelativePath = (url) =>
+	url.pathname.startsWith('/auth/')
+		? url.searchParams.get('redirect')
+		: url.toString().substring(url.origin.length);
 
 /**
  * @param {Request} request
