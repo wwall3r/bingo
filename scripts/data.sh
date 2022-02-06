@@ -15,7 +15,7 @@ EOF
 }
 
 function docker_postgres() {
-  "$SCRIPTS_DIR"/postgres.sh "$@"
+  $(dirname $0)/postgres.sh "$@"
 }
 
 function load_data {

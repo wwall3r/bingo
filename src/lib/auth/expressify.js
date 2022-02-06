@@ -61,6 +61,6 @@ export const toExpressResponse = async (resp) => {
 		body: resp instanceof Response ? await resp.json() : resp.body,
 		getHeader: (header) => headers[header.toLowerCase()],
 		setHeader: (header, value) => (headers[header.toLowerCase()] = value),
-		status: (_) => ({ json: (_) => {} })
+		status: () => ({ json: () => {} }) // eslint-disable-line @typescript-eslint/no-empty-function
 	};
 };

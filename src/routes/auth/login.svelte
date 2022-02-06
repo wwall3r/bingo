@@ -4,7 +4,7 @@
 
 <div class="container">
 	<h1>Log in</h1>
-  <EmailPasswordFormExample action="/api/auth/login" button="Log in" let:redirect>
+	<EmailPasswordFormExample action="/api/auth/login" button="Log in" let:redirect>
 		<p>
 			Not a member?
 			<a

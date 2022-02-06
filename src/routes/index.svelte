@@ -6,15 +6,13 @@
 			const objectives = await Objectives.all();
 			return { props: { objectives } };
 		} catch (error) {
-			console.log(error);
+			console.error(error);
 			return { error };
 		}
 	}
 </script>
 
 <script lang="ts">
-	import LogInOutFormExample from '$lib/auth/LogInOutFormExample.svelte';
-
 	export let objectives;
 
 	let newObjective = { label: '' };
@@ -28,18 +26,15 @@
 	}
 </script>
 
-<main>
-	<LogInOutFormExample />
-	<h1>My Favorite Objectives</h1>
+<h1>My Favorite Objectives</h1>
 
-	<ul>
-		{#each objectives as objective}
-			<li>{objective.label}</li>
-		{/each}
-	</ul>
+<ul>
+	{#each objectives as objective}
+		<li>{objective.label}</li>
+	{/each}
+</ul>
 
-	<form on:submit|preventDefault={onSubmit}>
-		<input type="text" bind:value={newObjective.label} />
-		<button>Submit</button>
-	</form>
-</main>
+<form on:submit|preventDefault={onSubmit}>
+	<input type="text" bind:value={newObjective.label} />
+	<button>Submit</button>
+</form>
