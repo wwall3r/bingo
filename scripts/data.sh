@@ -15,14 +15,14 @@ EOF
 }
 
 function docker_postgres() {
-  docker run -it --rm --net host --env-file "${ENV_FILE}" -v "${PROJECT_DIR}":/workspace -w /workspace supabase/postgres:14.1.0 "$@"
+  "$SCRIPTS_DIR"/postgres.sh "$@"
 }
 
-function load_data() {
+function load_data {
   docker_postgres psql -f supabase/seed_data/data.sql
 }
 
-function dump_data() {
+function dump_data {
   docker_postgres \
     pg_dump --data-only \
     --table public.objectives \
@@ -40,16 +40,6 @@ function dump_data() {
     --table auth.users \
   > supabase/seed_data/data.sql
 }
-
-SCRIPTS_DIR=$(dirname $0)
-PROJECT_DIR=$(realpath "$SCRIPTS_DIR/../")
-ENV_FILE="${PROJECT_DIR}/.env"
-
-# Check for prerequistes
-if [ ! -f "${ENV_FILE}" ]; then
-    echo "Environment file ${ENV_FILE} does not exist!"
-	exit 1
-fi
 
 # execute command
 COMMAND=$1
