@@ -3,6 +3,41 @@
 -- and may require manual changes to the script to ensure changes are applied in the correct order.
 -- Please report an issue for any failure with the reproduction steps.
 
+create extension if not exists moddatetime schema extensions;
+
+CREATE TABLE IF NOT EXISTS public.user_profiles
+(
+    id uuid NOT NULL DEFAULT uuid_generate_v4(),
+    user_id uuid NOT NULL,
+    created_at timestamp with time zone NOT NULL DEFAULT now(),
+    updated_at timestamp with time zone NOT NULL DEFAULT now(),
+    display_name character varying COLLATE pg_catalog."default",
+    CONSTRAINT user_profile_pkey PRIMARY KEY (id),
+    CONSTRAINT user_profile_user_id_fkey FOREIGN KEY (user_id)
+        REFERENCES auth.users (id) MATCH SIMPLE
+        ON UPDATE NO ACTION
+        ON DELETE NO ACTION
+)
+
+TABLESPACE pg_default;
+
+ALTER TABLE IF EXISTS public.user_profiles
+    OWNER to postgres;
+
+ALTER TABLE IF EXISTS public.user_profiles
+    ENABLE ROW LEVEL SECURITY;
+
+GRANT ALL ON TABLE public.user_profiles TO anon;
+
+GRANT ALL ON TABLE public.user_profiles TO authenticated;
+
+GRANT ALL ON TABLE public.user_profiles TO postgres;
+
+GRANT ALL ON TABLE public.user_profiles TO service_role;
+
+COMMENT ON TABLE public.user_profiles
+    IS 'A user''s public data';
+
 CREATE OR REPLACE FUNCTION public.profile_id(
 	)
     RETURNS uuid
@@ -37,34 +72,6 @@ GRANT EXECUTE ON FUNCTION public.profile_id() TO postgres;
 
 GRANT EXECUTE ON FUNCTION public.profile_id() TO service_role;
 
-CREATE OR REPLACE FUNCTION public.is_member_of(
-	_game_id uuid)
-    RETURNS boolean
-    LANGUAGE 'sql'
-    COST 100
-    VOLATILE PARALLEL UNSAFE
-AS $BODY$
-SELECT EXISTS (
-  SELECT 1
-  FROM games_users gu
-  WHERE gu.game_id = _game_id
-  AND gu.profile_id = profile_id()
-);
-$BODY$;
-
-ALTER FUNCTION public.is_member_of(uuid)
-    OWNER TO postgres;
-
-GRANT EXECUTE ON FUNCTION public.is_member_of(uuid) TO PUBLIC;
-
-GRANT EXECUTE ON FUNCTION public.is_member_of(uuid) TO anon;
-
-GRANT EXECUTE ON FUNCTION public.is_member_of(uuid) TO authenticated;
-
-GRANT EXECUTE ON FUNCTION public.is_member_of(uuid) TO postgres;
-
-GRANT EXECUTE ON FUNCTION public.is_member_of(uuid) TO service_role;
-
 CREATE OR REPLACE FUNCTION public.create_user_profile()
     RETURNS trigger
     LANGUAGE 'plpgsql'
@@ -91,36 +98,75 @@ GRANT EXECUTE ON FUNCTION public.create_user_profile() TO anon;
 
 GRANT EXECUTE ON FUNCTION public.create_user_profile() TO service_role;
 
-CREATE TABLE IF NOT EXISTS public.boards_completions
+CREATE TABLE IF NOT EXISTS public.boards
 (
-    board_id uuid NOT NULL,
-    completion_id uuid NOT NULL,
-    CONSTRAINT boards_completions_pkey PRIMARY KEY (board_id, completion_id),
-    CONSTRAINT boards_completions_board_id_fkey FOREIGN KEY (board_id)
-        REFERENCES public.boards (id) MATCH SIMPLE
-        ON UPDATE NO ACTION
-        ON DELETE NO ACTION,
-    CONSTRAINT boards_completions_completion_id_fkey FOREIGN KEY (completion_id)
-        REFERENCES public.completions (id) MATCH SIMPLE
+    id uuid NOT NULL DEFAULT uuid_generate_v4(),
+    created_at timestamp with time zone NOT NULL DEFAULT now(),
+    updated_at timestamp with time zone NOT NULL DEFAULT now(),
+    profile_id uuid NOT NULL,
+    CONSTRAINT board_pkey PRIMARY KEY (id),
+    CONSTRAINT boards_profile_id_fkey FOREIGN KEY (profile_id)
+        REFERENCES public.user_profiles (id) MATCH SIMPLE
         ON UPDATE NO ACTION
         ON DELETE NO ACTION
 )
 
 TABLESPACE pg_default;
 
-ALTER TABLE IF EXISTS public.boards_completions
+ALTER TABLE IF EXISTS public.boards
     OWNER to postgres;
 
-GRANT ALL ON TABLE public.boards_completions TO authenticated;
+ALTER TABLE IF EXISTS public.boards
+    ENABLE ROW LEVEL SECURITY;
 
-GRANT ALL ON TABLE public.boards_completions TO anon;
+GRANT ALL ON TABLE public.boards TO authenticated;
 
-GRANT ALL ON TABLE public.boards_completions TO service_role;
+GRANT ALL ON TABLE public.boards TO anon;
 
-GRANT ALL ON TABLE public.boards_completions TO postgres;
+GRANT ALL ON TABLE public.boards TO service_role;
 
-COMMENT ON TABLE public.boards_completions
-    IS 'The association of boards to completions';
+GRANT ALL ON TABLE public.boards TO postgres;
+
+COMMENT ON TABLE public.boards
+    IS 'An instance of a game';
+
+
+CREATE TABLE IF NOT EXISTS public.objectives
+(
+    id uuid NOT NULL DEFAULT uuid_generate_v4(),
+    created_at timestamp with time zone DEFAULT now(),
+    updated_at timestamp with time zone NOT NULL DEFAULT now(),
+    label character varying COLLATE pg_catalog."default" NOT NULL,
+    description text COLLATE pg_catalog."default",
+    CONSTRAINT objectives_pkey PRIMARY KEY (id)
+)
+
+TABLESPACE pg_default;
+
+ALTER TABLE IF EXISTS public.objectives
+    OWNER to postgres;
+
+ALTER TABLE IF EXISTS public.objectives
+    ENABLE ROW LEVEL SECURITY;
+
+GRANT ALL ON TABLE public.objectives TO anon;
+
+GRANT ALL ON TABLE public.objectives TO authenticated;
+
+GRANT ALL ON TABLE public.objectives TO postgres;
+
+GRANT ALL ON TABLE public.objectives TO service_role;
+
+COMMENT ON TABLE public.objectives
+    IS 'A single item to be used on a board';
+
+CREATE TRIGGER handle_updated_at
+    BEFORE UPDATE 
+    ON public.objectives
+    FOR EACH ROW
+    EXECUTE FUNCTION extensions.moddatetime('updated_at');
+
+
 
 CREATE TABLE IF NOT EXISTS public.completions
 (
@@ -153,18 +199,82 @@ GRANT ALL ON TABLE public.completions TO postgres;
 
 GRANT ALL ON TABLE public.completions TO service_role;
 
+
+CREATE TABLE IF NOT EXISTS public.boards_completions
+(
+    board_id uuid NOT NULL,
+    completion_id uuid NOT NULL,
+    CONSTRAINT boards_completions_pkey PRIMARY KEY (board_id, completion_id),
+    CONSTRAINT boards_completions_board_id_fkey FOREIGN KEY (board_id)
+        REFERENCES public.boards (id) MATCH SIMPLE
+        ON UPDATE NO ACTION
+        ON DELETE NO ACTION,
+    CONSTRAINT boards_completions_completion_id_fkey FOREIGN KEY (completion_id)
+        REFERENCES public.completions (id) MATCH SIMPLE
+        ON UPDATE NO ACTION
+        ON DELETE NO ACTION
+)
+
+TABLESPACE pg_default;
+
+ALTER TABLE IF EXISTS public.boards_completions
+    OWNER to postgres;
+
+GRANT ALL ON TABLE public.boards_completions TO authenticated;
+
+GRANT ALL ON TABLE public.boards_completions TO anon;
+
+GRANT ALL ON TABLE public.boards_completions TO service_role;
+
+GRANT ALL ON TABLE public.boards_completions TO postgres;
+
+COMMENT ON TABLE public.boards_completions
+    IS 'The association of boards to completions';
+
+
 COMMENT ON TABLE public.completions
     IS 'The state of the objectives for a board';
-CREATE POLICY "completions - owners can execute ALL "
-    ON public.completions
-    AS PERMISSIVE
-    FOR SELECT
-    TO public
-    USING ((EXISTS ( SELECT 1
-   FROM completions c,
-    boards b,
-    boards_completions bc
-  WHERE ((c.id = bc.completion_id) AND (b.id = bc.board_id) AND (profile_id() = b.profile_id)))));
+
+
+
+CREATE TABLE IF NOT EXISTS public.games
+(
+    id uuid NOT NULL DEFAULT uuid_generate_v4(),
+    label character varying COLLATE pg_catalog."default" NOT NULL,
+    description text COLLATE pg_catalog."default",
+    board_size smallint NOT NULL DEFAULT '5'::smallint,
+    created_at timestamp with time zone DEFAULT now(),
+    updated_at timestamp with time zone DEFAULT now(),
+    expires_at timestamp with time zone DEFAULT (now() + '90 days'::interval),
+    CONSTRAINT games_pkey PRIMARY KEY (id)
+)
+
+TABLESPACE pg_default;
+
+ALTER TABLE IF EXISTS public.games
+    OWNER to postgres;
+
+ALTER TABLE IF EXISTS public.games
+    ENABLE ROW LEVEL SECURITY;
+
+GRANT ALL ON TABLE public.games TO anon;
+
+GRANT ALL ON TABLE public.games TO authenticated;
+
+GRANT ALL ON TABLE public.games TO postgres;
+
+GRANT ALL ON TABLE public.games TO service_role;
+
+COMMENT ON TABLE public.games
+    IS 'The game instances';
+
+CREATE TRIGGER handle_updated_at
+    BEFORE UPDATE 
+    ON public.games
+    FOR EACH ROW
+    EXECUTE FUNCTION extensions.moddatetime('updated_at');
+
+
 
 CREATE TABLE IF NOT EXISTS public.games_objectives
 (
@@ -199,12 +309,108 @@ GRANT ALL ON TABLE public.games_objectives TO postgres;
 
 COMMENT ON TABLE public.games_objectives
     IS 'Associates games to objectives';
-CREATE POLICY "game members can read"
-    ON public.games_objectives
-    AS PERMISSIVE
-    FOR SELECT
-    TO public
-    USING (is_member_of(game_id));
+
+CREATE TABLE IF NOT EXISTS public.games_users
+(
+    game_id uuid NOT NULL,
+    profile_id uuid,
+    CONSTRAINT games_users_game_id_fkey FOREIGN KEY (game_id)
+        REFERENCES public.games (id) MATCH SIMPLE
+        ON UPDATE NO ACTION
+        ON DELETE NO ACTION,
+    CONSTRAINT games_users_profile_id_fkey FOREIGN KEY (profile_id)
+        REFERENCES public.user_profiles (id) MATCH SIMPLE
+        ON UPDATE NO ACTION
+        ON DELETE NO ACTION
+)
+
+TABLESPACE pg_default;
+
+ALTER TABLE IF EXISTS public.games_users
+    OWNER to postgres;
+
+ALTER TABLE IF EXISTS public.games_users
+    ENABLE ROW LEVEL SECURITY;
+
+GRANT ALL ON TABLE public.games_users TO anon;
+
+GRANT ALL ON TABLE public.games_users TO authenticated;
+
+GRANT ALL ON TABLE public.games_users TO postgres;
+
+GRANT ALL ON TABLE public.games_users TO service_role;
+
+COMMENT ON TABLE public.games_users
+    IS 'The audience of game. Those that are able to create or view boards. ';
+
+CREATE TABLE IF NOT EXISTS public.games_boards
+(
+    game_id uuid NOT NULL,
+    board_id uuid NOT NULL,
+    CONSTRAINT games_boards_pkey PRIMARY KEY (game_id, board_id),
+    CONSTRAINT games_boards_board_id_fkey FOREIGN KEY (board_id)
+        REFERENCES public.boards (id) MATCH SIMPLE
+        ON UPDATE NO ACTION
+        ON DELETE NO ACTION,
+    CONSTRAINT games_boards_game_id_fkey FOREIGN KEY (game_id)
+        REFERENCES public.games (id) MATCH SIMPLE
+        ON UPDATE NO ACTION
+        ON DELETE NO ACTION
+)
+
+TABLESPACE pg_default;
+
+ALTER TABLE IF EXISTS public.games_boards
+    OWNER to postgres;
+
+ALTER TABLE IF EXISTS public.games_boards
+    ENABLE ROW LEVEL SECURITY;
+
+GRANT ALL ON TABLE public.games_boards TO authenticated;
+
+GRANT ALL ON TABLE public.games_boards TO anon;
+
+GRANT ALL ON TABLE public.games_boards TO service_role;
+
+GRANT ALL ON TABLE public.games_boards TO postgres;
+
+COMMENT ON TABLE public.games_boards
+    IS 'One game can have multiple board instances';
+
+CREATE TABLE IF NOT EXISTS public.tags
+(
+    id uuid NOT NULL DEFAULT uuid_generate_v4(),
+    label character varying COLLATE pg_catalog."default" NOT NULL,
+    created_at timestamp with time zone DEFAULT now(),
+    updated_at timestamp with time zone DEFAULT now(),
+    CONSTRAINT tags_pkey PRIMARY KEY (id),
+    CONSTRAINT tags_label_key UNIQUE (label)
+)
+
+TABLESPACE pg_default;
+
+ALTER TABLE IF EXISTS public.tags
+    OWNER to postgres;
+
+ALTER TABLE IF EXISTS public.tags
+    ENABLE ROW LEVEL SECURITY;
+
+GRANT ALL ON TABLE public.tags TO anon;
+
+GRANT ALL ON TABLE public.tags TO authenticated;
+
+GRANT ALL ON TABLE public.tags TO postgres;
+
+GRANT ALL ON TABLE public.tags TO service_role;
+
+COMMENT ON TABLE public.tags
+    IS 'Provides a means for categorizing Objectives';
+CREATE TRIGGER handle_updated_at
+    BEFORE UPDATE 
+    ON public.tags
+    FOR EACH ROW
+    EXECUTE FUNCTION extensions.moddatetime('updated_at');
+
 
 CREATE TABLE IF NOT EXISTS public.tags_objectives
 (
@@ -240,159 +446,37 @@ GRANT ALL ON TABLE public.tags_objectives TO postgres;
 COMMENT ON TABLE public.tags_objectives
     IS 'Associates a tag to an objective';
 
-CREATE TABLE IF NOT EXISTS public.games
-(
-    id uuid NOT NULL DEFAULT uuid_generate_v4(),
-    label character varying COLLATE pg_catalog."default" NOT NULL,
-    description text COLLATE pg_catalog."default",
-    board_size smallint NOT NULL DEFAULT '5'::smallint,
-    created_at timestamp with time zone DEFAULT now(),
-    updated_at timestamp with time zone DEFAULT now(),
-    expires_at timestamp with time zone DEFAULT (now() + '90 days'::interval),
-    CONSTRAINT games_pkey PRIMARY KEY (id)
-)
 
-TABLESPACE pg_default;
+CREATE OR REPLACE FUNCTION public.is_member_of(
+	_game_id uuid)
+    RETURNS boolean
+    LANGUAGE 'sql'
+    COST 100
+    VOLATILE PARALLEL UNSAFE
+AS $BODY$
+SELECT EXISTS (
+  SELECT 1
+  FROM games_users gu
+  WHERE gu.game_id = _game_id
+  AND gu.profile_id = profile_id()
+);
+$BODY$;
 
-ALTER TABLE IF EXISTS public.games
-    OWNER to postgres;
+-- FUNCTIIONS
+ALTER FUNCTION public.is_member_of(uuid)
+    OWNER TO postgres;
 
-ALTER TABLE IF EXISTS public.games
-    ENABLE ROW LEVEL SECURITY;
+GRANT EXECUTE ON FUNCTION public.is_member_of(uuid) TO PUBLIC;
 
-GRANT ALL ON TABLE public.games TO anon;
+GRANT EXECUTE ON FUNCTION public.is_member_of(uuid) TO anon;
 
-GRANT ALL ON TABLE public.games TO authenticated;
+GRANT EXECUTE ON FUNCTION public.is_member_of(uuid) TO authenticated;
 
-GRANT ALL ON TABLE public.games TO postgres;
+GRANT EXECUTE ON FUNCTION public.is_member_of(uuid) TO postgres;
 
-GRANT ALL ON TABLE public.games TO service_role;
+GRANT EXECUTE ON FUNCTION public.is_member_of(uuid) TO service_role;
 
-COMMENT ON TABLE public.games
-    IS 'The game instances';
-CREATE POLICY "game members can read"
-    ON public.games
-    AS PERMISSIVE
-    FOR SELECT
-    TO public
-    USING (is_member_of(id));
-
-CREATE TRIGGER handle_updated_at
-    BEFORE UPDATE 
-    ON public.games
-    FOR EACH ROW
-    EXECUTE FUNCTION extensions.moddatetime('updated_at');
-
-CREATE TABLE IF NOT EXISTS public.games_users
-(
-    game_id uuid NOT NULL,
-    profile_id uuid,
-    CONSTRAINT games_users_game_id_fkey FOREIGN KEY (game_id)
-        REFERENCES public.games (id) MATCH SIMPLE
-        ON UPDATE NO ACTION
-        ON DELETE NO ACTION,
-    CONSTRAINT games_users_profile_id_fkey FOREIGN KEY (profile_id)
-        REFERENCES public.user_profiles (id) MATCH SIMPLE
-        ON UPDATE NO ACTION
-        ON DELETE NO ACTION
-)
-
-TABLESPACE pg_default;
-
-ALTER TABLE IF EXISTS public.games_users
-    OWNER to postgres;
-
-ALTER TABLE IF EXISTS public.games_users
-    ENABLE ROW LEVEL SECURITY;
-
-GRANT ALL ON TABLE public.games_users TO anon;
-
-GRANT ALL ON TABLE public.games_users TO authenticated;
-
-GRANT ALL ON TABLE public.games_users TO postgres;
-
-GRANT ALL ON TABLE public.games_users TO service_role;
-
-COMMENT ON TABLE public.games_users
-    IS 'The audience of game. Those that are able to create or view boards. ';
-CREATE POLICY "game members can read"
-    ON public.games_users
-    AS PERMISSIVE
-    FOR SELECT
-    TO public
-    USING (is_member_of(game_id));
-
-CREATE TABLE IF NOT EXISTS public.games_boards
-(
-    game_id uuid NOT NULL,
-    board_id uuid NOT NULL,
-    CONSTRAINT games_boards_pkey PRIMARY KEY (game_id, board_id),
-    CONSTRAINT games_boards_board_id_fkey FOREIGN KEY (board_id)
-        REFERENCES public.boards (id) MATCH SIMPLE
-        ON UPDATE NO ACTION
-        ON DELETE NO ACTION,
-    CONSTRAINT games_boards_game_id_fkey FOREIGN KEY (game_id)
-        REFERENCES public.games (id) MATCH SIMPLE
-        ON UPDATE NO ACTION
-        ON DELETE NO ACTION
-)
-
-TABLESPACE pg_default;
-
-ALTER TABLE IF EXISTS public.games_boards
-    OWNER to postgres;
-
-ALTER TABLE IF EXISTS public.games_boards
-    ENABLE ROW LEVEL SECURITY;
-
-GRANT ALL ON TABLE public.games_boards TO authenticated;
-
-GRANT ALL ON TABLE public.games_boards TO anon;
-
-GRANT ALL ON TABLE public.games_boards TO service_role;
-
-GRANT ALL ON TABLE public.games_boards TO postgres;
-
-COMMENT ON TABLE public.games_boards
-    IS 'One game can have multiple board instances';
-CREATE POLICY "game members can read"
-    ON public.games_boards
-    AS PERMISSIVE
-    FOR SELECT
-    TO public
-    USING (is_member_of(game_id));
-
-CREATE TABLE IF NOT EXISTS public.boards
-(
-    id uuid NOT NULL DEFAULT uuid_generate_v4(),
-    created_at timestamp with time zone NOT NULL DEFAULT now(),
-    updated_at timestamp with time zone NOT NULL DEFAULT now(),
-    profile_id uuid NOT NULL,
-    CONSTRAINT board_pkey PRIMARY KEY (id),
-    CONSTRAINT boards_profile_id_fkey FOREIGN KEY (profile_id)
-        REFERENCES public.user_profiles (id) MATCH SIMPLE
-        ON UPDATE NO ACTION
-        ON DELETE NO ACTION
-)
-
-TABLESPACE pg_default;
-
-ALTER TABLE IF EXISTS public.boards
-    OWNER to postgres;
-
-ALTER TABLE IF EXISTS public.boards
-    ENABLE ROW LEVEL SECURITY;
-
-GRANT ALL ON TABLE public.boards TO authenticated;
-
-GRANT ALL ON TABLE public.boards TO anon;
-
-GRANT ALL ON TABLE public.boards TO service_role;
-
-GRANT ALL ON TABLE public.boards TO postgres;
-
-COMMENT ON TABLE public.boards
-    IS 'An instance of a game';
+-- POLICY
 CREATE POLICY "Enable ALL for users based on user_id"
     ON public.boards
     AS PERMISSIVE
@@ -401,40 +485,52 @@ CREATE POLICY "Enable ALL for users based on user_id"
     USING ((profile_id() = profile_id))
     WITH CHECK ((profile_id() = profile_id));
 
-CREATE TABLE IF NOT EXISTS public.objectives
-(
-    id uuid NOT NULL DEFAULT uuid_generate_v4(),
-    created_at timestamp with time zone DEFAULT now(),
-    updated_at timestamp with time zone NOT NULL DEFAULT now(),
-    label character varying COLLATE pg_catalog."default" NOT NULL,
-    description text COLLATE pg_catalog."default",
-    CONSTRAINT objectives_pkey PRIMARY KEY (id)
-)
+CREATE POLICY "completions - owners can execute ALL "
+    ON public.completions
+    AS PERMISSIVE
+    FOR SELECT
+    TO public
+    USING ((EXISTS ( SELECT 1
+   FROM completions c,
+    boards b,
+    boards_completions bc
+  WHERE ((c.id = bc.completion_id) AND (b.id = bc.board_id) AND (profile_id() = b.profile_id)))));
 
-TABLESPACE pg_default;
+CREATE POLICY "game members can read"
+    ON public.games
+    AS PERMISSIVE
+    FOR SELECT
+    TO public
+    USING (is_member_of(id));
 
-ALTER TABLE IF EXISTS public.objectives
-    OWNER to postgres;
+CREATE POLICY "game members can read"
+    ON public.games_boards
+    AS PERMISSIVE
+    FOR SELECT
+    TO public
+    USING (is_member_of(game_id));
 
-ALTER TABLE IF EXISTS public.objectives
-    ENABLE ROW LEVEL SECURITY;
+CREATE POLICY "game members can read"
+    ON public.games_objectives
+    AS PERMISSIVE
+    FOR SELECT
+    TO public
+    USING (is_member_of(game_id));
 
-GRANT ALL ON TABLE public.objectives TO anon;
+CREATE POLICY "game members can read"
+    ON public.games_users
+    AS PERMISSIVE
+    FOR SELECT
+    TO public
+    USING (is_member_of(game_id));
 
-GRANT ALL ON TABLE public.objectives TO authenticated;
-
-GRANT ALL ON TABLE public.objectives TO postgres;
-
-GRANT ALL ON TABLE public.objectives TO service_role;
-
-COMMENT ON TABLE public.objectives
-    IS 'A single item to be used on a board';
 CREATE POLICY "Enable insert for authenticated users only"
     ON public.objectives
     AS PERMISSIVE
     FOR INSERT
     TO public
     WITH CHECK ((auth.role() = 'authenticated'::text));
+
 CREATE POLICY "Enable update for authenticated users only"
     ON public.objectives
     AS PERMISSIVE
@@ -448,40 +544,6 @@ CREATE POLICY "objectives - authenticated users can read"
     TO public
     USING ((auth.role() = 'authenticated'::text));
 
-CREATE TRIGGER handle_updated_at
-    BEFORE UPDATE 
-    ON public.objectives
-    FOR EACH ROW
-    EXECUTE FUNCTION extensions.moddatetime('updated_at');
-
-CREATE TABLE IF NOT EXISTS public.tags
-(
-    id uuid NOT NULL DEFAULT uuid_generate_v4(),
-    label character varying COLLATE pg_catalog."default" NOT NULL,
-    created_at timestamp with time zone DEFAULT now(),
-    updated_at timestamp with time zone DEFAULT now(),
-    CONSTRAINT tags_pkey PRIMARY KEY (id),
-    CONSTRAINT tags_label_key UNIQUE (label)
-)
-
-TABLESPACE pg_default;
-
-ALTER TABLE IF EXISTS public.tags
-    OWNER to postgres;
-
-ALTER TABLE IF EXISTS public.tags
-    ENABLE ROW LEVEL SECURITY;
-
-GRANT ALL ON TABLE public.tags TO anon;
-
-GRANT ALL ON TABLE public.tags TO authenticated;
-
-GRANT ALL ON TABLE public.tags TO postgres;
-
-GRANT ALL ON TABLE public.tags TO service_role;
-
-COMMENT ON TABLE public.tags
-    IS 'Provides a means for categorizing Objectives';
 CREATE POLICY "tags - authenticated users can read"
     ON public.tags
     AS PERMISSIVE
@@ -489,44 +551,6 @@ CREATE POLICY "tags - authenticated users can read"
     TO public
     USING ((auth.role() = 'authenticated'::text));
 
-CREATE TRIGGER handle_updated_at
-    BEFORE UPDATE 
-    ON public.tags
-    FOR EACH ROW
-    EXECUTE FUNCTION extensions.moddatetime('updated_at');
-
-CREATE TABLE IF NOT EXISTS public.user_profiles
-(
-    id uuid NOT NULL DEFAULT uuid_generate_v4(),
-    user_id uuid NOT NULL,
-    created_at timestamp with time zone NOT NULL DEFAULT now(),
-    updated_at timestamp with time zone NOT NULL DEFAULT now(),
-    display_name character varying COLLATE pg_catalog."default",
-    CONSTRAINT user_profile_pkey PRIMARY KEY (id),
-    CONSTRAINT user_profile_user_id_fkey FOREIGN KEY (user_id)
-        REFERENCES auth.users (id) MATCH SIMPLE
-        ON UPDATE NO ACTION
-        ON DELETE NO ACTION
-)
-
-TABLESPACE pg_default;
-
-ALTER TABLE IF EXISTS public.user_profiles
-    OWNER to postgres;
-
-ALTER TABLE IF EXISTS public.user_profiles
-    ENABLE ROW LEVEL SECURITY;
-
-GRANT ALL ON TABLE public.user_profiles TO anon;
-
-GRANT ALL ON TABLE public.user_profiles TO authenticated;
-
-GRANT ALL ON TABLE public.user_profiles TO postgres;
-
-GRANT ALL ON TABLE public.user_profiles TO service_role;
-
-COMMENT ON TABLE public.user_profiles
-    IS 'A user''s public data';
 CREATE POLICY "Enable all actions for users based on user_id"
     ON public.user_profiles
     AS PERMISSIVE
@@ -534,9 +558,13 @@ CREATE POLICY "Enable all actions for users based on user_id"
     TO public
     USING ((auth.uid() = user_id))
     WITH CHECK ((auth.uid() = user_id));
+
 CREATE POLICY "Enable insert for authenticated users only"
     ON public.user_profiles
     AS PERMISSIVE
     FOR SELECT
     TO public
     USING ((auth.role() = 'authenticated'::text));
+
+
+
