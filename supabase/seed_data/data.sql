@@ -24,8 +24,8 @@ COPY auth.users (instance_id, id, aud, role, email, encrypted_password, email_co
 00000000-0000-0000-0000-000000000000	d67d9d66-7686-401d-a340-0fe8a22fbdf1		authenticated	joe@email.com	$2a$10$DP6RYW5KIddUKL0isAP0NuImt7Z2B0qClWDQz.FFFUNo0IdbLbAN6	2022-02-04 21:00:13.096429+00	\N		\N		\N			\N	2022-02-04 21:03:50.289936+00	{"provider": "email", "providers": ["email"]}	{}	f	2022-02-04 21:00:13.089273+00	2022-02-04 21:00:13.089326+00	\N	\N			\N		0
 00000000-0000-0000-0000-000000000000	b915af1d-bef1-4e6d-bc47-cf430d36258b		authenticated	jane@email.com	$2a$10$ynMXZF3r4mdAugBhY8DrwOM3DCHJ84UVQlOsvES8ESRUyYlZzYjye	2022-02-04 21:01:29.154819+00	\N		\N		\N			\N	2022-02-06 19:00:25.724571+00	{"provider": "email", "providers": ["email"]}	{}	f	2022-02-04 21:01:29.150638+00	2022-02-04 21:01:29.150646+00	\N	\N			\N		0
 00000000-0000-0000-0000-000000000000	be7dd07d-47dd-4118-b28f-9a9709a9c779		authenticated	admin@email.com	$2a$10$ghgFcmPvUP0YVGPGMTZnPuXrJ5uy79DAIbNeTSRAJJbs6XUxvan/O	2022-02-04 21:16:55.663081+00	\N		\N		\N			\N	2022-02-06 19:00:38.214309+00	{"provider": "email", "providers": ["email"]}	{}	f	2022-02-04 21:16:55.655554+00	2022-02-04 21:16:55.655562+00	\N	\N			\N		0
-00000000-0000-0000-0000-000000000000	0630ec75-0c45-4e8d-9406-2964bd2ff25d		authenticated	will@email.com	$2a$10$mdaWzWuo996Wr94fbiH7UuLFY.LFJ68K1zvfx1SnHjQ4aS./G1DU2	2022-02-06 23:22:05.118988+00	\N		\N		\N			\N	2022-02-07 01:51:38.720216+00	{"provider": "email", "providers": ["email"]}	{}	f	2022-02-06 23:22:05.1153+00	2022-02-06 23:22:05.115307+00	\N	\N			\N		0
-00000000-0000-0000-0000-000000000000	0f3609c8-b32a-40dc-860d-e047b89a5a6f		authenticated	jason@email.com	$2a$10$FP0fz2iaHU1F2wVnTnLjUuHSmMje48ojyurszcmnm93P23Vb1Ra7S	2022-02-06 23:20:35.504237+00	\N		\N		\N			\N	2022-02-07 02:04:14.299616+00	{"provider": "email", "providers": ["email"]}	{}	f	2022-02-06 23:20:35.495725+00	2022-02-06 23:20:35.495733+00	\N	\N			\N		0
+00000000-0000-0000-0000-000000000000	0630ec75-0c45-4e8d-9406-2964bd2ff25d		authenticated	will@email.com	$2a$10$mdaWzWuo996Wr94fbiH7UuLFY.LFJ68K1zvfx1SnHjQ4aS./G1DU2	2022-02-06 23:22:05.118988+00	\N		\N		\N			\N	2022-02-07 02:22:38.628916+00	{"provider": "email", "providers": ["email"]}	{}	f	2022-02-06 23:22:05.1153+00	2022-02-06 23:22:05.115307+00	\N	\N			\N		0
+00000000-0000-0000-0000-000000000000	0f3609c8-b32a-40dc-860d-e047b89a5a6f		authenticated	jason@email.com	$2a$10$FP0fz2iaHU1F2wVnTnLjUuHSmMje48ojyurszcmnm93P23Vb1Ra7S	2022-02-06 23:20:35.504237+00	\N		\N		\N			\N	2022-02-07 02:53:52.396129+00	{"provider": "email", "providers": ["email"]}	{}	f	2022-02-06 23:20:35.495725+00	2022-02-06 23:20:35.495733+00	\N	\N			\N		0
 \.
 
 
@@ -59,7 +59,7 @@ dd33d505-98bc-4f85-8fa2-f1261ff1fb03	0f3609c8-b32a-40dc-860d-e047b89a5a6f	2022-0
 -- Data for Name: boards; Type: TABLE DATA; Schema: public; Owner: postgres
 --
 
-COPY public.boards (id, created_at, updated_at, user_id, profile_id) FROM stdin;
+COPY public.boards (id, created_at, updated_at, profile_id) FROM stdin;
 \.
 
 

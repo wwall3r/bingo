@@ -23,7 +23,7 @@ export default {
 				.select(
 					`
 					user_profiles {
-						user_id,
+						profile_id,
 						display_name
 					}
 				`
