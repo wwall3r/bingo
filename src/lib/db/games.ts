@@ -9,26 +9,26 @@ export type Game = definitions['games'];
 
 export default {
 	async all(): Promise<Game[]> {
-		return wrap(await supabase.from(table).select());
+		return wrap(await supabase.from<Game[]>(table).select());
 	},
 
 	async one(gameId: string): Promise<Game> {
-		return wrap(await supabase.from(table).select().eq('id', gameId));
+		const data = wrap(await supabase.from<Game[]>(table).select().eq('id', gameId));
+		return data[0];
 	},
 
 	async members(gameId: string): Promise<UserProfile> {
 		return wrap(
 			await supabase
-				.from('games_users')
+				.from<UserProfile[]>('user_profiles')
 				.select(
 					`
-					user_profiles {
-						profile_id,
-						display_name
-					}
+					id,
+					display_name,
+					games_users!inner(game_id)
 				`
 				)
-				.eq('game_id', gameId)
+				.eq('games_users.game_id', gameId)
 		);
 	}
 };
