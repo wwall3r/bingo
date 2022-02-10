@@ -142,3 +142,9 @@ npm run build
 You can preview the production build with `npm run preview`.
 
 > To deploy your app, you may need to install an [adapter](https://kit.svelte.dev/docs#adapters) for your target environment.
+
+# Troubleshooting
+
+## `supabase db commit 'commit_name'` did not generate changes
+
+- Something bad happened. Grab the database dump as a reference `scripts/postgres.sh pg_dump dbname > db.dump` so you can have a backup in case you lose work.

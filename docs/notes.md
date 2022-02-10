@@ -27,3 +27,21 @@
   SELECT a.id, b.id
   FROM games as a, objectives as b;
   ```
+
+# Testing functions
+
+```sql
+SELECT uuid_generate_v4();
+```
+
+# Simulating a logged in user in psql
+
+```sql
+--SET request.jwt.claim.sub = 'MY USER ID';
+SET request.jwt.claim.sub = 'be7dd07d-47dd-4118-b28f-9a9709a9c779';
+SET ROLE authenticated;
+select auth.uid();
+select profile_id();
+select is_member_of('408957cc-06bc-42a6-a005-4d48693ce578');
+
+```
