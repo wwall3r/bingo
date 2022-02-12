@@ -1,6 +1,10 @@
 <script lang="ts">
 	import '../app.css';
 	import ThemeSwitcher from '$lib/theme/ThemeSwitcher.svelte';
+	import MenuIcon from 'svelte-feather-icons/src/icons/MenuIcon.svelte';
+	import LogInIcon from 'svelte-feather-icons/src/icons/LogInIcon.svelte';
+	import LogOutIcon from 'svelte-feather-icons/src/icons/LogOutIcon.svelte';
+	import ArrowUpIcon from 'svelte-feather-icons/src/icons/ArrowUpIcon.svelte';
 	import { session } from '$app/stores';
 	import { onMount } from 'svelte';
 	import { themeChange } from 'theme-change';
@@ -13,29 +17,23 @@
 	onMount(async () => {
 		themeChange(false);
 	});
+
+	let menuCheckbox: HTMLInputElement;
+
+	const closeDrawer = () => {
+		menuCheckbox.checked = false;
+	};
 </script>
 
 <svelte:head><title>Bingo!</title></svelte:head>
 
 <div class="shadow drawer">
-	<input id="menu-drawer" type="checkbox" class="drawer-toggle" />
+	<input bind:this={menuCheckbox} id="menu-drawer" type="checkbox" class="drawer-toggle" />
 	<div class="flex flex-col drawer-content min-h-screen">
 		<nav class="w-full navbar bg-primary text-primary-content">
 			<div class="flex-none md:hidden">
 				<label for="menu-drawer" class="btn btn-square btn-ghost">
-					<svg
-						xmlns="http://www.w3.org/2000/svg"
-						fill="none"
-						viewBox="0 0 24 24"
-						class="inline-block w-6 h-6 stroke-current"
-					>
-						<path
-							stroke-linecap="round"
-							stroke-linejoin="round"
-							stroke-width="2"
-							d="M4 6h16M4 12h16M4 18h16"
-						/>
-					</svg>
+					<MenuIcon class="inline-block w-6 h-6 stroke-current" />
 				</label>
 			</div>
 			<div class="flex-1 px-2 mx-2">
@@ -44,25 +42,34 @@
 			<div class="flex">
 				<div class="flex-none hidden md:block">
 					{#if $session.user}
-						<a
-							class="btn btn-ghost rounded-btn"
-							sveltekit:prefetch
-							href="/games"
-							aria-label="My Games">Games</a
-						>
-					{:else}
-						<a
-							class="btn btn-ghost rounded-btn"
-							aria-label="log in"
-							sveltekit:prefetch
-							href={`/auth/login?redirect=${encodeURIComponent(redirect)}`}>Log in</a
+						<a class="btn btn-ghost rounded-btn" sveltekit:prefetch href="/games" aria-label="Games"
+							>Games</a
 						>
 						<a
 							class="btn btn-ghost rounded-btn"
 							aria-label="sign up"
 							sveltekit:prefetch
-							href={`/auth/signup?redirect=${encodeURIComponent(redirect)}`}>Sign up</a
+							href={`/auth/signup?redirect=${encodeURIComponent(redirect)}`}
 						>
+							<LogOutIcon class="inline-block w-6 h-6 stroke-current mr-2" /> Log out
+						</a>
+					{:else}
+						<a
+							class="btn btn-ghost rounded-btn"
+							aria-label="log in"
+							sveltekit:prefetch
+							href={`/auth/login?redirect=${encodeURIComponent(redirect)}`}
+						>
+							<LogInIcon class="inline-block w-6 h-6 stroke-current mr-2" /> Log in
+						</a>
+						<a
+							class="btn btn-ghost rounded-btn"
+							aria-label="sign up"
+							sveltekit:prefetch
+							href={`/auth/signup?redirect=${encodeURIComponent(redirect)}`}
+						>
+							<ArrowUpIcon class="inline-block w-6 h-6 stroke-current mr-2" /> Sign up
+						</a>
 					{/if}
 				</div>
 				<ThemeSwitcher />
@@ -77,25 +84,38 @@
 	</div>
 	<div class="drawer-side">
 		<label for="menu-drawer" class="drawer-overlay">Menu</label>
-		<ul class="p-4 overflow-y-auto menu w-80 bg-base-100 text-base-content">
+		<ul class="p-4 overflow-y-auto menu w-80 bg-base-100 text-base-content" on:click={closeDrawer}>
 			{#if $session.user}
 				<li>
-					<a sveltekit:prefetch href="/games" aria-label="My Games">Games</a>
+					<a sveltekit:prefetch href="/games" aria-label="Games">Games</a>
+				</li>
+				<li>
+					<a
+						aria-label="sign up"
+						sveltekit:prefetch
+						href={`/auth/signup?redirect=${encodeURIComponent(redirect)}`}
+					>
+						<LogOutIcon class="inline-block w-6 h-6 stroke-current mr-2" /> Log out
+					</a>
 				</li>
 			{:else}
 				<li>
 					<a
 						aria-label="log in"
 						sveltekit:prefetch
-						href={`/auth/login?redirect=${encodeURIComponent(redirect)}`}>Log in</a
+						href={`/auth/login?redirect=${encodeURIComponent(redirect)}`}
 					>
+						<LogInIcon class="inline-block w-6 h-6 stroke-current mr-2" /> Log in
+					</a>
 				</li>
 				<li>
 					<a
 						aria-label="sign up"
 						sveltekit:prefetch
-						href={`/auth/signup?redirect=${encodeURIComponent(redirect)}`}>Sign up</a
+						href={`/auth/signup?redirect=${encodeURIComponent(redirect)}`}
 					>
+						<ArrowUpIcon class="inline-block w-6 h-6 stroke-current mr-2" /> Sign up
+					</a>
 				</li>
 			{/if}
 		</ul>
