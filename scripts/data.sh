@@ -30,6 +30,7 @@ function dump_data {
     --table public.tags \
     --table public.boards \
     --table public.completions \
+    --table public.roles \
     --table public.user_profiles \
     --table public.boards_completions \
     --table public.games_boards \

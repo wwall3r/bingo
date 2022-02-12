@@ -46,12 +46,12 @@ be7dd07d-47dd-4118-b28f-9a9709a9c779	be7dd07d-47dd-4118-b28f-9a9709a9c779	{"sub"
 -- Data for Name: user_profiles; Type: TABLE DATA; Schema: public; Owner: postgres
 --
 
-COPY public.user_profiles (id, user_id, created_at, updated_at, display_name) FROM stdin;
-8ea819b8-c4b5-41e5-8f40-451f0eed9acf	b915af1d-bef1-4e6d-bc47-cf430d36258b	2022-02-05 13:47:29+00	2022-02-05 13:47:29+00	Jane, Eater of Worlds
-2760facd-8c61-4473-b04f-d28a6ae189c7	d67d9d66-7686-401d-a340-0fe8a22fbdf1	2022-02-05 13:48:24+00	2022-02-05 13:48:24+00	Joe the Destroyer
-f65eae14-ecaa-4ece-bb64-0772fdb1caa3	be7dd07d-47dd-4118-b28f-9a9709a9c779	2022-02-05 13:49:16+00	2022-02-05 13:49:16+00	Administrator
-dd33d505-98bc-4f85-8fa2-f1261ff1fb03	0f3609c8-b32a-40dc-860d-e047b89a5a6f	2022-02-06 23:20:35.378+00	2022-02-06 23:20:35.378+00	JasonTheMighty
-9a6f304e-e9b7-4b04-9f51-54ad278baf70	0630ec75-0c45-4e8d-9406-2964bd2ff25d	2022-02-06 23:22:05.039+00	2022-02-06 23:22:05.039+00	Will
+COPY public.user_profiles (id, user_id, created_at, updated_at, display_name, role_id) FROM stdin;
+8ea819b8-c4b5-41e5-8f40-451f0eed9acf	b915af1d-bef1-4e6d-bc47-cf430d36258b	2022-02-05 13:47:29+00	2022-02-05 13:47:29+00	Jane, Eater of Worlds	46dd06a8-d4f7-47d7-ab7c-cdd88671d0d0
+2760facd-8c61-4473-b04f-d28a6ae189c7	d67d9d66-7686-401d-a340-0fe8a22fbdf1	2022-02-05 13:48:24+00	2022-02-05 13:48:24+00	Joe the Destroyer	46dd06a8-d4f7-47d7-ab7c-cdd88671d0d0
+dd33d505-98bc-4f85-8fa2-f1261ff1fb03	0f3609c8-b32a-40dc-860d-e047b89a5a6f	2022-02-06 23:20:35.378+00	2022-02-06 23:20:35.378+00	JasonTheMighty	a354132a-565a-489c-8717-e596fe18219c
+f65eae14-ecaa-4ece-bb64-0772fdb1caa3	be7dd07d-47dd-4118-b28f-9a9709a9c779	2022-02-05 13:49:16+00	2022-02-05 13:49:16+00	Administrator	a354132a-565a-489c-8717-e596fe18219c
+9a6f304e-e9b7-4b04-9f51-54ad278baf70	0630ec75-0c45-4e8d-9406-2964bd2ff25d	2022-02-06 23:22:05.039+00	2022-02-06 23:22:05.039+00	Will	a354132a-565a-489c-8717-e596fe18219c
 \.
 
 
@@ -163,12 +163,28 @@ COPY public.games_objectives (game_id, objective_id) FROM stdin;
 
 
 --
+-- Data for Name: roles; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.roles (id, created_at, label, description) FROM stdin;
+46dd06a8-d4f7-47d7-ab7c-cdd88671d0d0	2022-02-12 01:46:16+00	viewer	viewer: A system user that can read public information.
+c94a1b68-4ba7-410d-93c1-251157f22522	2022-02-12 01:46:58+00	editor	editor: A system user that can permissions to perform limited inserts and updates to the core system.
+a354132a-565a-489c-8717-e596fe18219c	2022-02-12 01:47:41+00	admin	admin: A system user that can perform all operations on the system
+35d824bd-96cf-4f2e-9b97-fa073b17f7ad	2022-02-12 01:48:30+00	keeper	keeper: A game user that assists the administrator in editing items related to a game.
+8909c101-2de4-4713-b8b1-b4573bfa4c50	2022-02-12 01:48:08+00	player	player: A game user with minimum privileges 
+91e5b01e-584e-4a02-b619-fef75fac22ac	2022-02-12 01:50:10+00	owner	owner: A game user that has full control over the editable items in a game
+\.
+
+
+--
 -- Data for Name: games_users; Type: TABLE DATA; Schema: public; Owner: postgres
 --
 
-COPY public.games_users (game_id, profile_id) FROM stdin;
-408957cc-06bc-42a6-a005-4d48693ce578	9a6f304e-e9b7-4b04-9f51-54ad278baf70
-408957cc-06bc-42a6-a005-4d48693ce578	dd33d505-98bc-4f85-8fa2-f1261ff1fb03
+COPY public.games_users (game_id, profile_id, role_id) FROM stdin;
+408957cc-06bc-42a6-a005-4d48693ce578	dd33d505-98bc-4f85-8fa2-f1261ff1fb03	91e5b01e-584e-4a02-b619-fef75fac22ac
+408957cc-06bc-42a6-a005-4d48693ce578	9a6f304e-e9b7-4b04-9f51-54ad278baf70	35d824bd-96cf-4f2e-9b97-fa073b17f7ad
+408957cc-06bc-42a6-a005-4d48693ce578	2760facd-8c61-4473-b04f-d28a6ae189c7	8909c101-2de4-4713-b8b1-b4573bfa4c50
+408957cc-06bc-42a6-a005-4d48693ce578	8ea819b8-c4b5-41e5-8f40-451f0eed9acf	8909c101-2de4-4713-b8b1-b4573bfa4c50
 \.
 
 
