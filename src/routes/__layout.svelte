@@ -39,12 +39,17 @@
 			<div class="flex-1 px-2 mx-2">
 				<a sveltekit:prefetch href="/" aria-label="home">Bingo!</a>
 			</div>
-			<div class="flex">
-				<div class="flex-none hidden md:block">
+			<div class="flex items-center">
+				<div class="flex-none hidden md:flex items-center">
 					{#if $session.user}
-						<a class="btn btn-ghost rounded-btn" sveltekit:prefetch href="/games" aria-label="Games"
-							>Games</a
+						<a
+							class="btn btn-ghost rounded-btn"
+							sveltekit:prefetch
+							href="/games"
+							aria-label="Games"
 						>
+							Games
+						</a>
 						<a
 							class="btn btn-ghost rounded-btn"
 							aria-label="sign up"

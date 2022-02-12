@@ -16,14 +16,21 @@
 	export let games;
 </script>
 
-<div>
+{#if !games?.length}
+	<p>You are not a member of any games. Try starting one yourself!</p>
+{:else}
 	{#each games as game}
-		<div>
-			<a sveltekit:prefetch href="/games/{game.id}"><h4>{game.label}</h4></a>
-			<p>{game.description}</p>
-		</div>
+		<a sveltekit:prefetch href="/games/{game.id}">
+			<div
+				class="m-2 p-2 card card-compact card-bordered md:card-normal hover:bg-base-200 md:max-w-prose md:mx-auto"
+			>
+				<div class="card-body">
+					<h2 class="card-title text-accent">
+						{game.label}
+					</h2>
+					<p>{game.description}</p>
+				</div>
+			</div>
+		</a>
 	{/each}
-	{#if !games?.length}
-		<p>You are not a member of any games. Try starting one yourself!</p>
-	{/if}
-</div>
+{/if}
