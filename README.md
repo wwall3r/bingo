@@ -148,3 +148,7 @@ You can preview the production build with `npm run preview`.
 ## `supabase db commit 'commit_name'` did not generate changes
 
 - Something bad happened. Grab the database dump as a reference `scripts/postgres.sh pg_dump dbname > db.dump` so you can have a backup in case you lose work.
+
+## stack depth error?
+
+- Try and change your RLS checking function to include `SECURITY DEFINER`
