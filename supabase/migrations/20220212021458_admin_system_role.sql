@@ -1,7 +1,8 @@
 CREATE OR REPLACE FUNCTION public.system_role_id()
  RETURNS uuid
  LANGUAGE 'plpgsql'
- COST 100 VOLATILE PARALLEL UNSAFE
+    COST 100
+    VOLATILE NOT LEAKPROOF SECURITY DEFINER
 AS $BODY$ 
   declare role_id user_profiles.role_id % TYPE;
 BEGIN
