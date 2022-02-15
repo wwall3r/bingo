@@ -4,8 +4,8 @@
 	export async function load({ params }) {
 		try {
 			const game = await Games.one(params.gameId);
-			const members = await Games.members(params.gameId);
-			return { props: { game, members } };
+			const players = await Games.members(params.gameId);
+			return { props: { game, players } };
 		} catch (error) {
 			console.error(error);
 			return { error };
@@ -15,16 +15,33 @@
 
 <script lang="ts">
 	export let game;
-	export let members;
+	export let players;
+
+	// TODO: boards/score is a better first UI than players. The list of all players
+	// should be accessible but not prevalent.
 </script>
 
-<h1>{game.label}</h1>
-<div>
-	<h3>Members</h3>
-	{#each members as member}
-		<div>{member.display_name}</div>
-	{/each}
-
-	<h3>Boards</h3>
-	<p>TODO: implement</p>
+<div class="m-2 md:max-w-prose md:mx-auto">
+	<h2 class="card-title text-accent">{game.label}</h2>
+	<p class="mb-2">{game.description}</p>
+	<div class="overflow-x-auto">
+		<table class="table w-full">
+			<thead>
+				<tr>
+					<th>Name</th>
+					<th>Board</th>
+					<th>Status</th>
+				</tr>
+			</thead>
+			<tbody>
+				{#each players as player, i}
+					<tr>
+						<td>{player.display_name}</td>
+						<td>board #{i}</td>
+						<td>not yet</td>
+					</tr>
+				{/each}
+			</tbody>
+		</table>
+	</div>
 </div>
