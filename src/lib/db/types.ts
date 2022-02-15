@@ -19,7 +19,7 @@ export interface paths {
 					id?: parameters['rowFilter.boards.id'];
 					created_at?: parameters['rowFilter.boards.created_at'];
 					updated_at?: parameters['rowFilter.boards.updated_at'];
-					user_id?: parameters['rowFilter.boards.user_id'];
+					profile_id?: parameters['rowFilter.boards.profile_id'];
 					/** Filtering Columns */
 					select?: parameters['select'];
 					/** Ordering */
@@ -73,7 +73,7 @@ export interface paths {
 					id?: parameters['rowFilter.boards.id'];
 					created_at?: parameters['rowFilter.boards.created_at'];
 					updated_at?: parameters['rowFilter.boards.updated_at'];
-					user_id?: parameters['rowFilter.boards.user_id'];
+					profile_id?: parameters['rowFilter.boards.profile_id'];
 				};
 				header: {
 					/** Preference */
@@ -91,7 +91,7 @@ export interface paths {
 					id?: parameters['rowFilter.boards.id'];
 					created_at?: parameters['rowFilter.boards.created_at'];
 					updated_at?: parameters['rowFilter.boards.updated_at'];
-					user_id?: parameters['rowFilter.boards.user_id'];
+					profile_id?: parameters['rowFilter.boards.profile_id'];
 				};
 				body: {
 					/** boards */
@@ -590,7 +590,9 @@ export interface paths {
 			parameters: {
 				query: {
 					game_id?: parameters['rowFilter.games_users.game_id'];
-					user_id?: parameters['rowFilter.games_users.user_id'];
+					profile_id?: parameters['rowFilter.games_users.profile_id'];
+					/** user's role for the game */
+					role_id?: parameters['rowFilter.games_users.role_id'];
 					/** Filtering Columns */
 					select?: parameters['select'];
 					/** Ordering */
@@ -642,7 +644,9 @@ export interface paths {
 			parameters: {
 				query: {
 					game_id?: parameters['rowFilter.games_users.game_id'];
-					user_id?: parameters['rowFilter.games_users.user_id'];
+					profile_id?: parameters['rowFilter.games_users.profile_id'];
+					/** user's role for the game */
+					role_id?: parameters['rowFilter.games_users.role_id'];
 				};
 				header: {
 					/** Preference */
@@ -658,7 +662,9 @@ export interface paths {
 			parameters: {
 				query: {
 					game_id?: parameters['rowFilter.games_users.game_id'];
-					user_id?: parameters['rowFilter.games_users.user_id'];
+					profile_id?: parameters['rowFilter.games_users.profile_id'];
+					/** user's role for the game */
+					role_id?: parameters['rowFilter.games_users.role_id'];
 				};
 				body: {
 					/** games_users */
@@ -762,6 +768,102 @@ export interface paths {
 				body: {
 					/** objectives */
 					objectives?: definitions['objectives'];
+				};
+				header: {
+					/** Preference */
+					Prefer?: parameters['preferReturn'];
+				};
+			};
+			responses: {
+				/** No Content */
+				204: never;
+			};
+		};
+	};
+	'/roles': {
+		get: {
+			parameters: {
+				query: {
+					id?: parameters['rowFilter.roles.id'];
+					created_at?: parameters['rowFilter.roles.created_at'];
+					label?: parameters['rowFilter.roles.label'];
+					description?: parameters['rowFilter.roles.description'];
+					/** Filtering Columns */
+					select?: parameters['select'];
+					/** Ordering */
+					order?: parameters['order'];
+					/** Limiting and Pagination */
+					offset?: parameters['offset'];
+					/** Limiting and Pagination */
+					limit?: parameters['limit'];
+				};
+				header: {
+					/** Limiting and Pagination */
+					Range?: parameters['range'];
+					/** Limiting and Pagination */
+					'Range-Unit'?: parameters['rangeUnit'];
+					/** Preference */
+					Prefer?: parameters['preferCount'];
+				};
+			};
+			responses: {
+				/** OK */
+				200: {
+					schema: definitions['roles'][];
+				};
+				/** Partial Content */
+				206: unknown;
+			};
+		};
+		post: {
+			parameters: {
+				body: {
+					/** roles */
+					roles?: definitions['roles'];
+				};
+				query: {
+					/** Filtering Columns */
+					select?: parameters['select'];
+				};
+				header: {
+					/** Preference */
+					Prefer?: parameters['preferReturn'];
+				};
+			};
+			responses: {
+				/** Created */
+				201: unknown;
+			};
+		};
+		delete: {
+			parameters: {
+				query: {
+					id?: parameters['rowFilter.roles.id'];
+					created_at?: parameters['rowFilter.roles.created_at'];
+					label?: parameters['rowFilter.roles.label'];
+					description?: parameters['rowFilter.roles.description'];
+				};
+				header: {
+					/** Preference */
+					Prefer?: parameters['preferReturn'];
+				};
+			};
+			responses: {
+				/** No Content */
+				204: never;
+			};
+		};
+		patch: {
+			parameters: {
+				query: {
+					id?: parameters['rowFilter.roles.id'];
+					created_at?: parameters['rowFilter.roles.created_at'];
+					label?: parameters['rowFilter.roles.label'];
+					description?: parameters['rowFilter.roles.description'];
+				};
+				body: {
+					/** roles */
+					roles?: definitions['roles'];
 				};
 				header: {
 					/** Preference */
@@ -969,6 +1071,8 @@ export interface paths {
 					created_at?: parameters['rowFilter.user_profiles.created_at'];
 					updated_at?: parameters['rowFilter.user_profiles.updated_at'];
 					display_name?: parameters['rowFilter.user_profiles.display_name'];
+					/** The system role assigned to the profile */
+					role_id?: parameters['rowFilter.user_profiles.role_id'];
 					/** Filtering Columns */
 					select?: parameters['select'];
 					/** Ordering */
@@ -1024,6 +1128,8 @@ export interface paths {
 					created_at?: parameters['rowFilter.user_profiles.created_at'];
 					updated_at?: parameters['rowFilter.user_profiles.updated_at'];
 					display_name?: parameters['rowFilter.user_profiles.display_name'];
+					/** The system role assigned to the profile */
+					role_id?: parameters['rowFilter.user_profiles.role_id'];
 				};
 				header: {
 					/** Preference */
@@ -1043,6 +1149,8 @@ export interface paths {
 					created_at?: parameters['rowFilter.user_profiles.created_at'];
 					updated_at?: parameters['rowFilter.user_profiles.updated_at'];
 					display_name?: parameters['rowFilter.user_profiles.display_name'];
+					/** The system role assigned to the profile */
+					role_id?: parameters['rowFilter.user_profiles.role_id'];
 				};
 				body: {
 					/** user_profiles */
@@ -1059,93 +1167,20 @@ export interface paths {
 			};
 		};
 	};
-	'/users': {
-		get: {
+	'/rpc/create_user_profile': {
+		post: {
 			parameters: {
-				query: {
-					id?: parameters['rowFilter.users.id'];
-					email?: parameters['rowFilter.users.email'];
-					/** Filtering Columns */
-					select?: parameters['select'];
-					/** Ordering */
-					order?: parameters['order'];
-					/** Limiting and Pagination */
-					offset?: parameters['offset'];
-					/** Limiting and Pagination */
-					limit?: parameters['limit'];
+				body: {
+					args: { [key: string]: unknown };
 				};
 				header: {
-					/** Limiting and Pagination */
-					Range?: parameters['range'];
-					/** Limiting and Pagination */
-					'Range-Unit'?: parameters['rangeUnit'];
 					/** Preference */
-					Prefer?: parameters['preferCount'];
+					Prefer?: parameters['preferParams'];
 				};
 			};
 			responses: {
 				/** OK */
-				200: {
-					schema: definitions['users'][];
-				};
-				/** Partial Content */
-				206: unknown;
-			};
-		};
-		post: {
-			parameters: {
-				body: {
-					/** users */
-					users?: definitions['users'];
-				};
-				query: {
-					/** Filtering Columns */
-					select?: parameters['select'];
-				};
-				header: {
-					/** Preference */
-					Prefer?: parameters['preferReturn'];
-				};
-			};
-			responses: {
-				/** Created */
-				201: unknown;
-			};
-		};
-		delete: {
-			parameters: {
-				query: {
-					id?: parameters['rowFilter.users.id'];
-					email?: parameters['rowFilter.users.email'];
-				};
-				header: {
-					/** Preference */
-					Prefer?: parameters['preferReturn'];
-				};
-			};
-			responses: {
-				/** No Content */
-				204: never;
-			};
-		};
-		patch: {
-			parameters: {
-				query: {
-					id?: parameters['rowFilter.users.id'];
-					email?: parameters['rowFilter.users.email'];
-				};
-				body: {
-					/** users */
-					users?: definitions['users'];
-				};
-				header: {
-					/** Preference */
-					Prefer?: parameters['preferReturn'];
-				};
-			};
-			responses: {
-				/** No Content */
-				204: never;
+				200: unknown;
 			};
 		};
 	};
@@ -1155,10 +1190,76 @@ export interface paths {
 				body: {
 					args: {
 						/** Format: uuid */
-						_user_id: string;
-						/** Format: uuid */
 						_game_id: string;
 					};
+				};
+				header: {
+					/** Preference */
+					Prefer?: parameters['preferParams'];
+				};
+			};
+			responses: {
+				/** OK */
+				200: unknown;
+			};
+		};
+	};
+	'/rpc/system_role_id': {
+		post: {
+			parameters: {
+				body: {
+					args: { [key: string]: unknown };
+				};
+				header: {
+					/** Preference */
+					Prefer?: parameters['preferParams'];
+				};
+			};
+			responses: {
+				/** OK */
+				200: unknown;
+			};
+		};
+	};
+	'/rpc/profile_id': {
+		post: {
+			parameters: {
+				body: {
+					args: { [key: string]: unknown };
+				};
+				header: {
+					/** Preference */
+					Prefer?: parameters['preferParams'];
+				};
+			};
+			responses: {
+				/** OK */
+				200: unknown;
+			};
+		};
+	};
+	'/rpc/default_game_role': {
+		post: {
+			parameters: {
+				body: {
+					args: { [key: string]: unknown };
+				};
+				header: {
+					/** Preference */
+					Prefer?: parameters['preferParams'];
+				};
+			};
+			responses: {
+				/** OK */
+				200: unknown;
+			};
+		};
+	};
+	'/rpc/default_system_role': {
+		post: {
+			parameters: {
+				body: {
+					args: { [key: string]: unknown };
 				};
 				header: {
 					/** Preference */
@@ -1196,9 +1297,9 @@ export interface definitions {
 		/**
 		 * Format: uuid
 		 * @description Note:
-		 * This is a Foreign Key to `users.id`.<fk table='users' column='id'/>
+		 * This is a Foreign Key to `user_profiles.id`.<fk table='user_profiles' column='id'/>
 		 */
-		user_id: string;
+		profile_id: string;
 	};
 	/** @description The association of boards to completions */
 	boards_completions: {
@@ -1320,17 +1421,24 @@ export interface definitions {
 		/**
 		 * Format: uuid
 		 * @description Note:
-		 * This is a Primary Key.<pk/>
 		 * This is a Foreign Key to `games.id`.<fk table='games' column='id'/>
 		 */
 		game_id: string;
 		/**
 		 * Format: uuid
 		 * @description Note:
-		 * This is a Primary Key.<pk/>
-		 * This is a Foreign Key to `users.id`.<fk table='users' column='id'/>
+		 * This is a Foreign Key to `user_profiles.id`.<fk table='user_profiles' column='id'/>
 		 */
-		user_id: string;
+		profile_id?: string;
+		/**
+		 * Format: uuid
+		 * @description user's role for the game
+		 *
+		 * Note:
+		 * This is a Foreign Key to `roles.id`.<fk table='roles' column='id'/>
+		 * @default public.default_game_role()
+		 */
+		role_id: string;
 	};
 	/** @description A single item to be used on a board */
 	objectives: {
@@ -1351,6 +1459,25 @@ export interface definitions {
 		 * @default now()
 		 */
 		updated_at: string;
+		/** Format: character varying */
+		label: string;
+		/** Format: text */
+		description?: string;
+	};
+	/** @description Roles and descriptions */
+	roles: {
+		/**
+		 * Format: uuid
+		 * @description Note:
+		 * This is a Primary Key.<pk/>
+		 * @default extensions.uuid_generate_v4()
+		 */
+		id: string;
+		/**
+		 * Format: timestamp with time zone
+		 * @default now()
+		 */
+		created_at?: string;
 		/** Format: character varying */
 		label: string;
 		/** Format: text */
@@ -1404,11 +1531,7 @@ export interface definitions {
 		 * @default extensions.uuid_generate_v4()
 		 */
 		id: string;
-		/**
-		 * Format: uuid
-		 * @description Note:
-		 * This is a Foreign Key to `users.id`.<fk table='users' column='id'/>
-		 */
+		/** Format: uuid */
 		user_id: string;
 		/**
 		 * Format: timestamp with time zone
@@ -1422,16 +1545,12 @@ export interface definitions {
 		updated_at: string;
 		/** Format: character varying */
 		display_name?: string;
-	};
-	users: {
 		/**
 		 * Format: uuid
-		 * @description Note:
-		 * This is a Primary Key.<pk/>
+		 * @description The system role assigned to the profile
+		 * @default public.default_system_role()
 		 */
-		id?: string;
-		/** Format: character varying */
-		email?: string;
+		role_id: string;
 	};
 }
 
@@ -1477,7 +1596,7 @@ export interface parameters {
 	/** Format: timestamp with time zone */
 	'rowFilter.boards.updated_at': string;
 	/** Format: uuid */
-	'rowFilter.boards.user_id': string;
+	'rowFilter.boards.profile_id': string;
 	/** @description boards_completions */
 	'body.boards_completions': definitions['boards_completions'];
 	/** Format: uuid */
@@ -1531,7 +1650,12 @@ export interface parameters {
 	/** Format: uuid */
 	'rowFilter.games_users.game_id': string;
 	/** Format: uuid */
-	'rowFilter.games_users.user_id': string;
+	'rowFilter.games_users.profile_id': string;
+	/**
+	 * Format: uuid
+	 * @description user's role for the game
+	 */
+	'rowFilter.games_users.role_id': string;
 	/** @description objectives */
 	'body.objectives': definitions['objectives'];
 	/** Format: uuid */
@@ -1544,6 +1668,16 @@ export interface parameters {
 	'rowFilter.objectives.label': string;
 	/** Format: text */
 	'rowFilter.objectives.description': string;
+	/** @description roles */
+	'body.roles': definitions['roles'];
+	/** Format: uuid */
+	'rowFilter.roles.id': string;
+	/** Format: timestamp with time zone */
+	'rowFilter.roles.created_at': string;
+	/** Format: character varying */
+	'rowFilter.roles.label': string;
+	/** Format: text */
+	'rowFilter.roles.description': string;
 	/** @description tags */
 	'body.tags': definitions['tags'];
 	/** Format: uuid */
@@ -1572,12 +1706,11 @@ export interface parameters {
 	'rowFilter.user_profiles.updated_at': string;
 	/** Format: character varying */
 	'rowFilter.user_profiles.display_name': string;
-	/** @description users */
-	'body.users': definitions['users'];
-	/** Format: uuid */
-	'rowFilter.users.id': string;
-	/** Format: character varying */
-	'rowFilter.users.email': string;
+	/**
+	 * Format: uuid
+	 * @description The system role assigned to the profile
+	 */
+	'rowFilter.user_profiles.role_id': string;
 }
 
 export interface operations {}
