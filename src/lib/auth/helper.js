@@ -45,6 +45,14 @@ export const getRelativePath = (url) =>
 		: url.toString().substring(url.origin.length);
 
 /**
+ * @param {URL} url
+ */
+export const redirectToLogin = (url) => ({
+	status: 302,
+	redirect: '/auth/login?redirect=' + encodeURIComponent(getRelativePath(url))
+});
+
+/**
  * @param {Request} request
  * @param {import('@sveltejs/kit').EndpointOutput} response
  */

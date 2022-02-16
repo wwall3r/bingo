@@ -1,7 +1,12 @@
 <script lang="ts" context="module">
 	import Games from '$lib/db/games';
+	import { redirectToLogin } from '$lib/auth/helper';
 
-	export async function load() {
+	export async function load({ session, url }) {
+		if (!session?.user) {
+			return redirectToLogin(url);
+		}
+
 		try {
 			const games = await Games.all();
 			return { props: { games } };
