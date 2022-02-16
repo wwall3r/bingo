@@ -64,6 +64,17 @@ COPY public.boards (id, created_at, updated_at, profile_id) FROM stdin;
 
 
 --
+-- Data for Name: completion_states; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.completion_states (id, created_at, updated_at, label) FROM stdin;
+1	2022-02-16 21:15:02+00	2022-02-16 21:15:02+00	incomplete
+2	2022-02-16 21:15:17+00	2022-02-16 21:15:17+00	complete
+3	2022-02-16 21:15:24+00	2022-02-16 21:15:24+00	in progress
+\.
+
+
+--
 -- Data for Name: objectives; Type: TABLE DATA; Schema: public; Owner: postgres
 --
 
@@ -100,7 +111,7 @@ c1df10ad-107c-4b95-b1b6-911a7fed0897	2022-01-30 04:20:57+00	2022-01-30 04:20:57+
 -- Data for Name: completions; Type: TABLE DATA; Schema: public; Owner: postgres
 --
 
-COPY public.completions (id, created_at, updated_at, objective_id, state, notes) FROM stdin;
+COPY public.completions (id, created_at, updated_at, objective_id, notes, state) FROM stdin;
 \.
 
 
@@ -228,6 +239,13 @@ COPY public.tags_objectives (tag_id, objective_id) FROM stdin;
 37fd9162-c822-44c4-a0ad-2c745656ca9d	c1df10ad-107c-4b95-b1b6-911a7fed0897
 37fd9162-c822-44c4-a0ad-2c745656ca9d	29d90ab1-1ab7-4b35-80db-c3a05f12070b
 \.
+
+
+--
+-- Name: completion_states_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('public.completion_states_id_seq', 3, true);
 
 
 --

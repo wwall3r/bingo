@@ -35,7 +35,7 @@ The idea is to create multiple types of bingo games and share a game with indivi
 - selects the category and filters objectives appropriate for the game instance
 - invites players or anonymous
   - This may be a backend workflow which doesn't care. It either adds an existing player or sends an invitation
-  - consider security rammifications of revealing information)
+  - consider security ramifications of revealing information)
   - can find players or do they have to know e-mail addresses?
 - can view all board instances for their game instances
 - can promote players to directors for a game instance

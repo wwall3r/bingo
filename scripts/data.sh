@@ -29,6 +29,7 @@ function dump_data {
     --table public.games \
     --table public.tags \
     --table public.boards \
+    --table public.completion_states \
     --table public.completions \
     --table public.roles \
     --table public.user_profiles \
