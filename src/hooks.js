@@ -13,6 +13,18 @@ export const handle = async ({ event, resolve }) => {
 
 	supabase.auth.setAuth(locals.token);
 
+	if (!locals.profile_id && locals.user) {
+		const { data, error } = await supabase
+			.from('user_profiles')
+			.select()
+			.eq('user_id', locals.user.id)
+			.single();
+		if (error) {
+			console.log(error);
+		}
+		locals.profile_id = data.id;
+	}
+
 	return resolve(event);
 };
 
