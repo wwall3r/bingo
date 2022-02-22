@@ -1,7 +1,8 @@
 <script lang="ts" context="module">
-	import { UserProfile } from './../../lib/db/user_profiles.ts';
-	import supabase from '$lib/db';
+	import Boards from '$lib/db/boards';
 	import Games from '$lib/db/games';
+	import BoardMini from '$lib/BoardMini.svelte';
+	import supabase from '$lib/db';
 	import { redirectToLogin } from '$lib/auth/helper';
 
 	export async function load({ params, session, url }) {
@@ -11,8 +12,8 @@
 
 		try {
 			const game = await Games.one(params.gameId);
-			const players = await Games.members(params.gameId);
-			return { props: { game, players } };
+			const boards = await Boards.allForGame(params.gameId);
+			return { props: { game, boards } };
 		} catch (error) {
 			console.error(error);
 			return { error };
@@ -23,7 +24,7 @@
 <script lang="ts">
 	import { page, session } from '$app/stores';
 	export let game;
-	export let players;
+	export let boards;
 
 	// TODO: boards/score is a better first UI than players. The list of all players
 	// should be accessible but not prevalent.
@@ -41,24 +42,18 @@
 <div class="m-2 md:max-w-prose md:mx-auto">
 	<h2 class="card-title text-accent">{game.label}</h2>
 	<p class="mb-2">{game.description}</p>
-	<div class="overflow-x-auto">
-		<table class="table w-full">
-			<thead>
-				<tr>
-					<th>Name</th>
-					<th>Board</th>
-					<th>Status</th>
-				</tr>
-			</thead>
-			<tbody>
-				{#each players as player, i}
-					<tr>
-						<td>{player.display_name}</td>
-						<td>board #{i}</td>
-						<td>not yet</td>
-					</tr>
-				{/each}
-			</tbody>
-		</table>
-	</div>
+	{#each boards as board}
+		<a sveltekit:prefetch href="/boards/{board.id}">
+			<div class="card card-side bg-base-200 hover shadow-xl">
+				<div class="card-body">
+					<h2 class="card-title">
+						{board.user_profiles.display_name}
+					</h2>
+				</div>
+				<div class="mr-3 absolute top-0 right-0 bottom-0 flex items-center justify-center">
+					<BoardMini {board} />
+				</div>
+			</div>
+		</a>
+	{/each}
 </div>
