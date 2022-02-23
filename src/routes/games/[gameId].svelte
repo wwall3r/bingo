@@ -30,11 +30,17 @@
 	// should be accessible but not prevalent.
 
 	const handleNewBoard = async () => {
-		await supabase.rpc('create_board', {
+		const { data, error } = await supabase.rpc('create_board', {
 			p_game_id: $page.params.gameId,
 			p_profile_id: $session.profile_id,
 			p_num_objectives: 24
 		});
+
+		if (!error) {
+			boards = await Boards.allForGame($page.params.gameId);
+		} else {
+			console.log(error);
+		}
 	};
 </script>
 
