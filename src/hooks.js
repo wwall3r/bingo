@@ -1,17 +1,44 @@
-import { toExpressRequest } from '$lib/auth/expressify';
 import supabase from '$lib/db';
+import { parse } from 'cookie-es';
 
 /** @type {import('@sveltejs/kit').Handle} */
 export const handle = async ({ event, resolve }) => {
 	const { locals, request } = event;
 
-	const expressRequest = toExpressRequest(request);
-	const { user } = await supabase.auth.api.getUserByCookie(expressRequest);
+	const cookies = request?.headers.get('cookie');
+	let token;
 
-	locals.token = expressRequest.cookies['sb:token'] || undefined;
-	locals.user = user || false;
+	if (cookies) {
+		const parsed = parse(cookies);
+		token = parsed['sb:token'];
 
-	supabase.auth.setAuth(locals.token);
+		if (!token && parsed['sb:refresh']) {
+			const { session, error } = await supabase.auth.signIn({
+				refreshToken: parsed['sb:refresh']
+			});
+
+			if (error) {
+				console.error('could not sign in with refresh token', error);
+			}
+
+			token = session.access_token;
+
+			// TODO: bump sb:refresh cookie maxAge or expiration
+		}
+
+		if (token) {
+			const { user, error } = await supabase.auth.api.getUser(token);
+
+			if (error) {
+				console.error('could not get user with access_token', error);
+			}
+
+			locals.token = token || undefined;
+			locals.user = user || false;
+		}
+	}
+
+	supabase.auth.setAuth(token);
 
 	if (!locals.profile_id && locals.user) {
 		const { data, error } = await supabase
@@ -19,9 +46,11 @@ export const handle = async ({ event, resolve }) => {
 			.select()
 			.eq('user_id', locals.user.id)
 			.single();
+
 		if (error) {
-			console.log(error);
+			console.log('could not query profile', error);
 		}
+
 		locals.profile_id = data.id;
 	}
 

@@ -9,8 +9,8 @@ export type Completion = definitions['completions'];
 
 export default {
 	async allForGame(gameId: string): Promise<Board[]> {
-		return wrap(
-			await supabase
+		const tiles = await wrap(() =>
+			supabase
 				.from<Board[]>(table)
 				.select(
 					`
@@ -32,13 +32,15 @@ export default {
 				`
 				)
 				.eq('games_boards.game_id', gameId)
-		).map(addFreeSpace);
+		);
+
+		return tiles.map(addFreeSpace);
 	},
 
 	async one(boardId: string): Promise<Board> {
 		return addFreeSpace(
-			wrap(
-				await supabase
+			await wrap(() =>
+				supabase
 					.from<Board[]>(table)
 					.select(
 						`

@@ -1,5 +1,5 @@
-import { toExpressRequest, toExpressResponse } from '$lib/auth/expressify';
 import supabase from '$lib/db';
+import { serialize } from 'cookie-es';
 
 /**
  * @param {string} path
@@ -21,11 +21,14 @@ export const createHandler =
 		}
 
 		if (error) {
+			console.error(error);
 			return getErrorResponse(error.message, redirect, path);
+		} else {
+			console.log('session', session);
 		}
 
 		const response = getSuccessResponse(session, redirect);
-		updateAuthCookie(request, response);
+		updateAuthCookie(response, session);
 		return response;
 	};
 
@@ -53,22 +56,24 @@ export const redirectToLogin = (url) => ({
 });
 
 /**
- * @param {Request} request
  * @param {import('@sveltejs/kit').EndpointOutput} response
+ * @param {Session?} session
  */
-export const updateAuthCookie = async (request, response) => {
-	const expressResponse = await toExpressResponse(response);
-	const expressRequest = toExpressRequest(request);
-	expressRequest.body = expressResponse.body;
-	supabase.auth.api.setAuthCookie(expressRequest, expressResponse);
-	const cookies = expressResponse.getHeader('set-cookie');
-	let cookie = Array.isArray(cookies) ? cookies.find((c) => c.startsWith('sb:token=')) : cookies;
-
-	if (cookie) {
-		cookie = cookie.replace('HttpOnly;', '');
-	}
-
-	response.headers['set-cookie'] = cookie;
+export const updateAuthCookie = async (response, session) => {
+	response.headers['set-cookie'] = [
+		serialize('sb:token', session?.access_token || '', {
+			httpOnly: false,
+			maxAge: session?.expires_in || -1,
+			path: '/',
+			sameSite: 'lax'
+		}),
+		serialize('sb:refresh', session?.refresh_token || '', {
+			httpOnly: true,
+			maxAge: 2 * (session?.expires_in || -1),
+			path: '/',
+			sameSite: 'lax'
+		})
+	];
 };
 
 /**

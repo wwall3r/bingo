@@ -40,6 +40,6 @@ const handleLogOut = async (event, redirect) => {
 		}
 	};
 
-	updateAuthCookie(request, response);
+	updateAuthCookie(response);
 	return response;
 };

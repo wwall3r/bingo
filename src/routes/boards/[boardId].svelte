@@ -19,23 +19,46 @@
 </script>
 
 <script lang="ts">
+	import { fly } from 'svelte/transition';
 	import { scaledContent } from '$lib/scaledContent';
 	export let board: Board;
 
 	// TODO: size is computable from board.completions.length, but that mucks
 	// up tailwind. Set manually?
+
+	// TODO: May want to drop the board and profile display name on here
+	const duration = 500;
+	const transitionOptions = {
+		duration,
+		delay: duration
+	};
+
+	const getTransitionOptions = (i) => {
+		const x = i % 5;
+		const y = Math.floor(i / 5);
+
+		return Object.assign({}, transitionOptions, {
+			x: (2 - x) * 200,
+			y: (2 - y) * 200
+		});
+	};
 </script>
 
-<div class="mt-2 grid gap-2 grid-cols-5 grid-rows-5 md:max-w-prose md:mx-auto">
-	{#each board.completions as tile}
-		<div
-			class="p-1 aspect-square border-2 border-info shadow-lg text-info-content rounded-lg flex justify-center items-center"
-			class:border-success={tile.state === 2}
+<div
+	class="mt-2 mx-1 grid gap-2 grid-cols-5 grid-rows-5 md:max-w-prose md:mx-auto"
+	transition:fly={transitionOptions}
+>
+	{#each board.completions as tile, i}
+		<button
+			aria-label={tile.objectives.label}
+			class="btn aspect-square h-auto"
+			class:btn-success={tile.state === 2}
 			use:scaledContent
+			in:fly={getTransitionOptions(i)}
 		>
-			<div class="scaled-content text-center invisible">
+			<span class="scaled-content">
 				{tile.objectives.label}
-			</div>
-		</div>
+			</span>
+		</button>
 	{/each}
 </div>

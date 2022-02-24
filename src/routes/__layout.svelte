@@ -1,22 +1,15 @@
 <script lang="ts">
 	import '../app.css';
-	import ThemeSwitcher from '$lib/theme/ThemeSwitcher.svelte';
 	import MenuIcon from 'svelte-feather-icons/src/icons/MenuIcon.svelte';
 	import LogInIcon from 'svelte-feather-icons/src/icons/LogInIcon.svelte';
 	import LogOutIcon from 'svelte-feather-icons/src/icons/LogOutIcon.svelte';
 	import ArrowUpIcon from 'svelte-feather-icons/src/icons/ArrowUpIcon.svelte';
 	import { session } from '$app/stores';
-	import { onMount } from 'svelte';
-	import { themeChange } from 'theme-change';
 	import { page } from '$app/stores';
 	import { getRelativePath } from '$lib/auth/helper';
 
 	// get relative URL for this page to redirect back to after logging in
 	$: redirect = getRelativePath($page.url);
-
-	onMount(async () => {
-		themeChange(false);
-	});
 
 	let menuCheckbox: HTMLInputElement;
 
@@ -77,7 +70,6 @@
 						</a>
 					{/if}
 				</div>
-				<ThemeSwitcher />
 			</div>
 		</nav>
 		<main class="flex-1">

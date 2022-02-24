@@ -9,12 +9,12 @@ export type Objective = definitions['objectives'];
 
 export default {
 	async all(): Promise<Objective[]> {
-		return wrap(await supabase.from(table).select());
+		return wrap(() => supabase.from(table).select());
 	},
 
 	async insert(objectives: Objective | Objective[]): Promise<any> {
-		return wrap(
-			await supabase.from(table).insert(Array.isArray(objectives) ? objectives : [objectives])
+		return wrap(() =>
+			supabase.from(table).insert(Array.isArray(objectives) ? objectives : [objectives])
 		);
 	},
 
@@ -25,8 +25,8 @@ export default {
 			.join(` ${operator} `);
 
 		// TODO: add full text index for label + description
-		return wrap(
-			await supabase
+		return wrap(() =>
+			supabase
 				.from(table)
 				.select(
 					`
