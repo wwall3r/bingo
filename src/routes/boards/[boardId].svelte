@@ -21,7 +21,9 @@
 <script lang="ts">
 	import { fly } from 'svelte/transition';
 	import { scaledContent } from '$lib/scaledContent';
+	import CompletionDetails from '$lib/CompletionDetails.svelte';
 	export let board: Board;
+	let completion;
 
 	// TODO: size is computable from board.completions.length, but that mucks
 	// up tailwind. Set manually?
@@ -42,6 +44,12 @@
 			y: (2 - y) * 200
 		});
 	};
+
+	const completionHandler = (c) => {
+		console.log('Button clicked for completion');
+		console.log(c);
+		completion = c;
+	};
 </script>
 
 <div
@@ -54,6 +62,9 @@
 			class="btn aspect-square h-auto"
 			class:btn-success={tile.state === 2}
 			use:scaledContent
+			on:click={() => {
+				completionHandler(tile);
+			}}
 			in:fly={getTransitionOptions(i)}
 		>
 			<span class="scaled-content">
@@ -62,3 +73,7 @@
 		</button>
 	{/each}
 </div>
+
+{#if completion}
+	<CompletionDetails {completion} />
+{/if}
