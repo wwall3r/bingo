@@ -1,6 +1,6 @@
 <script lang="ts" context="module">
 	import Boards from '$lib/db/boards';
-	import type { Board } from '$lib/db/boards';
+	import type { GameBoard } from '$lib/db/boards';
 	import { redirectToLogin } from '$lib/auth/helper';
 
 	export async function load({ params, session, url }) {
@@ -22,7 +22,8 @@
 	import { fly } from 'svelte/transition';
 	import { scaledContent } from '$lib/scaledContent';
 	import CompletionDetails from '$lib/CompletionDetails.svelte';
-	export let board: Board;
+	export let board: GameBoard;
+
 	let completion;
 
 	// TODO: size is computable from board.completions.length, but that mucks

@@ -48,6 +48,20 @@ export const handle = async ({ event, resolve }) => {
 	locals.token = token || undefined;
 	locals.user = user || false;
 
+	if (!locals.profile_id && locals.user) {
+		const { data, error } = await supabase
+			.from('user_profiles')
+			.select()
+			.eq('user_id', locals.user.id)
+			.single();
+
+		if (error) {
+			console.log('could not query profile', error);
+		}
+
+		locals.profile_id = data.id;
+	}
+
 	const response = await resolve(event);
 
 	if (setCookies?.length) {
@@ -59,4 +73,4 @@ export const handle = async ({ event, resolve }) => {
 };
 
 /** @type {import('@sveltejs/kit').GetSession} */
-export const getSession = async (request) => request.locals;
+export const getSession = async (event) => event.locals;

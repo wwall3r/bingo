@@ -1,7 +1,7 @@
 <script lang="ts">
-	import type { Board } from './db/boards';
+	import type { GameBoard } from './db/boards';
 
-	export let board: Board;
+	export let board: GameBoard;
 </script>
 
 <div class="aspect-square grid gap-1 grid-cols-5 grid-rows-5">

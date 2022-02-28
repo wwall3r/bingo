@@ -1,12 +1,12 @@
 <script lang="ts">
-	import Objectives, { type Objective } from '$lib/db/objectives';
+	import Objectives, { type ObjectiveWithTags } from '$lib/db/objectives';
 	import Operators from '$lib/db/operators';
 
 	let label: string = '';
 	let description: string = '';
 	let error = false;
 
-	let searchPromise: Promise<Objective[]>;
+	let searchPromise: Promise<ObjectiveWithTags[]>;
 
 	const searchSimilar = () => {
 		searchPromise = Objectives.search(label, Operators.OR);

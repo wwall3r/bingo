@@ -7,11 +7,34 @@ const table = 'boards';
 export type Board = definitions['boards'];
 export type Completion = definitions['completions'];
 
+type GameProfile = {
+	display_name: definitions['user_profiles']['display_name'];
+};
+
+type GameObjective = {
+	id: definitions['objectives']['id'];
+	label: definitions['objectives']['label'];
+	description: definitions['objectives']['description'];
+};
+
+type GameCompletions = {
+	id: Completion['id'];
+	notes: Completion['notes'];
+	state: Completion['state'];
+	objectives: GameObjective;
+};
+
+export type GameBoard = {
+	id: Board['id'];
+	user_profiles: GameProfile;
+	completions: GameCompletions[];
+};
+
 export default {
-	async allForGame(gameId: string): Promise<Board[]> {
+	async allForGame(gameId: string): Promise<GameBoard[]> {
 		const tiles = await wrap(() =>
 			supabase
-				.from<Board[]>(table)
+				.from<GameBoard[]>(table)
 				.select(
 					`
 					id,
@@ -37,11 +60,11 @@ export default {
 		return tiles.map(addFreeSpace);
 	},
 
-	async one(boardId: string): Promise<Board> {
+	async one(boardId: string): Promise<GameBoard> {
 		return addFreeSpace(
 			await wrap(() =>
 				supabase
-					.from<Board[]>(table)
+					.from<GameBoard[]>(table)
 					.select(
 						`
 					id,

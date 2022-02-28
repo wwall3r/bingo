@@ -198,6 +198,102 @@ export interface paths {
 			};
 		};
 	};
+	'/completion_states': {
+		get: {
+			parameters: {
+				query: {
+					id?: parameters['rowFilter.completion_states.id'];
+					created_at?: parameters['rowFilter.completion_states.created_at'];
+					updated_at?: parameters['rowFilter.completion_states.updated_at'];
+					label?: parameters['rowFilter.completion_states.label'];
+					/** Filtering Columns */
+					select?: parameters['select'];
+					/** Ordering */
+					order?: parameters['order'];
+					/** Limiting and Pagination */
+					offset?: parameters['offset'];
+					/** Limiting and Pagination */
+					limit?: parameters['limit'];
+				};
+				header: {
+					/** Limiting and Pagination */
+					Range?: parameters['range'];
+					/** Limiting and Pagination */
+					'Range-Unit'?: parameters['rangeUnit'];
+					/** Preference */
+					Prefer?: parameters['preferCount'];
+				};
+			};
+			responses: {
+				/** OK */
+				200: {
+					schema: definitions['completion_states'][];
+				};
+				/** Partial Content */
+				206: unknown;
+			};
+		};
+		post: {
+			parameters: {
+				body: {
+					/** completion_states */
+					completion_states?: definitions['completion_states'];
+				};
+				query: {
+					/** Filtering Columns */
+					select?: parameters['select'];
+				};
+				header: {
+					/** Preference */
+					Prefer?: parameters['preferReturn'];
+				};
+			};
+			responses: {
+				/** Created */
+				201: unknown;
+			};
+		};
+		delete: {
+			parameters: {
+				query: {
+					id?: parameters['rowFilter.completion_states.id'];
+					created_at?: parameters['rowFilter.completion_states.created_at'];
+					updated_at?: parameters['rowFilter.completion_states.updated_at'];
+					label?: parameters['rowFilter.completion_states.label'];
+				};
+				header: {
+					/** Preference */
+					Prefer?: parameters['preferReturn'];
+				};
+			};
+			responses: {
+				/** No Content */
+				204: never;
+			};
+		};
+		patch: {
+			parameters: {
+				query: {
+					id?: parameters['rowFilter.completion_states.id'];
+					created_at?: parameters['rowFilter.completion_states.created_at'];
+					updated_at?: parameters['rowFilter.completion_states.updated_at'];
+					label?: parameters['rowFilter.completion_states.label'];
+				};
+				body: {
+					/** completion_states */
+					completion_states?: definitions['completion_states'];
+				};
+				header: {
+					/** Preference */
+					Prefer?: parameters['preferReturn'];
+				};
+			};
+			responses: {
+				/** No Content */
+				204: never;
+			};
+		};
+	};
 	'/completions': {
 		get: {
 			parameters: {
@@ -206,8 +302,8 @@ export interface paths {
 					created_at?: parameters['rowFilter.completions.created_at'];
 					updated_at?: parameters['rowFilter.completions.updated_at'];
 					objective_id?: parameters['rowFilter.completions.objective_id'];
-					state?: parameters['rowFilter.completions.state'];
 					notes?: parameters['rowFilter.completions.notes'];
+					state?: parameters['rowFilter.completions.state'];
 					/** Filtering Columns */
 					select?: parameters['select'];
 					/** Ordering */
@@ -262,8 +358,8 @@ export interface paths {
 					created_at?: parameters['rowFilter.completions.created_at'];
 					updated_at?: parameters['rowFilter.completions.updated_at'];
 					objective_id?: parameters['rowFilter.completions.objective_id'];
-					state?: parameters['rowFilter.completions.state'];
 					notes?: parameters['rowFilter.completions.notes'];
+					state?: parameters['rowFilter.completions.state'];
 				};
 				header: {
 					/** Preference */
@@ -282,8 +378,8 @@ export interface paths {
 					created_at?: parameters['rowFilter.completions.created_at'];
 					updated_at?: parameters['rowFilter.completions.updated_at'];
 					objective_id?: parameters['rowFilter.completions.objective_id'];
-					state?: parameters['rowFilter.completions.state'];
 					notes?: parameters['rowFilter.completions.notes'];
+					state?: parameters['rowFilter.completions.state'];
 				};
 				body: {
 					/** completions */
@@ -1167,6 +1263,26 @@ export interface paths {
 			};
 		};
 	};
+	'/rpc/can_write_completions': {
+		post: {
+			parameters: {
+				body: {
+					args: {
+						/** Format: uuid */
+						p_profile_id: string;
+					};
+				};
+				header: {
+					/** Preference */
+					Prefer?: parameters['preferParams'];
+				};
+			};
+			responses: {
+				/** OK */
+				200: unknown;
+			};
+		};
+	};
 	'/rpc/create_user_profile': {
 		post: {
 			parameters: {
@@ -1238,7 +1354,65 @@ export interface paths {
 			};
 		};
 	};
+	'/rpc/get_completions_for_user': {
+		post: {
+			parameters: {
+				body: {
+					args: { [key: string]: unknown };
+				};
+				header: {
+					/** Preference */
+					Prefer?: parameters['preferParams'];
+				};
+			};
+			responses: {
+				/** OK */
+				200: unknown;
+			};
+		};
+	};
+	'/rpc/create_board': {
+		post: {
+			parameters: {
+				body: {
+					args: {
+						/** Format: integer */
+						p_num_objectives: number;
+						/** Format: uuid */
+						p_game_id: string;
+						/** Format: uuid */
+						p_profile_id: string;
+					};
+				};
+				header: {
+					/** Preference */
+					Prefer?: parameters['preferParams'];
+				};
+			};
+			responses: {
+				/** OK */
+				200: unknown;
+			};
+		};
+	};
 	'/rpc/default_game_role': {
+		post: {
+			parameters: {
+				body: {
+					args: { [key: string]: unknown };
+				};
+				header: {
+					/** Preference */
+					Prefer?: parameters['preferParams'];
+				};
+			};
+			responses: {
+				/** OK */
+				200: unknown;
+			};
+		};
+	};
+	'/rpc/get_user_games': {
 		post: {
 			parameters: {
 				body: {
@@ -1318,6 +1492,27 @@ export interface definitions {
 		 */
 		completion_id: string;
 	};
+	/** @description The states allowed for completions */
+	completion_states: {
+		/**
+		 * Format: integer
+		 * @description Note:
+		 * This is a Primary Key.<pk/>
+		 */
+		id: number;
+		/**
+		 * Format: timestamp with time zone
+		 * @default now()
+		 */
+		created_at?: string;
+		/**
+		 * Format: timestamp with time zone
+		 * @default now()
+		 */
+		updated_at?: string;
+		/** Format: character varying */
+		label: string;
+	};
 	/** @description The state of the objectives for a board */
 	completions: {
 		/**
@@ -1343,13 +1538,15 @@ export interface definitions {
 		 * This is a Foreign Key to `objectives.id`.<fk table='objectives' column='id'/>
 		 */
 		objective_id: string;
-		/**
-		 * Format: character varying
-		 * @default incomplete
-		 */
-		state: string;
 		/** Format: text */
 		notes?: string;
+		/**
+		 * Format: integer
+		 * @description Note:
+		 * This is a Foreign Key to `completion_states.id`.<fk table='completion_states' column='id'/>
+		 * @default 1
+		 */
+		state?: number;
 	};
 	/** @description The game instances */
 	games: {
@@ -1603,6 +1800,16 @@ export interface parameters {
 	'rowFilter.boards_completions.board_id': string;
 	/** Format: uuid */
 	'rowFilter.boards_completions.completion_id': string;
+	/** @description completion_states */
+	'body.completion_states': definitions['completion_states'];
+	/** Format: integer */
+	'rowFilter.completion_states.id': string;
+	/** Format: timestamp with time zone */
+	'rowFilter.completion_states.created_at': string;
+	/** Format: timestamp with time zone */
+	'rowFilter.completion_states.updated_at': string;
+	/** Format: character varying */
+	'rowFilter.completion_states.label': string;
 	/** @description completions */
 	'body.completions': definitions['completions'];
 	/** Format: uuid */
@@ -1613,10 +1820,10 @@ export interface parameters {
 	'rowFilter.completions.updated_at': string;
 	/** Format: uuid */
 	'rowFilter.completions.objective_id': string;
-	/** Format: character varying */
-	'rowFilter.completions.state': string;
 	/** Format: text */
 	'rowFilter.completions.notes': string;
+	/** Format: integer */
+	'rowFilter.completions.state': string;
 	/** @description games */
 	'body.games': definitions['games'];
 	/** Format: uuid */
