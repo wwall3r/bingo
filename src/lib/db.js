@@ -14,7 +14,7 @@ const supabase = createClient(
 if (browser) {
 	const update = () => {
 		const cookies = cookieParse(document.cookie);
-		supabase.auth.setAuth(cookies['sb:token']);
+		supabase.auth.setAuth(cookies.access_token);
 	};
 
 	document.addEventListener('cookiechange', update);

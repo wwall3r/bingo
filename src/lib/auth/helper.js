@@ -23,12 +23,10 @@ export const createHandler =
 		if (error) {
 			console.error(error);
 			return getErrorResponse(error.message, redirect, path);
-		} else {
-			console.log('session', session);
 		}
 
 		const response = getSuccessResponse(session, redirect);
-		updateAuthCookie(response, session);
+		updateAuthCookies(response, session);
 		return response;
 	};
 
@@ -43,7 +41,7 @@ export const validateRedirect = (redirect) => /^\/\w?/.test(redirect);
  * @return {string} the path to use for redirect through /auth endpoints and pages
  */
 export const getRelativePath = (url) =>
-	url.pathname.startsWith('/auth/')
+	url.pathname == '/auth/login' || url.pathname == '/auth/signup'
 		? url.searchParams.get('redirect')
 		: url.toString().substring(url.origin.length);
 
@@ -59,22 +57,38 @@ export const redirectToLogin = (url) => ({
  * @param {import('@sveltejs/kit').EndpointOutput} response
  * @param {Session?} session
  */
-export const updateAuthCookie = async (response, session) => {
-	response.headers['set-cookie'] = [
-		serialize('sb:token', session?.access_token || '', {
-			httpOnly: false,
-			maxAge: session?.expires_in || -1,
-			path: '/',
-			sameSite: 'lax'
-		}),
-		serialize('sb:refresh', session?.refresh_token || '', {
-			httpOnly: true,
-			maxAge: 2 * (session?.expires_in || -1),
-			path: '/',
-			sameSite: 'lax'
-		})
-	];
+export const updateAuthCookies = (response, session) => {
+	response.headers['set-cookie'] = getCookies(session);
 };
+
+/**
+ * @param {Session?} session
+ * @return {string[]} The cookies representing the session
+ */
+export const getCookies = (session) => [
+	serialize('access_token', session?.access_token, {
+		httpOnly: false,
+		maxAge: session?.expires_in || -1,
+		path: '/',
+		sameSite: 'strict',
+		secure: true
+	}),
+
+	// Enable this to allow the user to stay logged in via a refresh token.
+	//
+	// For the expiration, note that it does not make any sense to use the
+	// `expires_in/at` field off of the session, since that would mean that the
+	// `refresh_token` cookie would expire at the same time as the `access_token`
+	// we are trying to refresh. So use something farther out like 90 days or
+	// whatever is best for your users.
+	serialize('refresh_token', session?.refresh_token || '', {
+		httpOnly: true,
+		expires: new Date(Date.now() + 90 * 24 * 60 * 60 * 1000),
+		path: '/',
+		sameSite: 'strict',
+		secure: true
+	})
+];
 
 /**
  * @param {string} error

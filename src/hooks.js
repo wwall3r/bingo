@@ -1,60 +1,61 @@
 import supabase from '$lib/db';
+import { getCookies } from '$lib/auth/helper';
 import { parse } from 'cookie-es';
 
 /** @type {import('@sveltejs/kit').Handle} */
 export const handle = async ({ event, resolve }) => {
-	const { locals, request } = event;
+	const { locals, request, url } = event;
 
-	const cookies = request?.headers.get('cookie');
+	console.log('########################### request begin');
+	console.log(url.toString());
+
+	const cookiesHeader = request?.headers.get('cookie');
 	let token;
+	let user;
+	let setCookies;
 
-	if (cookies) {
-		const parsed = parse(cookies);
-		token = parsed['sb:token'];
+	if (cookiesHeader) {
+		const cookies = parse(cookiesHeader);
+		token = cookies.access_token;
 
-		if (!token && parsed['sb:refresh']) {
-			const { session, error } = await supabase.auth.signIn({
-				refreshToken: parsed['sb:refresh']
-			});
+		if (!token && cookies.refresh_token) {
+			console.log('No access token provided. Refreshing ...');
+			const { data, error } = await supabase.auth.api.refreshAccessToken(cookies.refresh_token);
 
 			if (error) {
-				console.error('could not sign in with refresh token', error);
+				console.error('Could not refresh access token', error);
+				setCookies = getCookies(null);
+			} else {
+				token = data.access_token;
+				setCookies = getCookies(data);
 			}
-
-			token = session.access_token;
-
-			// TODO: bump sb:refresh cookie maxAge or expiration
 		}
+	}
 
-		if (token) {
-			const { user, error } = await supabase.auth.api.getUser(token);
+	if (token) {
+		const { user: tokenUser, error } = await supabase.auth.api.getUser(token);
 
-			if (error) {
-				console.error('could not get user with access_token', error);
-			}
-
-			locals.token = token || undefined;
-			locals.user = user || false;
+		if (error) {
+			console.error('Could not get user with access token', error);
+		} else {
+			user = tokenUser;
+			console.log('Logged in as user', user);
 		}
 	}
 
 	supabase.auth.setAuth(token);
 
-	if (!locals.profile_id && locals.user) {
-		const { data, error } = await supabase
-			.from('user_profiles')
-			.select()
-			.eq('user_id', locals.user.id)
-			.single();
+	locals.token = token || undefined;
+	locals.user = user || false;
 
-		if (error) {
-			console.log('could not query profile', error);
-		}
+	const response = await resolve(event);
 
-		locals.profile_id = data.id;
+	if (setCookies?.length) {
+		setCookies.forEach((cookie) => response.headers.append('set-cookie', cookie));
 	}
 
-	return resolve(event);
+	console.log('########################### request end');
+	return response;
 };
 
 /** @type {import('@sveltejs/kit').GetSession} */
