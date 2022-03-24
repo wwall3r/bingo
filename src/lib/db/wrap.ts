@@ -1,8 +1,8 @@
 import supabase from '$lib/db';
 
-import type PostgrestResponse from '@supabase/postgrest-js';
+import type PostgrestFilterBuilder from '@supabase/postgrest-js';
 
-export default async <T>(cmd: () => Promise<PostgrestResponse<T>>): Promise<T> => {
+export default async <T>(cmd: () => PostgrestFilterBuilder<T>): Promise<T> => {
 	// check for JWT expiration
 	const session = supabase.auth.session();
 	if (session && session.expires_at * 1000 <= Date.now()) {

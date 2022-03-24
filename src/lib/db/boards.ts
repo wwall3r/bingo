@@ -34,7 +34,7 @@ export default {
 	async allForGame(gameId: string): Promise<GameBoard[]> {
 		const tiles = await wrap(() =>
 			supabase
-				.from<GameBoard[]>(table)
+				.from<GameBoard>(table)
 				.select(
 					`
 					id,
@@ -64,7 +64,7 @@ export default {
 		return addFreeSpace(
 			await wrap(() =>
 				supabase
-					.from<GameBoard[]>(table)
+					.from<GameBoard>(table)
 					.select(
 						`
 					id,
