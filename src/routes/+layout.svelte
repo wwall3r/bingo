@@ -4,7 +4,6 @@
 	import LogInIcon from 'svelte-feather-icons/src/icons/LogInIcon.svelte';
 	import LogOutIcon from 'svelte-feather-icons/src/icons/LogOutIcon.svelte';
 	import ArrowUpIcon from 'svelte-feather-icons/src/icons/ArrowUpIcon.svelte';
-	import { session } from '$app/stores';
 	import { page } from '$app/stores';
 	import { getRelativePath } from '$lib/auth/helper';
 
@@ -30,14 +29,14 @@
 				</label>
 			</div>
 			<div class="flex-1 px-2 mx-2">
-				<a sveltekit:prefetch href="/" aria-label="home">Bingo!</a>
+				<a data-sveltekit-prefetch href="/" aria-label="home">Bingo!</a>
 			</div>
 			<div class="flex items-center">
 				<div class="flex-none hidden md:flex items-center">
-					{#if $session.user}
+					{#if $page.data.user}
 						<a
 							class="btn btn-ghost rounded-btn"
-							sveltekit:prefetch
+							data-sveltekit-prefetch
 							href="/games"
 							aria-label="Games"
 						>
@@ -46,8 +45,10 @@
 						<a
 							class="btn btn-ghost rounded-btn"
 							aria-label="sign up"
-							sveltekit:prefetch
-							href={`/auth/signup?redirect=${encodeURIComponent(redirect)}`}
+							data-sveltekit-prefetch
+							href={`/api/auth/logout?redirect=${encodeURIComponent(
+								`/auth/login?redirect=${encodeURIComponent(redirect)}`
+							)}`}
 						>
 							<LogOutIcon class="inline-block w-6 h-6 stroke-current mr-2" /> Log out
 						</a>
@@ -55,7 +56,7 @@
 						<a
 							class="btn btn-ghost rounded-btn"
 							aria-label="log in"
-							sveltekit:prefetch
+							data-sveltekit-prefetch
 							href={`/auth/login?redirect=${encodeURIComponent(redirect)}`}
 						>
 							<LogInIcon class="inline-block w-6 h-6 stroke-current mr-2" /> Log in
@@ -63,7 +64,7 @@
 						<a
 							class="btn btn-ghost rounded-btn"
 							aria-label="sign up"
-							sveltekit:prefetch
+							data-sveltekit-prefetch
 							href={`/auth/signup?redirect=${encodeURIComponent(redirect)}`}
 						>
 							<ArrowUpIcon class="inline-block w-6 h-6 stroke-current mr-2" /> Sign up
@@ -82,14 +83,14 @@
 	<div class="drawer-side">
 		<label for="menu-drawer" class="drawer-overlay">Menu</label>
 		<ul class="p-4 overflow-y-auto menu w-80 bg-base-100 text-base-content" on:click={closeDrawer}>
-			{#if $session.user}
+			{#if $page.data.user}
 				<li>
-					<a sveltekit:prefetch href="/games" aria-label="Games">Games</a>
+					<a data-sveltekit-prefetch href="/games" aria-label="Games">Games</a>
 				</li>
 				<li>
 					<a
 						aria-label="sign up"
-						sveltekit:prefetch
+						data-sveltekit-prefetch
 						href={`/auth/signup?redirect=${encodeURIComponent(redirect)}`}
 					>
 						<LogOutIcon class="inline-block w-6 h-6 stroke-current mr-2" /> Log out
@@ -99,7 +100,7 @@
 				<li>
 					<a
 						aria-label="log in"
-						sveltekit:prefetch
+						data-sveltekit-prefetch
 						href={`/auth/login?redirect=${encodeURIComponent(redirect)}`}
 					>
 						<LogInIcon class="inline-block w-6 h-6 stroke-current mr-2" /> Log in
@@ -108,7 +109,7 @@
 				<li>
 					<a
 						aria-label="sign up"
-						sveltekit:prefetch
+						data-sveltekit-prefetch
 						href={`/auth/signup?redirect=${encodeURIComponent(redirect)}`}
 					>
 						<ArrowUpIcon class="inline-block w-6 h-6 stroke-current mr-2" /> Sign up

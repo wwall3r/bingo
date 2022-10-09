@@ -2,10 +2,10 @@
 	import EmailPasswordFormExample from '$lib/auth/EmailPasswordFormExample.svelte';
 </script>
 
-<EmailPasswordFormExample action="/api/auth/login" let:redirect>
+<EmailPasswordFormExample action="/api/auth/signup" let:redirect>
 	<a
 		class="btn btn-ghost rounded-btn"
-		sveltekit:prefetch
+		data-sveltekit-prefetch
 		aria-label="log in"
 		href={`/auth/login?redirect=${encodeURIComponent(redirect)}`}
 	>

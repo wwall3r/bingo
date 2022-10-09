@@ -1,7 +1,7 @@
 import { parse as cookieParse } from 'cookie-es';
 import { createClient } from '@supabase/supabase-js';
 import '$lib/auth/cookie-change';
-import { browser } from '$app/env';
+import { browser } from '$app/environment';
 
 const supabase = createClient(
 	/** @type {string} */

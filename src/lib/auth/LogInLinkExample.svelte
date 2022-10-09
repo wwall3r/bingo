@@ -8,12 +8,12 @@
 
 <a
 	aria-label="log in"
-	sveltekit:prefetch
+	data-sveltekit-prefetch
 	href={`/auth/login?redirect=${encodeURIComponent(redirect)}`}>Log in</a
 >
 |
 <a
 	aria-label="sign up"
-	sveltekit:prefetch
+	data-sveltekit-prefetch
 	href={`/auth/signup?redirect=${encodeURIComponent(redirect)}`}>Sign up</a
 >

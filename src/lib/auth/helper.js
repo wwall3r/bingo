@@ -14,6 +14,7 @@ export const createHandler =
 		const password = body.get('password').toString();
 		const redirect = body.get('redirect').toString() || '/';
 
+		console.log(method, email, password);
 		const { session, error } = await supabase.auth[method]({ email, password });
 
 		if (!validateRedirect(redirect)) {
@@ -54,11 +55,11 @@ export const redirectToLogin = (url) => ({
 });
 
 /**
- * @param {import('@sveltejs/kit').EndpointOutput} response
+ * @param {Response} response
  * @param {Session?} session
  */
 export const updateAuthCookies = (response, session) => {
-	response.headers['set-cookie'] = getCookies(session);
+	response.headers.set('set-cookie', getCookies(session));
 };
 
 /**
@@ -94,34 +95,36 @@ export const getCookies = (session) => [
  * @param {string} error
  * @param {string} redirect
  * @param {string} path
- * @return {import('@sveltejs/kit').EndpointOutput}
+ * @return {Response}
  */
 const getErrorResponse = (error, redirect, path) => {
 	const params = new URLSearchParams();
 	params.set('error', error);
 	params.set('redirect', redirect);
 
-	return {
+	return new Response(error, {
 		status: 302,
-		body: 'error',
 		headers: {
 			location: `${path}?${params.toString()}`
 		}
-	};
+	});
 };
 
 /**
  * @param {import('@supabase/gotrue-js').Session} session
  * @param {string} redirect
- * @return {import('@sveltejs/kit').EndpointOutput}
+ * @return {Response}
  */
-const getSuccessResponse = (session, redirect) => ({
-	status: 302,
-	body: {
-		event: 'SIGNED_IN',
-		session
-	},
-	headers: {
-		location: redirect || '/'
-	}
-});
+const getSuccessResponse = (session, redirect) =>
+	new Response(
+		JSON.stringify({
+			event: 'SIGNED_IN',
+			session
+		}),
+		{
+			status: 302,
+			headers: {
+				location: redirect || '/'
+			}
+		}
+	);

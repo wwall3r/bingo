@@ -1,43 +1,27 @@
-<script lang="ts" context="module">
-	import Boards from '$lib/db/boards';
-	import Games from '$lib/db/games';
-	import BoardMini from '$lib/BoardMini.svelte';
-	import supabase from '$lib/db';
-	import { redirectToLogin } from '$lib/auth/helper';
-
-	export async function load({ params, session, url }) {
-		if (!session?.user) {
-			return redirectToLogin(url);
-		}
-
-		try {
-			const game = await Games.one(params.gameId);
-			const boards = await Boards.allForGame(params.gameId);
-			return { props: { game, boards } };
-		} catch (error) {
-			console.error(error);
-			return { error };
-		}
-	}
-</script>
-
 <script lang="ts">
 	import { page, session } from '$app/stores';
-	export let game;
-	export let boards;
+	import { invalidateAll } from '$app/navigation';
+	import supabase from '$lib/db';
+	import BoardMini from '$lib/BoardMini.svelte';
+
+	/** @type {import('./$types').PageLoad} */
+	export let data;
+
+	$: game = data.game;
+	$: boards = data.boards;
 
 	// TODO: boards/score is a better first UI than players. The list of all players
 	// should be accessible but not prevalent.
 
 	const handleNewBoard = async () => {
-		const { data, error } = await supabase.rpc('create_board', {
+		const { error } = await supabase.rpc('create_board', {
 			p_game_id: $page.params.gameId,
 			p_profile_id: $session.profile_id,
 			p_num_objectives: 24
 		});
 
 		if (!error) {
-			boards = await Boards.allForGame($page.params.gameId);
+			invalidateAll();
 		} else {
 			console.log(error);
 		}
@@ -49,7 +33,7 @@
 	<h2 class="card-title text-accent">{game.label}</h2>
 	<p class="mb-2">{game.description}</p>
 	{#each boards as board}
-		<a sveltekit:prefetch href="/boards/{board.id}">
+		<a data-sveltekit-prefetch href="/boards/{board.id}">
 			<div class="card card-side bg-base-200 hover shadow-xl">
 				<div class="card-body">
 					<h2 class="card-title">

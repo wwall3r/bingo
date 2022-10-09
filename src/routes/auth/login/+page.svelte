@@ -5,7 +5,7 @@
 <EmailPasswordFormExample action="/api/auth/login" let:redirect>
 	<a
 		class="btn btn-ghost rounded-btn"
-		sveltekit:prefetch
+		data-sveltekit-prefetch
 		aria-label="sign up"
 		href={`/auth/signup?redirect=${encodeURIComponent(redirect)}`}
 	>
