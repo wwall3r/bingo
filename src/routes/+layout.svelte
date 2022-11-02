@@ -86,7 +86,11 @@
 	</div>
 	<div class="drawer-side">
 		<label for="menu-drawer" class="drawer-overlay">Menu</label>
-		<ul class="p-4 overflow-y-auto menu w-80 bg-base-100 text-base-content" on:click={closeDrawer}>
+		<ul
+			class="p-4 overflow-y-auto menu w-80 bg-base-100 text-base-content"
+			on:click={closeDrawer}
+			on:keypress={closeDrawer}
+		>
 			{#if $page.data.session}
 				<li>
 					<a href="/games" aria-label="Games">Games</a>
