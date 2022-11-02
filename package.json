@@ -1,6 +1,7 @@
 {
 	"name": "bingo",
 	"version": "0.0.1",
+	"packageManager": "pnpm@7.14.1",
 	"scripts": {
 		"dev": "vite dev",
 		"build": "vite build",

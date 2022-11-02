@@ -1,3 +1,14 @@
+# For Jason (ditch this section after you've updated):
+
+1. Ensure supabase is stopped
+1. Upgrade supabase cli to latest: probably via `brew upgrade`
+1. supabase start
+1. `./scripts/data.sh load`
+1. Update node to latest lts: `nvm install --lts`
+1. `corepack enable` (enable `pnpm` and `yarn` binaries delivered with node)
+1. `pnpm i`
+1. `pnpm dev`
+
 # Vision
 
 The idea is to create multiple types of bingo games and share a game with individuals.
@@ -77,7 +88,7 @@ The idea is to create multiple types of bingo games and share a game with indivi
 1. `supabase db reset` recreates the database
 1. `scripts/data.sh load` loads the seed data. Requires PGHOST, PGPORT, PGDATABASE, PGUSER, PGPASSWORD in .env
    1. Alternatively: `psql 'postgresql://postgres:postgres@localhost:54322/postgres' < supabase/seed_data/data.sql` load the seed data. Use [postgresql-client](https://www.postgresql.org/download/linux/ubuntu/)
-1. `npm run dev` to start the application
+1. `pnpm dev` to start the application
 1. Test users - Password is `password`
    1. admin@email.com
    1. joe@email.com
@@ -101,54 +112,3 @@ The idea is to create multiple types of bingo games and share a game with indivi
 
 - Commit the changes `supabase db commit 'migration_name'`
 - Dump the data `scripts/data.sh dump`
-
-# create-svelte
-
-Everything you need to build a Svelte project, powered by [`create-svelte`](https://github.com/sveltejs/kit/tree/master/packages/create-svelte).
-
-## Creating a project
-
-If you're seeing this, you've probably already done this step. Congrats!
-
-```bash
-# create a new project in the current directory
-npm init svelte@next
-
-# create a new project in my-app
-npm init svelte@next my-app
-```
-
-> Note: the `@next` is temporary
-
-## Developing
-
-Once you've created a project and installed dependencies with `npm install` (or `pnpm install` or `yarn`), start a development server:
-
-```bash
-npm run dev
-
-# or start the server and open the app in a new browser tab
-npm run dev -- --open
-```
-
-## Building
-
-To create a production version of your app:
-
-```bash
-npm run build
-```
-
-You can preview the production build with `npm run preview`.
-
-> To deploy your app, you may need to install an [adapter](https://kit.svelte.dev/docs#adapters) for your target environment.
-
-# Troubleshooting
-
-## `supabase db commit 'commit_name'` did not generate changes
-
-- Something bad happened. Grab the database dump as a reference `scripts/postgres.sh pg_dump dbname > db.dump` so you can have a backup in case you lose work.
-
-## stack depth error?
-
-- Try and change your RLS checking function to include `SECURITY DEFINER`
