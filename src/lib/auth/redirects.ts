@@ -9,7 +9,7 @@ export const getRelativePath = (url: URL | string): string =>
 		: url.toString().substring(url.origin.length);
 
 export const redirectToPage = async (event: RequestEvent) => {
-	const uri = event.url.searchParams.get('redirect');
+	let uri = event.url.searchParams.get('redirect');
 
 	if (!uri) {
 		const formData = await event.request.formData();
