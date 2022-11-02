@@ -5,7 +5,7 @@
 
 CREATE OR REPLACE FUNCTION public.create_board(
 	p_game_id uuid,
-	p_profile_id uuid,
+	p_user_id uuid,
 	p_num_objectives integer)
     RETURNS void
     LANGUAGE 'plpgsql'
@@ -19,11 +19,11 @@ declare
 BEGIN
    -- Insert a board
    board_id := uuid_generate_v4();
-   INSERT INTO boards (id, profile_id) VALUES (board_id, p_profile_id);
+   INSERT INTO boards (id, user_id) VALUES (board_id, p_user_id);
 
    -- Insert an association from the board to the game
    INSERT INTO games_boards (game_id, board_id) VALUES (p_game_id, board_id);
-   
+
    -- Insert completions
    -- Insert an association from the board to the completion
    -- TODO: There is a possibility of an underrun on p_num_objectives

@@ -1,7 +1,7 @@
-CREATE OR REPLACE FUNCTION public.can_write_completions(p_profile_id uuid) RETURNS bool AS
+CREATE OR REPLACE FUNCTION public.can_write_completions(p_user_id uuid) RETURNS bool AS
 $BODY$
-SELECT p_profile_id IN (
-    SELECT b.profile_id
+SELECT p_user_id IN (
+    SELECT b.user_id
     FROM completions c,
         boards b,
         boards_completions bc

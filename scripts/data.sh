@@ -31,7 +31,6 @@ function dump_data {
     --table public.boards \
     --table public.completion_states \
     --table public.completions \
-    --table public.roles \
     --table public.user_profiles \
     --table public.boards_completions \
     --table public.games_boards \

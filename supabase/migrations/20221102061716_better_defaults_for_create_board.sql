@@ -4,7 +4,7 @@
 
 CREATE OR REPLACE FUNCTION public.create_board(
 	p_game_id uuid,
-	p_profile_id uuid = profile_id(),
+	p_user_id uuid = auth.uid(),
 	p_num_objectives integer = 24)
     RETURNS void
     LANGUAGE 'plpgsql'
@@ -18,20 +18,20 @@ declare
    temprow games_objectives%ROWTYPE;
 
 BEGIN
-  -- Raise an error if a board exists for this profile_id and game_id
+  -- Raise an error if a board exists for this user_id and game_id
   SELECT EXISTS (
     SELECT 1
     FROM games_boards gb
 	INNER JOIN boards AS b ON gb.board_id = b.id
     WHERE gb.game_id = p_game_id
-    AND b.profile_id = p_profile_id
+    AND b.user_id = p_user_id
   ) INTO found;
   IF found THEN
-     RAISE EXCEPTION 'The board already exists for the game_id and profile_id';
+     RAISE EXCEPTION 'The board already exists for the game_id and user_id';
   END IF;
 
   -- Insert a board
-  INSERT INTO boards (profile_id) VALUES (p_profile_id) RETURNING id INTO board_id;
+  INSERT INTO boards (user_id) VALUES (p_user_id) RETURNING id INTO board_id;
 
   -- Insert an association from the board to the game
   INSERT INTO games_boards (game_id, board_id) VALUES (p_game_id, board_id);

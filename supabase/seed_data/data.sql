@@ -15,6 +15,7 @@ SET check_function_bodies = false;
 SET xmloption = content;
 SET client_min_messages = warning;
 SET row_security = off;
+SET session_replication_role = replica;
 
 --
 -- Data for Name: users; Type: TABLE DATA; Schema: auth; Owner: supabase_auth_admin
@@ -46,12 +47,12 @@ e63385d3-3fc1-450e-8f09-46f35cc9228b	e63385d3-3fc1-450e-8f09-46f35cc9228b	{"sub"
 -- Data for Name: user_profiles; Type: TABLE DATA; Schema: public; Owner: postgres
 --
 
-COPY public.user_profiles (id, user_id, created_at, updated_at, display_name, role_id) FROM stdin;
-8ea819b8-c4b5-41e5-8f40-451f0eed9acf	7c147a5e-b9ab-4ff0-8c30-d4f4401b2675	2022-02-05 13:47:29+00	2022-02-05 13:47:29+00	Jane, Eater of Worlds	46dd06a8-d4f7-47d7-ab7c-cdd88671d0d0
-2760facd-8c61-4473-b04f-d28a6ae189c7	05098166-33f7-41c8-beef-452b2143d440	2022-02-05 13:48:24+00	2022-02-05 13:48:24+00	Joe the Destroyer	46dd06a8-d4f7-47d7-ab7c-cdd88671d0d0
-dd33d505-98bc-4f85-8fa2-f1261ff1fb03	e63385d3-3fc1-450e-8f09-46f35cc9228b	2022-02-06 23:20:35.378+00	2022-02-06 23:20:35.378+00	JasonTheMighty	a354132a-565a-489c-8717-e596fe18219c
-f65eae14-ecaa-4ece-bb64-0772fdb1caa3	4e015719-099e-485f-97fb-2569cb6aed76	2022-02-05 13:49:16+00	2022-02-05 13:49:16+00	Administrator	a354132a-565a-489c-8717-e596fe18219c
-9a6f304e-e9b7-4b04-9f51-54ad278baf70	ecf15eee-ddeb-40bc-a63e-a507bc26df52	2022-02-06 23:22:05.039+00	2022-02-06 23:22:05.039+00	Will	a354132a-565a-489c-8717-e596fe18219c
+COPY public.user_profiles (user_id, created_at, updated_at, display_name, role_id) FROM stdin;
+7c147a5e-b9ab-4ff0-8c30-d4f4401b2675	2022-02-05 13:47:29+00	2022-02-05 13:47:29+00	Jane, Eater of Worlds	46dd06a8-d4f7-47d7-ab7c-cdd88671d0d0
+05098166-33f7-41c8-beef-452b2143d440	2022-02-05 13:48:24+00	2022-02-05 13:48:24+00	Joe the Destroyer	46dd06a8-d4f7-47d7-ab7c-cdd88671d0d0
+e63385d3-3fc1-450e-8f09-46f35cc9228b	2022-02-06 23:20:35.378+00	2022-02-06 23:20:35.378+00	JasonTheMighty	a354132a-565a-489c-8717-e596fe18219c
+4e015719-099e-485f-97fb-2569cb6aed76	2022-02-05 13:49:16+00	2022-02-05 13:49:16+00	Administrator	a354132a-565a-489c-8717-e596fe18219c
+ecf15eee-ddeb-40bc-a63e-a507bc26df52	2022-02-06 23:22:05.039+00	2022-02-06 23:22:05.039+00	Will	a354132a-565a-489c-8717-e596fe18219c
 \.
 
 
@@ -59,7 +60,7 @@ f65eae14-ecaa-4ece-bb64-0772fdb1caa3	4e015719-099e-485f-97fb-2569cb6aed76	2022-0
 -- Data for Name: boards; Type: TABLE DATA; Schema: public; Owner: postgres
 --
 
-COPY public.boards (id, created_at, updated_at, profile_id) FROM stdin;
+COPY public.boards (id, created_at, updated_at, user_id) FROM stdin;
 \.
 
 
@@ -174,32 +175,18 @@ COPY public.games_objectives (game_id, objective_id) FROM stdin;
 
 
 --
--- Data for Name: roles; Type: TABLE DATA; Schema: public; Owner: postgres
---
-
-COPY public.roles (id, created_at, label, description) FROM stdin;
-46dd06a8-d4f7-47d7-ab7c-cdd88671d0d0	2022-02-12 01:46:16+00	viewer	viewer: A system user that can read public information.
-c94a1b68-4ba7-410d-93c1-251157f22522	2022-02-12 01:46:58+00	editor	editor: A system user that can permissions to perform limited inserts and updates to the core system.
-a354132a-565a-489c-8717-e596fe18219c	2022-02-12 01:47:41+00	admin	admin: A system user that can perform all operations on the system
-35d824bd-96cf-4f2e-9b97-fa073b17f7ad	2022-02-12 01:48:30+00	keeper	keeper: A game user that assists the administrator in editing items related to a game.
-8909c101-2de4-4713-b8b1-b4573bfa4c50	2022-02-12 01:48:08+00	player	player: A game user with minimum privileges
-91e5b01e-584e-4a02-b619-fef75fac22ac	2022-02-12 01:50:10+00	owner	owner: A game user that has full control over the editable items in a game
-\.
-
-
---
 -- Data for Name: games_users; Type: TABLE DATA; Schema: public; Owner: postgres
 --
 
-COPY public.games_users (game_id, profile_id, role_id) FROM stdin;
-408957cc-06bc-42a6-a005-4d48693ce578	dd33d505-98bc-4f85-8fa2-f1261ff1fb03	91e5b01e-584e-4a02-b619-fef75fac22ac
-408957cc-06bc-42a6-a005-4d48693ce578	9a6f304e-e9b7-4b04-9f51-54ad278baf70	35d824bd-96cf-4f2e-9b97-fa073b17f7ad
-408957cc-06bc-42a6-a005-4d48693ce578	2760facd-8c61-4473-b04f-d28a6ae189c7	8909c101-2de4-4713-b8b1-b4573bfa4c50
-408957cc-06bc-42a6-a005-4d48693ce578	8ea819b8-c4b5-41e5-8f40-451f0eed9acf	8909c101-2de4-4713-b8b1-b4573bfa4c50
-408957cc-06bc-42a6-a005-4d48693ce578	dd33d505-98bc-4f85-8fa2-f1261ff1fb03	91e5b01e-584e-4a02-b619-fef75fac22ac
-408957cc-06bc-42a6-a005-4d48693ce578	9a6f304e-e9b7-4b04-9f51-54ad278baf70	35d824bd-96cf-4f2e-9b97-fa073b17f7ad
-408957cc-06bc-42a6-a005-4d48693ce578	2760facd-8c61-4473-b04f-d28a6ae189c7	8909c101-2de4-4713-b8b1-b4573bfa4c50
-408957cc-06bc-42a6-a005-4d48693ce578	8ea819b8-c4b5-41e5-8f40-451f0eed9acf	8909c101-2de4-4713-b8b1-b4573bfa4c50
+COPY public.games_users (game_id, user_id, role_id) FROM stdin;
+408957cc-06bc-42a6-a005-4d48693ce578	e63385d3-3fc1-450e-8f09-46f35cc9228b	91e5b01e-584e-4a02-b619-fef75fac22ac
+408957cc-06bc-42a6-a005-4d48693ce578	ecf15eee-ddeb-40bc-a63e-a507bc26df52	35d824bd-96cf-4f2e-9b97-fa073b17f7ad
+408957cc-06bc-42a6-a005-4d48693ce578	05098166-33f7-41c8-beef-452b2143d440	8909c101-2de4-4713-b8b1-b4573bfa4c50
+408957cc-06bc-42a6-a005-4d48693ce578	7c147a5e-b9ab-4ff0-8c30-d4f4401b2675	8909c101-2de4-4713-b8b1-b4573bfa4c50
+408957cc-06bc-42a6-a005-4d48693ce578	e63385d3-3fc1-450e-8f09-46f35cc9228b	91e5b01e-584e-4a02-b619-fef75fac22ac
+408957cc-06bc-42a6-a005-4d48693ce578	ecf15eee-ddeb-40bc-a63e-a507bc26df52	35d824bd-96cf-4f2e-9b97-fa073b17f7ad
+408957cc-06bc-42a6-a005-4d48693ce578	05098166-33f7-41c8-beef-452b2143d440	8909c101-2de4-4713-b8b1-b4573bfa4c50
+408957cc-06bc-42a6-a005-4d48693ce578	7c147a5e-b9ab-4ff0-8c30-d4f4401b2675	8909c101-2de4-4713-b8b1-b4573bfa4c50
 \.
 
 

@@ -1,10 +1,10 @@
 CREATE OR REPLACE FUNCTION public.get_completions_for_user()
-    RETURNS TABLE (board_id uuid, game_id uuid, profile_id uuid, completion_id uuid) AS
+    RETURNS TABLE (board_id uuid, game_id uuid, user_id uuid, completion_id uuid) AS
 $BODY$
     SELECT
         gb.board_id,
         gb.game_id,
-        b.profile_id,
+        b.user_id,
         bc.completion_id
     FROM
         games_boards gb,

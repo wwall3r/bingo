@@ -18,7 +18,7 @@ CREATE POLICY "owners can execute all"
     AS PERMISSIVE
     FOR ALL
     TO public
-    USING (can_write_completions(profile_id()))
-    WITH CHECK (can_write_completions(profile_id()));
+    USING (can_write_completions(auth.uid()))
+    WITH CHECK (can_write_completions(auth.uid()));
 
 DROP POLICY IF EXISTS "completions - owners can execute ALL " ON public.completions;

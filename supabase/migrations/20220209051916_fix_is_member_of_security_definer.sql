@@ -4,6 +4,6 @@ SELECT EXISTS (
   SELECT 1
   FROM games_users gu
   WHERE gu.game_id = _game_id
-  AND gu.profile_id = profile_id()
+  AND gu.user_id = auth.uid()
 );
 $BODY$ LANGUAGE sql SECURITY DEFINER;

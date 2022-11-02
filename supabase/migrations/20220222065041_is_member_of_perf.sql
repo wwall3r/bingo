@@ -3,7 +3,7 @@ $BODY$
   SELECT ARRAY(
     SELECT gu.game_id
     FROM games_users gu
-    WHERE gu.profile_id = profile_id()
+    WHERE gu.user_id = auth.uid()
   );
 $BODY$ LANGUAGE sql SECURITY DEFINER;
 

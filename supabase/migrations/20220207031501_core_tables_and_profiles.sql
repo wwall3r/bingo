@@ -7,16 +7,11 @@ create extension if not exists moddatetime schema extensions;
 
 CREATE TABLE IF NOT EXISTS public.user_profiles
 (
-    id uuid NOT NULL DEFAULT uuid_generate_v4(),
-    user_id uuid NOT NULL,
+    user_id uuid references auth.users NOT NULL,
     created_at timestamp with time zone NOT NULL DEFAULT now(),
     updated_at timestamp with time zone NOT NULL DEFAULT now(),
     display_name character varying COLLATE pg_catalog."default",
-    CONSTRAINT user_profile_pkey PRIMARY KEY (id),
-    CONSTRAINT user_profile_user_id_fkey FOREIGN KEY (user_id)
-        REFERENCES auth.users (id) MATCH SIMPLE
-        ON UPDATE NO ACTION
-        ON DELETE NO ACTION
+    CONSTRAINT user_profile_pkey PRIMARY KEY (user_id)
 )
 
 TABLESPACE pg_default;
@@ -38,40 +33,6 @@ GRANT ALL ON TABLE public.user_profiles TO service_role;
 COMMENT ON TABLE public.user_profiles
     IS 'A user''s public data';
 
-CREATE OR REPLACE FUNCTION public.profile_id(
-	)
-    RETURNS uuid
-    LANGUAGE 'plpgsql'
-    COST 100
-    VOLATILE PARALLEL UNSAFE
-AS $BODY$
-declare
-   profile_id user_profiles.id%type;
-begin
-  select id
-  into profile_id
-  from user_profiles
-  where user_id = auth.uid();
-  if not found then
-     raise 'profile with user_id % not found', auth.uid();
-  end if;
-  return profile_id;
-end;
-$BODY$;
-
-ALTER FUNCTION public.profile_id()
-    OWNER TO postgres;
-
-GRANT EXECUTE ON FUNCTION public.profile_id() TO PUBLIC;
-
-GRANT EXECUTE ON FUNCTION public.profile_id() TO anon;
-
-GRANT EXECUTE ON FUNCTION public.profile_id() TO authenticated;
-
-GRANT EXECUTE ON FUNCTION public.profile_id() TO postgres;
-
-GRANT EXECUTE ON FUNCTION public.profile_id() TO service_role;
-
 CREATE OR REPLACE FUNCTION public.create_user_profile()
     RETURNS trigger
     LANGUAGE 'plpgsql'
@@ -79,7 +40,7 @@ CREATE OR REPLACE FUNCTION public.create_user_profile()
     VOLATILE NOT LEAKPROOF SECURITY DEFINER
 AS $BODY$
 begin
-  insert into public.user_profiles (user_id, display_name)
+  insert into public.user_profiles (id, display_name)
   values (new.id, 'New User');
   return new;
 end;
@@ -103,10 +64,10 @@ CREATE TABLE IF NOT EXISTS public.boards
     id uuid NOT NULL DEFAULT uuid_generate_v4(),
     created_at timestamp with time zone NOT NULL DEFAULT now(),
     updated_at timestamp with time zone NOT NULL DEFAULT now(),
-    profile_id uuid NOT NULL,
+    user_id uuid NOT NULL,
     CONSTRAINT board_pkey PRIMARY KEY (id),
-    CONSTRAINT boards_profile_id_fkey FOREIGN KEY (profile_id)
-        REFERENCES public.user_profiles (id) MATCH SIMPLE
+    CONSTRAINT boards_user_id_fkey FOREIGN KEY (user_id)
+        REFERENCES public.user_profiles (user_id) MATCH SIMPLE
         ON UPDATE NO ACTION
         ON DELETE NO ACTION
 )
@@ -161,7 +122,7 @@ COMMENT ON TABLE public.objectives
     IS 'A single item to be used on a board';
 
 CREATE TRIGGER handle_updated_at
-    BEFORE UPDATE 
+    BEFORE UPDATE
     ON public.objectives
     FOR EACH ROW
     EXECUTE FUNCTION extensions.moddatetime('updated_at');
@@ -269,7 +230,7 @@ COMMENT ON TABLE public.games
     IS 'The game instances';
 
 CREATE TRIGGER handle_updated_at
-    BEFORE UPDATE 
+    BEFORE UPDATE
     ON public.games
     FOR EACH ROW
     EXECUTE FUNCTION extensions.moddatetime('updated_at');
@@ -313,13 +274,13 @@ COMMENT ON TABLE public.games_objectives
 CREATE TABLE IF NOT EXISTS public.games_users
 (
     game_id uuid NOT NULL,
-    profile_id uuid,
+    user_id uuid,
     CONSTRAINT games_users_game_id_fkey FOREIGN KEY (game_id)
         REFERENCES public.games (id) MATCH SIMPLE
         ON UPDATE NO ACTION
         ON DELETE NO ACTION,
-    CONSTRAINT games_users_profile_id_fkey FOREIGN KEY (profile_id)
-        REFERENCES public.user_profiles (id) MATCH SIMPLE
+    CONSTRAINT games_users_user_id_fkey FOREIGN KEY (user_id)
+        REFERENCES public.user_profiles (user_id) MATCH SIMPLE
         ON UPDATE NO ACTION
         ON DELETE NO ACTION
 )
@@ -406,7 +367,7 @@ GRANT ALL ON TABLE public.tags TO service_role;
 COMMENT ON TABLE public.tags
     IS 'Provides a means for categorizing Objectives';
 CREATE TRIGGER handle_updated_at
-    BEFORE UPDATE 
+    BEFORE UPDATE
     ON public.tags
     FOR EACH ROW
     EXECUTE FUNCTION extensions.moddatetime('updated_at');
@@ -458,7 +419,7 @@ SELECT EXISTS (
   SELECT 1
   FROM games_users gu
   WHERE gu.game_id = _game_id
-  AND gu.profile_id = profile_id()
+  AND gu.user_id = auth.uid()
 );
 $BODY$;
 
@@ -482,8 +443,8 @@ CREATE POLICY "Enable ALL for users based on user_id"
     AS PERMISSIVE
     FOR ALL
     TO public
-    USING ((profile_id() = profile_id))
-    WITH CHECK ((profile_id() = profile_id));
+    USING ((auth.uid() = user_id))
+    WITH CHECK ((auth.uid() = user_id));
 
 CREATE POLICY "completions - owners can execute ALL "
     ON public.completions
@@ -494,7 +455,7 @@ CREATE POLICY "completions - owners can execute ALL "
    FROM completions c,
     boards b,
     boards_completions bc
-  WHERE ((c.id = bc.completion_id) AND (b.id = bc.board_id) AND (profile_id() = b.profile_id)))));
+  WHERE ((c.id = bc.completion_id) AND (b.id = bc.board_id) AND (auth.uid() = b.user_id)))));
 
 CREATE POLICY "game members can read"
     ON public.games
