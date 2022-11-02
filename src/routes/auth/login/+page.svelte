@@ -1,15 +1,17 @@
-<script>
-	import EmailPasswordFormExample from '$lib/auth/EmailPasswordFormExample.svelte';
+<script lang="ts">
+	import type { ActionData } from './$types';
+	import EmailPasswordForm from '$lib/auth/EmailPasswordForm.svelte';
+
+	export let form: ActionData;
 </script>
 
-<EmailPasswordFormExample action="/api/auth/login" let:redirect>
+<EmailPasswordForm {form} let:redirect>
 	<a
 		class="btn btn-ghost rounded-btn"
-		data-sveltekit-prefetch
 		aria-label="sign up"
 		href={`/auth/signup?redirect=${encodeURIComponent(redirect)}`}
 	>
 		Sign Up
 	</a>
 	<button class="btn btn-primary rounded-btn">Log In</button>
-</EmailPasswordFormExample>
+</EmailPasswordForm>

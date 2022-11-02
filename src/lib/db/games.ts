@@ -1,24 +1,24 @@
-import supabase from '../db';
-import wrap from './wrap';
+import type { TypedSupabaseClient } from '@supabase/auth-helpers-sveltekit';
 import type { definitions } from './types';
 import type { UserProfile } from './user_profiles';
+import wrap from './wrap';
 
 const table = 'games';
 
 export type Game = definitions['games'];
 
 export default {
-	async all(): Promise<Game[]> {
-		return wrap(() => supabase.from<Game>(table).select());
+	async all(client: TypedSupabaseClient): Promise<Game[]> {
+		return wrap(client.from<Game>(table).select());
 	},
 
-	async one(gameId: string): Promise<Game> {
-		return wrap(() => supabase.from<Game>(table).select().eq('id', gameId).single());
+	async one(client: TypedSupabaseClient, gameId: string): Promise<Game> {
+		return wrap(client.from<Game>(table).select().eq('id', gameId).single());
 	},
 
-	async members(gameId: string): Promise<UserProfile[]> {
-		return wrap(() =>
-			supabase
+	async members(client: TypedSupabaseClient, gameId: string): Promise<UserProfile[]> {
+		return wrap(
+			client
 				.from<UserProfile & definitions['games_users']>('user_profiles')
 				.select(
 					`

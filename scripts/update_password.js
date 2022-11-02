@@ -2,22 +2,33 @@
 import { createClient } from '@supabase/supabase-js';
 import readline from 'readline';
 
-let SERVICE_KEY = '';
-
 const rl = readline.createInterface({
 	input: process.stdin,
 	output: process.stdout
 });
 
-rl.question('What is your supabase service_role key? ', async (key) => {
+rl.question('What is your supabase anon key? ', async (key) => {
 	const supabase = createClient('http://localhost:54321', key);
 
-	const { user, session, error } = await supabase.auth.signIn({
-		email: 'will@email.com',
-		password: 'password'
-	});
+	// log in
+	console.log(
+		await supabase.auth.signInWithPassword({
+			email: 'will@email.com',
+			password: 'password'
+		})
+	);
 
-	console.log(user, session, error);
+	// did we actually log in?
+	console.log(await supabase.auth.getSession());
+
+	// // check auth status
+	// const { data, error: e3 } = await supabase.rpc('get_uid');
+	// console.log(data, e3);
+
+	// // pull record
+	// const {data
+	// console.log(await supabase.from('games').select());
+
 	rl.close();
 
 	// rl.question('Enter the user id: ', async (id) => {

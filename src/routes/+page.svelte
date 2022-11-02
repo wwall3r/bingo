@@ -1,9 +1,8 @@
 <script lang="ts">
+	import type { PageData } from './$types';
 	import Objectives from '$lib/db/objectives';
 
-	/** @type {import('./$types').PageData} */
-	export let data;
-
+	export let data: PageData;
 	$: objectives = data.objectives;
 
 	let newObjective = { label: '' };

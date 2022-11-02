@@ -1,11 +1,26 @@
 <script lang="ts">
-	import '../app.css';
+	import { supabaseClient } from '$lib/db';
+	import { invalidate } from '$app/navigation';
+	import { onMount } from 'svelte';
 	import MenuIcon from 'svelte-feather-icons/src/icons/MenuIcon.svelte';
 	import LogInIcon from 'svelte-feather-icons/src/icons/LogInIcon.svelte';
 	import LogOutIcon from 'svelte-feather-icons/src/icons/LogOutIcon.svelte';
 	import ArrowUpIcon from 'svelte-feather-icons/src/icons/ArrowUpIcon.svelte';
 	import { page } from '$app/stores';
-	import { getRelativePath } from '$lib/auth/helper';
+	import { getRelativePath } from '$lib/auth/redirects';
+	import '../app.css';
+
+	onMount(() => {
+		const {
+			data: { subscription }
+		} = supabaseClient.auth.onAuthStateChange(() => {
+			invalidate('supabase:auth');
+		});
+
+		return () => {
+			subscription.unsubscribe();
+		};
+	});
 
 	// get relative URL for this page to redirect back to after logging in
 	$: redirect = getRelativePath($page.url);
@@ -29,34 +44,24 @@
 				</label>
 			</div>
 			<div class="flex-1 px-2 mx-2">
-				<a data-sveltekit-prefetch href="/" aria-label="home">Bingo!</a>
+				<a href="/" aria-label="home">Bingo!</a>
 			</div>
 			<div class="flex items-center">
 				<div class="flex-none hidden md:flex items-center">
-					{#if $page.data.user}
-						<a
-							class="btn btn-ghost rounded-btn"
-							data-sveltekit-prefetch
-							href="/games"
-							aria-label="Games"
+					{#if $page.data.session}
+						<a class="btn btn-ghost rounded-btn" href="/games" aria-label="Games"> Games </a>
+						<form
+							action={`/api/auth/logout?redirect=${encodeURIComponent(redirect)}`}
+							method="post"
 						>
-							Games
-						</a>
-						<a
-							class="btn btn-ghost rounded-btn"
-							aria-label="sign up"
-							data-sveltekit-prefetch
-							href={`/api/auth/logout?redirect=${encodeURIComponent(
-								`/auth/login?redirect=${encodeURIComponent(redirect)}`
-							)}`}
-						>
-							<LogOutIcon class="inline-block w-6 h-6 stroke-current mr-2" /> Log out
-						</a>
+							<button type="submit">
+								<LogOutIcon class="inline-block w-6 h-6 stroke-current mr-2" /> Log out
+							</button>
+						</form>
 					{:else}
 						<a
 							class="btn btn-ghost rounded-btn"
 							aria-label="log in"
-							data-sveltekit-prefetch
 							href={`/auth/login?redirect=${encodeURIComponent(redirect)}`}
 						>
 							<LogInIcon class="inline-block w-6 h-6 stroke-current mr-2" /> Log in
@@ -64,7 +69,6 @@
 						<a
 							class="btn btn-ghost rounded-btn"
 							aria-label="sign up"
-							data-sveltekit-prefetch
 							href={`/auth/signup?redirect=${encodeURIComponent(redirect)}`}
 						>
 							<ArrowUpIcon class="inline-block w-6 h-6 stroke-current mr-2" /> Sign up
@@ -83,35 +87,23 @@
 	<div class="drawer-side">
 		<label for="menu-drawer" class="drawer-overlay">Menu</label>
 		<ul class="p-4 overflow-y-auto menu w-80 bg-base-100 text-base-content" on:click={closeDrawer}>
-			{#if $page.data.user}
+			{#if $page.data.session}
 				<li>
-					<a data-sveltekit-prefetch href="/games" aria-label="Games">Games</a>
+					<a href="/games" aria-label="Games">Games</a>
 				</li>
 				<li>
-					<a
-						aria-label="sign up"
-						data-sveltekit-prefetch
-						href={`/auth/signup?redirect=${encodeURIComponent(redirect)}`}
-					>
+					<a aria-label="sign up" href={`/auth/signup?redirect=${encodeURIComponent(redirect)}`}>
 						<LogOutIcon class="inline-block w-6 h-6 stroke-current mr-2" /> Log out
 					</a>
 				</li>
 			{:else}
 				<li>
-					<a
-						aria-label="log in"
-						data-sveltekit-prefetch
-						href={`/auth/login?redirect=${encodeURIComponent(redirect)}`}
-					>
+					<a aria-label="log in" href={`/auth/login?redirect=${encodeURIComponent(redirect)}`}>
 						<LogInIcon class="inline-block w-6 h-6 stroke-current mr-2" /> Log in
 					</a>
 				</li>
 				<li>
-					<a
-						aria-label="sign up"
-						data-sveltekit-prefetch
-						href={`/auth/signup?redirect=${encodeURIComponent(redirect)}`}
-					>
+					<a aria-label="sign up" href={`/auth/signup?redirect=${encodeURIComponent(redirect)}`}>
 						<ArrowUpIcon class="inline-block w-6 h-6 stroke-current mr-2" /> Sign up
 					</a>
 				</li>

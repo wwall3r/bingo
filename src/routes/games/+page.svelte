@@ -1,13 +1,15 @@
 <script lang="ts">
-	/** @type {import('./$types').PageData} */
-	export let games;
+	import { invalidateAll } from '$app/navigation';
+	import type { PageData } from './$types';
+	export let data: PageData;
 </script>
 
-{#if !games?.length}
+{#if !data?.games?.length}
 	<p>You are not a member of any games. Try starting one yourself!</p>
+	<button on:click={invalidateAll}>load</button>
 {:else}
-	{#each games as game}
-		<a data-sveltekit-prefetch href="/games/{game.id}">
+	{#each data?.games as game}
+		<a href="/games/{game.id}">
 			<div
 				class="m-2 p-2 card card-compact card-bordered md:card-normal hover:bg-base-200 md:max-w-prose md:mx-auto"
 			>

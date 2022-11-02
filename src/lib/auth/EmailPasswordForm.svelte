@@ -1,16 +1,16 @@
 <script>
 	import SlashIcon from 'svelte-feather-icons/src/icons/SlashIcon.svelte';
+	import { enhance } from '$app/forms';
 	import { page } from '$app/stores';
 
-	export let action = '/api/login';
+	export let form;
 
 	$: redirect = $page.url.searchParams.get('redirect') || '';
-	$: error = $page.url.searchParams.get('error') || '';
 </script>
 
 <div class="m-2 p-2 card card-compact card-bordered md:card-normal md:max-w-md md:mx-auto">
 	<div class="card-body">
-		<form {action} method="post">
+		<form method="post" use:enhance>
 			<input name="redirect" type="hidden" value={redirect} />
 			<div class="form-control">
 				<label for="email" class="label">
@@ -21,7 +21,8 @@
 					type="email"
 					aria-label="e-mail"
 					class="input input-bordered"
-					class:input-error={error}
+					class:input-error={form?.error}
+					value={form?.values?.email ?? ''}
 					required
 				/>
 			</div>
@@ -34,14 +35,14 @@
 					type="password"
 					aria-label="password"
 					class="input input-bordered"
-					class:input-error={error}
+					class:input-error={form?.error}
 					required
 				/>
 			</div>
 
-			{#if error}
+			{#if form?.error}
 				<div class="alert alert-error mt-2">
-					<span> <SlashIcon class="inline-block w-6 h-6 stroke-current mr-2" />{error}</span>
+					<span> <SlashIcon class="inline-block w-6 h-6 stroke-current mr-2" />{form.error}</span>
 				</div>
 			{/if}
 
