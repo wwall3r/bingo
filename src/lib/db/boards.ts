@@ -1,4 +1,4 @@
-import supabase from '../db';
+import type { TypedSupabaseClient } from '@supabase/auth-helpers-sveltekit';
 import wrap from './wrap';
 import type { definitions } from './types';
 
@@ -31,9 +31,9 @@ export type GameBoard = {
 };
 
 export default {
-	async allForGame(gameId: string): Promise<GameBoard[]> {
+	async allForGame(client: TypedSupabaseClient, gameId: string): Promise<GameBoard[]> {
 		const tiles = await wrap(() =>
-			supabase
+			client
 				.from<GameBoard>(table)
 				.select(
 					`
@@ -57,13 +57,13 @@ export default {
 				.eq('games_boards.game_id', gameId)
 		);
 
-		return tiles.map(addFreeSpace);
+		return tiles?.map(addFreeSpace);
 	},
 
-	async one(boardId: string): Promise<GameBoard> {
+	async one(client: TypedSupabaseClient, boardId: string): Promise<GameBoard> {
 		return addFreeSpace(
 			await wrap(() =>
-				supabase
+				client
 					.from<GameBoard>(table)
 					.select(
 						`
@@ -87,6 +87,15 @@ export default {
 					.single()
 			)
 		);
+	},
+
+	async create(client: TypedSupabaseClient, gameId: string, numObjectives = 24): Promise<void> {
+		return wrap(
+			client.rpc('create_board', {
+				p_game_id: gameId,
+				p_num_objectives: numObjectives
+			})
+		);
 	}
 };
 
@@ -94,7 +103,7 @@ const addFreeSpace = (board: Board): Board => {
 	// TODO: this should really be computed by either game size
 	// or number of board tiles, and should only be done for odd game sizes
 	// (e.g. 4^2 doesn't get a free space, but 5^2 does)
-	board.completions.splice(12, 0, {
+	board?.completions.splice(12, 0, {
 		state: 2,
 		objectives: {
 			label: 'Free Space'

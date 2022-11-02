@@ -1,19 +1,9 @@
-<script lang="ts" context="module">
+<script lang="ts">
+	import type { PageData } from './$types';
 	import Objectives from '$lib/db/objectives';
 
-	export async function load() {
-		try {
-			const objectives = await Objectives.all();
-			return { props: { objectives } };
-		} catch (error) {
-			console.error(error);
-			return { error };
-		}
-	}
-</script>
-
-<script lang="ts">
-	export let objectives;
+	export let data: PageData;
+	$: objectives = data.objectives;
 
 	let newObjective = { label: '' };
 
@@ -28,11 +18,13 @@
 
 <h1>My Favorite Objectives</h1>
 
-<ul>
-	{#each objectives as objective}
-		<li>{objective.label}</li>
-	{/each}
-</ul>
+{#if objectives}
+	<ul>
+		{#each objectives as objective}
+			<li>{objective.label}</li>
+		{/each}
+	</ul>
+{/if}
 
 <form on:submit|preventDefault={onSubmit}>
 	<input type="text" bind:value={newObjective.label} />

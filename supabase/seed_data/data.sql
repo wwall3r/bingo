@@ -2,7 +2,7 @@
 -- PostgreSQL database dump
 --
 
--- Dumped from database version 14.1 (Debian 14.1-1.pgdg110+1)
+-- Dumped from database version 14.5 (Debian 14.5-1.pgdg110+1)
 -- Dumped by pg_dump version 14.1 (Debian 14.1-1.pgdg110+1)
 
 SET statement_timeout = 0;
@@ -20,12 +20,12 @@ SET row_security = off;
 -- Data for Name: users; Type: TABLE DATA; Schema: auth; Owner: supabase_auth_admin
 --
 
-COPY auth.users (instance_id, id, aud, role, email, encrypted_password, email_confirmed_at, invited_at, confirmation_token, confirmation_sent_at, recovery_token, recovery_sent_at, email_change_token_new, email_change, email_change_sent_at, last_sign_in_at, raw_app_meta_data, raw_user_meta_data, is_super_admin, created_at, updated_at, phone, phone_confirmed_at, phone_change, phone_change_token, phone_change_sent_at, email_change_token_current, email_change_confirm_status) FROM stdin;
-00000000-0000-0000-0000-000000000000	d67d9d66-7686-401d-a340-0fe8a22fbdf1		authenticated	joe@email.com	$2a$10$DP6RYW5KIddUKL0isAP0NuImt7Z2B0qClWDQz.FFFUNo0IdbLbAN6	2022-02-04 21:00:13.096429+00	\N		\N		\N			\N	2022-02-04 21:03:50.289936+00	{"provider": "email", "providers": ["email"]}	{}	f	2022-02-04 21:00:13.089273+00	2022-02-04 21:00:13.089326+00	\N	\N			\N		0
-00000000-0000-0000-0000-000000000000	b915af1d-bef1-4e6d-bc47-cf430d36258b		authenticated	jane@email.com	$2a$10$ynMXZF3r4mdAugBhY8DrwOM3DCHJ84UVQlOsvES8ESRUyYlZzYjye	2022-02-04 21:01:29.154819+00	\N		\N		\N			\N	2022-02-06 19:00:25.724571+00	{"provider": "email", "providers": ["email"]}	{}	f	2022-02-04 21:01:29.150638+00	2022-02-04 21:01:29.150646+00	\N	\N			\N		0
-00000000-0000-0000-0000-000000000000	be7dd07d-47dd-4118-b28f-9a9709a9c779		authenticated	admin@email.com	$2a$10$ghgFcmPvUP0YVGPGMTZnPuXrJ5uy79DAIbNeTSRAJJbs6XUxvan/O	2022-02-04 21:16:55.663081+00	\N		\N		\N			\N	2022-02-06 19:00:38.214309+00	{"provider": "email", "providers": ["email"]}	{}	f	2022-02-04 21:16:55.655554+00	2022-02-04 21:16:55.655562+00	\N	\N			\N		0
-00000000-0000-0000-0000-000000000000	0630ec75-0c45-4e8d-9406-2964bd2ff25d		authenticated	will@email.com	$2a$10$mdaWzWuo996Wr94fbiH7UuLFY.LFJ68K1zvfx1SnHjQ4aS./G1DU2	2022-02-06 23:22:05.118988+00	\N		\N		\N			\N	2022-02-07 02:22:38.628916+00	{"provider": "email", "providers": ["email"]}	{}	f	2022-02-06 23:22:05.1153+00	2022-02-06 23:22:05.115307+00	\N	\N			\N		0
-00000000-0000-0000-0000-000000000000	0f3609c8-b32a-40dc-860d-e047b89a5a6f		authenticated	jason@email.com	$2a$10$FP0fz2iaHU1F2wVnTnLjUuHSmMje48ojyurszcmnm93P23Vb1Ra7S	2022-02-06 23:20:35.504237+00	\N		\N		\N			\N	2022-02-07 02:53:52.396129+00	{"provider": "email", "providers": ["email"]}	{}	f	2022-02-06 23:20:35.495725+00	2022-02-06 23:20:35.495733+00	\N	\N			\N		0
+COPY auth.users (instance_id, id, aud, role, email, encrypted_password, email_confirmed_at, invited_at, confirmation_token, confirmation_sent_at, recovery_token, recovery_sent_at, email_change_token_new, email_change, email_change_sent_at, last_sign_in_at, raw_app_meta_data, raw_user_meta_data, is_super_admin, created_at, updated_at, phone, phone_confirmed_at, phone_change, phone_change_token, phone_change_sent_at, email_change_token_current, email_change_confirm_status, banned_until, reauthentication_token, reauthentication_sent_at) FROM stdin;
+00000000-0000-0000-0000-000000000000	05098166-33f7-41c8-beef-452b2143d440	authenticated	authenticated	joe@email.com	$2a$10$gS4cwayoaZmlvRp7UbYZJOwgKRNUbqGKnjW39xk4Xq/9VJzN5k8aW	2022-10-29 19:02:45.555745+00	\N		\N		\N			\N	2022-10-29 19:02:45.556944+00	{"provider": "email", "providers": ["email"]}	{}	\N	2022-10-29 19:02:45.55164+00	2022-10-29 19:02:45.558714+00	\N	\N			\N		0	\N		\N
+00000000-0000-0000-0000-000000000000	7c147a5e-b9ab-4ff0-8c30-d4f4401b2675	authenticated	authenticated	jane@email.com	$2a$10$dmUmK1NsaNhlRFLsYQaIi.5lW5SsCrjIkscgyovpQ1SGVjyqfJLyW	2022-10-29 19:04:01.795756+00	\N		\N		\N			\N	2022-10-29 19:04:01.7971+00	{"provider": "email", "providers": ["email"]}	{}	\N	2022-10-29 19:04:01.792423+00	2022-10-29 19:04:01.79801+00	\N	\N			\N		0	\N		\N
+00000000-0000-0000-0000-000000000000	e63385d3-3fc1-450e-8f09-46f35cc9228b	authenticated	authenticated	jason@email.com	$2a$10$tBl/FHlSW/LmGNWIhbQiY.XgluKXSz1R6RLpEMsXzzlmGTYHg1TGS	2022-10-29 19:04:21.143741+00	\N		\N		\N			\N	2022-10-29 19:04:21.145174+00	{"provider": "email", "providers": ["email"]}	{}	\N	2022-10-29 19:04:21.141845+00	2022-10-29 19:04:21.146144+00	\N	\N			\N		0	\N		\N
+00000000-0000-0000-0000-000000000000	4e015719-099e-485f-97fb-2569cb6aed76	authenticated	authenticated	admin@email.com	$2a$10$VYo2C0NcYyDMW2kEzqEMrODouaeYQQs.dj7hNem.f5l03SecB1cUO	2022-10-29 19:04:36.93594+00	\N		\N		\N			\N	2022-10-29 19:04:36.937253+00	{"provider": "email", "providers": ["email"]}	{}	\N	2022-10-29 19:04:36.933755+00	2022-10-29 19:04:36.938238+00	\N	\N			\N		0	\N		\N
+00000000-0000-0000-0000-000000000000	ecf15eee-ddeb-40bc-a63e-a507bc26df52	authenticated	authenticated	will@email.com	$2a$10$.s9XO4mMmlNtnOOFu6MOMuBoA7MGAiTie6wMpjUbpIj/JmuB8BS1O	2022-10-29 19:04:12.368187+00	\N		\N		\N			\N	2022-10-29 19:49:42.934588+00	{"provider": "email", "providers": ["email"]}	{}	\N	2022-10-29 19:04:12.365918+00	2022-10-29 19:49:42.93541+00	\N	\N			\N		0	\N		\N
 \.
 
 
@@ -34,11 +34,11 @@ COPY auth.users (instance_id, id, aud, role, email, encrypted_password, email_co
 --
 
 COPY auth.identities (id, user_id, identity_data, provider, last_sign_in_at, created_at, updated_at) FROM stdin;
-d67d9d66-7686-401d-a340-0fe8a22fbdf1	d67d9d66-7686-401d-a340-0fe8a22fbdf1	{"sub": "d67d9d66-7686-401d-a340-0fe8a22fbdf1"}	email	2022-02-04 21:00:13.093623+00	2022-02-04 21:00:13.09368+00	2022-02-04 21:00:13.093683+00
-b915af1d-bef1-4e6d-bc47-cf430d36258b	b915af1d-bef1-4e6d-bc47-cf430d36258b	{"sub": "b915af1d-bef1-4e6d-bc47-cf430d36258b"}	email	2022-02-04 21:01:29.152875+00	2022-02-04 21:01:29.152916+00	2022-02-04 21:01:29.15292+00
-be7dd07d-47dd-4118-b28f-9a9709a9c779	be7dd07d-47dd-4118-b28f-9a9709a9c779	{"sub": "be7dd07d-47dd-4118-b28f-9a9709a9c779"}	email	2022-02-04 21:16:55.658985+00	2022-02-04 21:16:55.659057+00	2022-02-04 21:16:55.659066+00
-0f3609c8-b32a-40dc-860d-e047b89a5a6f	0f3609c8-b32a-40dc-860d-e047b89a5a6f	{"sub": "0f3609c8-b32a-40dc-860d-e047b89a5a6f"}	email	2022-02-06 23:20:35.500441+00	2022-02-06 23:20:35.500474+00	2022-02-06 23:20:35.500477+00
-0630ec75-0c45-4e8d-9406-2964bd2ff25d	0630ec75-0c45-4e8d-9406-2964bd2ff25d	{"sub": "0630ec75-0c45-4e8d-9406-2964bd2ff25d"}	email	2022-02-06 23:22:05.117338+00	2022-02-06 23:22:05.117389+00	2022-02-06 23:22:05.117392+00
+05098166-33f7-41c8-beef-452b2143d440	05098166-33f7-41c8-beef-452b2143d440	{"sub": "05098166-33f7-41c8-beef-452b2143d440"}	email	2022-10-29 19:02:45.55407+00	2022-10-29 19:02:45.554107+00	2022-10-29 19:02:45.554112+00
+7c147a5e-b9ab-4ff0-8c30-d4f4401b2675	7c147a5e-b9ab-4ff0-8c30-d4f4401b2675	{"sub": "7c147a5e-b9ab-4ff0-8c30-d4f4401b2675"}	email	2022-10-29 19:04:01.794239+00	2022-10-29 19:04:01.794279+00	2022-10-29 19:04:01.794284+00
+ecf15eee-ddeb-40bc-a63e-a507bc26df52	ecf15eee-ddeb-40bc-a63e-a507bc26df52	{"sub": "ecf15eee-ddeb-40bc-a63e-a507bc26df52"}	email	2022-10-29 19:04:12.367292+00	2022-10-29 19:04:12.367321+00	2022-10-29 19:04:12.367325+00
+e63385d3-3fc1-450e-8f09-46f35cc9228b	e63385d3-3fc1-450e-8f09-46f35cc9228b	{"sub": "e63385d3-3fc1-450e-8f09-46f35cc9228b"}	email	2022-10-29 19:04:21.142902+00	2022-10-29 19:04:21.142933+00	2022-10-29 19:04:21.142937+00
+4e015719-099e-485f-97fb-2569cb6aed76	4e015719-099e-485f-97fb-2569cb6aed76	{"sub": "4e015719-099e-485f-97fb-2569cb6aed76"}	email	2022-10-29 19:04:36.935059+00	2022-10-29 19:04:36.935088+00	2022-10-29 19:04:36.935092+00
 \.
 
 
@@ -47,11 +47,11 @@ be7dd07d-47dd-4118-b28f-9a9709a9c779	be7dd07d-47dd-4118-b28f-9a9709a9c779	{"sub"
 --
 
 COPY public.user_profiles (id, user_id, created_at, updated_at, display_name, role_id) FROM stdin;
-8ea819b8-c4b5-41e5-8f40-451f0eed9acf	b915af1d-bef1-4e6d-bc47-cf430d36258b	2022-02-05 13:47:29+00	2022-02-05 13:47:29+00	Jane, Eater of Worlds	46dd06a8-d4f7-47d7-ab7c-cdd88671d0d0
-2760facd-8c61-4473-b04f-d28a6ae189c7	d67d9d66-7686-401d-a340-0fe8a22fbdf1	2022-02-05 13:48:24+00	2022-02-05 13:48:24+00	Joe the Destroyer	46dd06a8-d4f7-47d7-ab7c-cdd88671d0d0
-dd33d505-98bc-4f85-8fa2-f1261ff1fb03	0f3609c8-b32a-40dc-860d-e047b89a5a6f	2022-02-06 23:20:35.378+00	2022-02-06 23:20:35.378+00	JasonTheMighty	a354132a-565a-489c-8717-e596fe18219c
-f65eae14-ecaa-4ece-bb64-0772fdb1caa3	be7dd07d-47dd-4118-b28f-9a9709a9c779	2022-02-05 13:49:16+00	2022-02-05 13:49:16+00	Administrator	a354132a-565a-489c-8717-e596fe18219c
-9a6f304e-e9b7-4b04-9f51-54ad278baf70	0630ec75-0c45-4e8d-9406-2964bd2ff25d	2022-02-06 23:22:05.039+00	2022-02-06 23:22:05.039+00	Will	a354132a-565a-489c-8717-e596fe18219c
+8ea819b8-c4b5-41e5-8f40-451f0eed9acf	7c147a5e-b9ab-4ff0-8c30-d4f4401b2675	2022-02-05 13:47:29+00	2022-02-05 13:47:29+00	Jane, Eater of Worlds	46dd06a8-d4f7-47d7-ab7c-cdd88671d0d0
+2760facd-8c61-4473-b04f-d28a6ae189c7	05098166-33f7-41c8-beef-452b2143d440	2022-02-05 13:48:24+00	2022-02-05 13:48:24+00	Joe the Destroyer	46dd06a8-d4f7-47d7-ab7c-cdd88671d0d0
+dd33d505-98bc-4f85-8fa2-f1261ff1fb03	e63385d3-3fc1-450e-8f09-46f35cc9228b	2022-02-06 23:20:35.378+00	2022-02-06 23:20:35.378+00	JasonTheMighty	a354132a-565a-489c-8717-e596fe18219c
+f65eae14-ecaa-4ece-bb64-0772fdb1caa3	4e015719-099e-485f-97fb-2569cb6aed76	2022-02-05 13:49:16+00	2022-02-05 13:49:16+00	Administrator	a354132a-565a-489c-8717-e596fe18219c
+9a6f304e-e9b7-4b04-9f51-54ad278baf70	ecf15eee-ddeb-40bc-a63e-a507bc26df52	2022-02-06 23:22:05.039+00	2022-02-06 23:22:05.039+00	Will	a354132a-565a-489c-8717-e596fe18219c
 \.
 
 
@@ -128,7 +128,7 @@ COPY public.boards_completions (board_id, completion_id) FROM stdin;
 --
 
 COPY public.games (id, label, description, board_size, created_at, updated_at, expires_at) FROM stdin;
-408957cc-06bc-42a6-a005-4d48693ce578	The Running Man	A Bingo Game for Runners	5	2022-01-30 14:27:50+00	2022-01-30 14:27:50+00	2022-05-06 13:28:13.296031+00
+408957cc-06bc-42a6-a005-4d48693ce578	The Running Man	A Bingo Game for Runners	5	2022-01-30 14:27:50+00	2022-10-29 19:17:27.988102+00	2023-10-29 19:17:27.988102+00
 \.
 
 
@@ -182,7 +182,7 @@ COPY public.roles (id, created_at, label, description) FROM stdin;
 c94a1b68-4ba7-410d-93c1-251157f22522	2022-02-12 01:46:58+00	editor	editor: A system user that can permissions to perform limited inserts and updates to the core system.
 a354132a-565a-489c-8717-e596fe18219c	2022-02-12 01:47:41+00	admin	admin: A system user that can perform all operations on the system
 35d824bd-96cf-4f2e-9b97-fa073b17f7ad	2022-02-12 01:48:30+00	keeper	keeper: A game user that assists the administrator in editing items related to a game.
-8909c101-2de4-4713-b8b1-b4573bfa4c50	2022-02-12 01:48:08+00	player	player: A game user with minimum privileges 
+8909c101-2de4-4713-b8b1-b4573bfa4c50	2022-02-12 01:48:08+00	player	player: A game user with minimum privileges
 91e5b01e-584e-4a02-b619-fef75fac22ac	2022-02-12 01:50:10+00	owner	owner: A game user that has full control over the editable items in a game
 \.
 
@@ -192,6 +192,10 @@ a354132a-565a-489c-8717-e596fe18219c	2022-02-12 01:47:41+00	admin	admin: A syste
 --
 
 COPY public.games_users (game_id, profile_id, role_id) FROM stdin;
+408957cc-06bc-42a6-a005-4d48693ce578	dd33d505-98bc-4f85-8fa2-f1261ff1fb03	91e5b01e-584e-4a02-b619-fef75fac22ac
+408957cc-06bc-42a6-a005-4d48693ce578	9a6f304e-e9b7-4b04-9f51-54ad278baf70	35d824bd-96cf-4f2e-9b97-fa073b17f7ad
+408957cc-06bc-42a6-a005-4d48693ce578	2760facd-8c61-4473-b04f-d28a6ae189c7	8909c101-2de4-4713-b8b1-b4573bfa4c50
+408957cc-06bc-42a6-a005-4d48693ce578	8ea819b8-c4b5-41e5-8f40-451f0eed9acf	8909c101-2de4-4713-b8b1-b4573bfa4c50
 408957cc-06bc-42a6-a005-4d48693ce578	dd33d505-98bc-4f85-8fa2-f1261ff1fb03	91e5b01e-584e-4a02-b619-fef75fac22ac
 408957cc-06bc-42a6-a005-4d48693ce578	9a6f304e-e9b7-4b04-9f51-54ad278baf70	35d824bd-96cf-4f2e-9b97-fa073b17f7ad
 408957cc-06bc-42a6-a005-4d48693ce578	2760facd-8c61-4473-b04f-d28a6ae189c7	8909c101-2de4-4713-b8b1-b4573bfa4c50

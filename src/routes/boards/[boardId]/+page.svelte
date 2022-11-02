@@ -1,28 +1,12 @@
-<script lang="ts" context="module">
-	import Boards from '$lib/db/boards';
-	import type { GameBoard } from '$lib/db/boards';
-	import { redirectToLogin } from '$lib/auth/helper';
-
-	export async function load({ params, session, url }) {
-		if (!session?.user) {
-			return redirectToLogin(url);
-		}
-
-		try {
-			const board = await Boards.one(params.boardId);
-			return { props: { board } };
-		} catch (error) {
-			console.error(error);
-			return { error };
-		}
-	}
-</script>
-
 <script lang="ts">
 	import { fly } from 'svelte/transition';
 	import { scaledContent } from '$lib/scaledContent';
 	import CompletionDetails from '$lib/CompletionDetails.svelte';
-	export let board: GameBoard;
+
+	/** @type {import('./$types').PageData} */
+	export let data;
+
+	$: board = data.board;
 
 	let completion;
 
