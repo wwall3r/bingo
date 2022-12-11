@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { PageData } from './$types';
+	import type { PageData } from './$types';
 	import { fly } from 'svelte/transition';
 	import { scaledContent } from '$lib/scaledContent';
 	import CompletionDetails from '$lib/CompletionDetails.svelte';
