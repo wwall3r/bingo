@@ -16,8 +16,10 @@ export const withAuthenticatedSupabase = async (
 	try {
 		return cmd(supabaseClient);
 	} catch (error) {
+		// log the error on the server or in the console depending on context
 		console.error(error);
 	}
 
+	// display friendlier error to the user
 	error(500, 'We could not load the page data');
 };

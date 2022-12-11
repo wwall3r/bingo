@@ -3,6 +3,7 @@
 1. Ensure supabase is stopped
 1. Upgrade supabase cli to latest: probably via `brew upgrade`
 1. supabase start
+1. Update `.env` with the keys from the output of `supabase start`
 1. `./scripts/data.sh load`
 1. Update node to latest lts: `nvm install --lts`
 1. `corepack enable` (enable `pnpm` and `yarn` binaries delivered with node)

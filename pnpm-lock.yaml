@@ -2,7 +2,7 @@ lockfileVersion: 5.4
 
 specifiers:
   '@supabase/auth-helpers-sveltekit': ^0.8.6
-  '@supabase/supabase-js': ^2.0.5
+  '@supabase/supabase-js': ^2.1.1
   '@sveltejs/adapter-auto': 1.0.0-next.90
   '@sveltejs/kit': 1.0.0-next.571
   '@tailwindcss/typography': ^0.5.1
@@ -22,7 +22,6 @@ specifiers:
   prettier: ^2.4.1
   prettier-plugin-svelte: ^2.4.0
   pretty-quick: ^3.1.3
-  supabase-ui-svelte: ^0.1.1
   svelte: ^3.53.1
   svelte-check: ^2.10.0
   svelte-feather-icons: ^4.0.0
@@ -33,8 +32,8 @@ specifiers:
   vite: ^3.1.6
 
 devDependencies:
-  '@supabase/auth-helpers-sveltekit': 0.8.6_zkgeqwp3h2sozttntdecfeola4
-  '@supabase/supabase-js': 2.0.5
+  '@supabase/auth-helpers-sveltekit': 0.8.6_m57u6a6l34vkx3j4pjzwywi7ua
+  '@supabase/supabase-js': 2.1.1
   '@sveltejs/adapter-auto': 1.0.0-next.90
   '@sveltejs/kit': 1.0.0-next.571_svelte@3.53.1+vite@3.2.2
   '@tailwindcss/typography': 0.5.7_tailwindcss@3.2.1
@@ -54,7 +53,6 @@ devDependencies:
   prettier: 2.7.1
   prettier-plugin-svelte: 2.8.0_nryolsexf6k3znhuh4uzpugsem
   pretty-quick: 3.1.3_prettier@2.7.1
-  supabase-ui-svelte: 0.1.1
   svelte: 3.53.1
   svelte-check: 2.10.0_32gljzbjlz4bh2ipwikllaxqgi
   svelte-feather-icons: 4.0.0
@@ -177,21 +175,21 @@ packages:
     resolution: {integrity: sha512-a5Sab1C4/icpTZVzZc5Ghpz88yQtGOyNqYXcZgOssB2uuAr+wF/MvN6bgtW32q7HHrvBki+BsZ0OuNv6EV3K9g==}
     dev: true
 
-  /@supabase/auth-helpers-shared/0.2.3_zkgeqwp3h2sozttntdecfeola4:
+  /@supabase/auth-helpers-shared/0.2.3_m57u6a6l34vkx3j4pjzwywi7ua:
     resolution: {integrity: sha512-Xwnd2UQ/VTjTKIuVg1Xl/ryrElbSccOJhC11jbVPHOs7Y6yxzy9APxQs//jj4IpbDH4uOEDCdpMIJ0tzRxj9DQ==}
     peerDependencies:
       '@supabase/supabase-js': ^2.0.4
     dependencies:
-      '@supabase/supabase-js': 2.0.5
+      '@supabase/supabase-js': 2.1.1
     dev: true
 
-  /@supabase/auth-helpers-sveltekit/0.8.6_zkgeqwp3h2sozttntdecfeola4:
+  /@supabase/auth-helpers-sveltekit/0.8.6_m57u6a6l34vkx3j4pjzwywi7ua:
     resolution: {integrity: sha512-RQ1qKG0VtO9n2eTPZ5CBV2s5ZJqwLQ/R0AIeTTb7BCXEG3sesGamROoZMudvV/bbJlWeO0anBZSUudAc8B/hxw==}
     peerDependencies:
       '@supabase/supabase-js': ^2.0.4
     dependencies:
-      '@supabase/auth-helpers-shared': 0.2.3_zkgeqwp3h2sozttntdecfeola4
-      '@supabase/supabase-js': 2.0.5
+      '@supabase/auth-helpers-shared': 0.2.3_m57u6a6l34vkx3j4pjzwywi7ua
+      '@supabase/supabase-js': 2.1.1
     dev: true
 
   /@supabase/functions-js/2.0.0:
@@ -202,8 +200,8 @@ packages:
       - encoding
     dev: true
 
-  /@supabase/gotrue-js/2.2.2:
-    resolution: {integrity: sha512-rPvBrMFsgkagA+z3ttMT3SJNfp+veN6IK9uU9YlzfwMysd5R0hX/7OuYt46N8w5cw4ZYhgovOjJ0fQ62lJFINg==}
+  /@supabase/gotrue-js/2.4.2:
+    resolution: {integrity: sha512-OjonGyH0DvFcLAM9QrX73hSM6qXBAvgnISyOvjidUUIh9GgcYAJRWWysjN7Rn3QVpKNGQ65JE6gkuXBIGz1gcg==}
     dependencies:
       cross-fetch: 3.1.5
     transitivePeerDependencies:
@@ -235,11 +233,11 @@ packages:
       - encoding
     dev: true
 
-  /@supabase/supabase-js/2.0.5:
-    resolution: {integrity: sha512-zewk3U8wSe2UlKqzUk7iNxeMZzgDa5kjosSG4SKuAizIv+xzS+c2EZsYnNtc2byGjah4QT1dw3t91k2E+j+Akg==}
+  /@supabase/supabase-js/2.1.1:
+    resolution: {integrity: sha512-6uBz31zrYfXkb5f2lzSHtncLWDQG5LvuH/OrmIAJqnjvliyd1pXMCGn/03xTfnflbjMolbOva+XMrydkyIMDfQ==}
     dependencies:
       '@supabase/functions-js': 2.0.0
-      '@supabase/gotrue-js': 2.2.2
+      '@supabase/gotrue-js': 2.4.2
       '@supabase/postgrest-js': 1.1.0
       '@supabase/realtime-js': 2.1.0
       '@supabase/storage-js': 2.0.0
@@ -2715,12 +2713,6 @@ packages:
       postcss-selector-parser: 6.0.10
     dev: true
 
-  /supabase-ui-svelte/0.1.1:
-    resolution: {integrity: sha512-tDnkU2ma2C8gmwBTr476FFeckt1kHxOxParTfrHLFtOkb30MuBABQ6zAE8ytImF12v3VGuSSniOB9cAYKaSxJA==}
-    dependencies:
-      svelte-feather-icons: 3.6.0
-    dev: true
-
   /supports-color/5.5.0:
     resolution: {integrity: sha512-QjVjwdXIt408MIiAqCX4oUKsgU2EqAGzs2Ppkm4aQYbjm+ZEWEcW4SfFNTr4uMNZma0ey4f5lgLrkB0aX0QMow==}
     engines: {node: '>=4'}
@@ -2766,12 +2758,6 @@ packages:
       - sass
       - stylus
       - sugarss
-    dev: true
-
-  /svelte-feather-icons/3.6.0:
-    resolution: {integrity: sha512-pdRmJwrYUxTI00uTJvGtrMoWXI56n4iX+7fBuxVG/TdBtnqZ8RlGPPvgXmH9+yGOMvWOF5SbZ7h4I+FiORbs2A==}
-    dependencies:
-      svelte: 3.53.1
     dev: true
 
   /svelte-feather-icons/4.0.0:

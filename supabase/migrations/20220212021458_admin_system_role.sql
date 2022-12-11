@@ -3,7 +3,7 @@ CREATE OR REPLACE FUNCTION public.system_role_id()
  LANGUAGE 'plpgsql'
     COST 100
     VOLATILE NOT LEAKPROOF SECURITY DEFINER
-AS $BODY$ 
+AS $BODY$
   declare role_id user_profiles.role_id % TYPE;
 BEGIN
   SELECT
@@ -11,8 +11,8 @@ BEGIN
   FROM
     user_profiles
   WHERE
-    user_id = auth.uid();
-  IF NOT found THEN 
+    id = auth.uid();
+  IF NOT found THEN
     raise 'profile with user_id % not found', auth.uid();
   END IF;
   RETURN role_id;

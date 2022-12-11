@@ -1,10 +1,10 @@
 <script lang="ts">
+	import { PageData } from './$types';
 	import { fly } from 'svelte/transition';
 	import { scaledContent } from '$lib/scaledContent';
 	import CompletionDetails from '$lib/CompletionDetails.svelte';
 
-	/** @type {import('./$types').PageData} */
-	export let data;
+	export let data: PageData;
 
 	$: board = data.board;
 

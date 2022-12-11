@@ -31,16 +31,23 @@ export const getPasswordAction =
 		const { error } = await supabaseClient.auth[method]({ email, password });
 
 		if (error) {
-			if (error instanceof AuthApiError && error.status === 400) {
-				return invalid(400, {
+			if (error instanceof AuthApiError) {
+				if (method === 'signUp') {
+					console.error(error);
+				}
+
+				return invalid(error.status, {
 					error: 'Invalid credentials.',
 					values: {
 						email
 					}
 				});
 			}
+
+			console.error(error);
+
 			return invalid(500, {
-				error: 'Server error. Try again later.',
+				error: 'Server error. Please try again later.',
 				values: {
 					email
 				}

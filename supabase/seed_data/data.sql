@@ -47,7 +47,7 @@ e63385d3-3fc1-450e-8f09-46f35cc9228b	e63385d3-3fc1-450e-8f09-46f35cc9228b	{"sub"
 -- Data for Name: user_profiles; Type: TABLE DATA; Schema: public; Owner: postgres
 --
 
-COPY public.user_profiles (user_id, created_at, updated_at, display_name, role_id) FROM stdin;
+COPY public.user_profiles (id, created_at, updated_at, display_name, role_id) FROM stdin;
 7c147a5e-b9ab-4ff0-8c30-d4f4401b2675	2022-02-05 13:47:29+00	2022-02-05 13:47:29+00	Jane, Eater of Worlds	46dd06a8-d4f7-47d7-ab7c-cdd88671d0d0
 05098166-33f7-41c8-beef-452b2143d440	2022-02-05 13:48:24+00	2022-02-05 13:48:24+00	Joe the Destroyer	46dd06a8-d4f7-47d7-ab7c-cdd88671d0d0
 e63385d3-3fc1-450e-8f09-46f35cc9228b	2022-02-06 23:20:35.378+00	2022-02-06 23:20:35.378+00	JasonTheMighty	a354132a-565a-489c-8717-e596fe18219c

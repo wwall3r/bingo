@@ -7,11 +7,11 @@ create extension if not exists moddatetime schema extensions;
 
 CREATE TABLE IF NOT EXISTS public.user_profiles
 (
-    user_id uuid references auth.users NOT NULL,
+    id uuid references auth.users NOT NULL,
     created_at timestamp with time zone NOT NULL DEFAULT now(),
     updated_at timestamp with time zone NOT NULL DEFAULT now(),
     display_name character varying COLLATE pg_catalog."default",
-    CONSTRAINT user_profile_pkey PRIMARY KEY (user_id)
+    CONSTRAINT user_profile_pkey PRIMARY KEY (id)
 )
 
 TABLESPACE pg_default;
@@ -35,16 +35,13 @@ COMMENT ON TABLE public.user_profiles
 
 CREATE OR REPLACE FUNCTION public.create_user_profile()
     RETURNS trigger
-    LANGUAGE 'plpgsql'
-    COST 100
-    VOLATILE NOT LEAKPROOF SECURITY DEFINER
 AS $BODY$
 begin
   insert into public.user_profiles (id, display_name)
   values (new.id, 'New User');
   return new;
 end;
-$BODY$;
+$BODY$ LANGUAGE plpgsql SECURITY DEFINER;
 
 ALTER FUNCTION public.create_user_profile()
     OWNER TO postgres;
@@ -59,6 +56,12 @@ GRANT EXECUTE ON FUNCTION public.create_user_profile() TO anon;
 
 GRANT EXECUTE ON FUNCTION public.create_user_profile() TO service_role;
 
+CREATE TRIGGER
+    create_profile_on_signup
+    AFTER INSERT ON auth.users
+    FOR EACH ROW
+        EXECUTE PROCEDURE public.create_user_profile();
+
 CREATE TABLE IF NOT EXISTS public.boards
 (
     id uuid NOT NULL DEFAULT uuid_generate_v4(),
@@ -67,7 +70,7 @@ CREATE TABLE IF NOT EXISTS public.boards
     user_id uuid NOT NULL,
     CONSTRAINT board_pkey PRIMARY KEY (id),
     CONSTRAINT boards_user_id_fkey FOREIGN KEY (user_id)
-        REFERENCES public.user_profiles (user_id) MATCH SIMPLE
+        REFERENCES public.user_profiles (id) MATCH SIMPLE
         ON UPDATE NO ACTION
         ON DELETE NO ACTION
 )
@@ -280,7 +283,7 @@ CREATE TABLE IF NOT EXISTS public.games_users
         ON UPDATE NO ACTION
         ON DELETE NO ACTION,
     CONSTRAINT games_users_user_id_fkey FOREIGN KEY (user_id)
-        REFERENCES public.user_profiles (user_id) MATCH SIMPLE
+        REFERENCES public.user_profiles (id) MATCH SIMPLE
         ON UPDATE NO ACTION
         ON DELETE NO ACTION
 )
@@ -517,8 +520,8 @@ CREATE POLICY "Enable all actions for users based on user_id"
     AS PERMISSIVE
     FOR ALL
     TO public
-    USING ((auth.uid() = user_id))
-    WITH CHECK ((auth.uid() = user_id));
+    USING ((auth.uid() = id))
+    WITH CHECK ((auth.uid() = id));
 
 CREATE POLICY "Enable insert for authenticated users only"
     ON public.user_profiles

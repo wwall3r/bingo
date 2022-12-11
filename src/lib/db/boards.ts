@@ -32,7 +32,7 @@ export type GameBoard = {
 
 export default {
 	async allForGame(client: TypedSupabaseClient, gameId: string): Promise<GameBoard[]> {
-		const tiles = await wrap(() =>
+		const tiles = await wrap(
 			client
 				.from<GameBoard>(table)
 				.select(
@@ -57,31 +57,32 @@ export default {
 				.eq('games_boards.game_id', gameId)
 		);
 
+		console.log('boards', tiles);
 		return tiles?.map(addFreeSpace);
 	},
 
 	async one(client: TypedSupabaseClient, boardId: string): Promise<GameBoard> {
 		return addFreeSpace(
-			await wrap(() =>
+			await wrap(
 				client
 					.from<GameBoard>(table)
 					.select(
 						`
-					id,
-					user_profiles (
-						display_name
-					),
-					completions (
 						id,
-						notes,
-						state,
-						objectives (
+						user_profiles (
+							display_name
+						),
+						completions (
 							id,
-							label,
-							description
+							notes,
+							state,
+							objectives (
+								id,
+								label,
+								description
+							)
 						)
-					)
-				`
+					`
 					)
 					.eq('id', boardId)
 					.single()
