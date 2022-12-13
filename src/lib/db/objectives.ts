@@ -1,6 +1,7 @@
 import Operators from './operators';
 import type { TypedSupabaseClient } from '@supabase/auth-helpers-sveltekit';
 import type { definitions } from './types';
+import wrap from './wrap';
 
 const table = 'objectives';
 
@@ -16,7 +17,7 @@ export interface ObjectiveWithTags extends Objective {
 
 export default {
 	async all(client: TypedSupabaseClient): Promise<Objective[]> {
-		return client.from<Objective>(table).select();
+		return wrap(client.from<Objective>(table).select());
 	},
 
 	// TODO: This probably needs to be more specific than Partial;
@@ -25,7 +26,7 @@ export default {
 		client: TypedSupabaseClient,
 		objectives: Partial<Objective> | Partial<Objective>[]
 	): Promise<any> {
-		return client.from(table).insert(Array.isArray(objectives) ? objectives : [objectives]);
+		return wrap(client.from(table).insert(Array.isArray(objectives) ? objectives : [objectives]));
 	},
 
 	async search(
@@ -39,11 +40,11 @@ export default {
 			.join(` ${operator} `);
 
 		// TODO: add full text index for label + description
-		return;
-		client
-			.from<ObjectiveWithTags>(table)
-			.select(
-				`
+		return wrap(
+			client
+				.from<ObjectiveWithTags>(table)
+				.select(
+					`
 				id,
 				label,
 				description,
@@ -52,7 +53,8 @@ export default {
 					label
 				)
 			`
-			)
-			.textSearch('label', query);
+				)
+				.textSearch('label', query)
+		);
 	}
 };

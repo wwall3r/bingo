@@ -57,7 +57,6 @@ export default {
 				.eq('games_boards.game_id', gameId)
 		);
 
-		console.log('boards', tiles);
 		return tiles?.map(addFreeSpace);
 	},
 
