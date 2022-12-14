@@ -1,26 +1,33 @@
 export const scaledContent = (node: HTMLElement) => {
-	const scaledContent: HTMLElement | null = node.querySelector('.scaled-content');
+	const listener = () => {
+		const scaledEl: HTMLElement | null = node.querySelector('.scaled-content');
 
-	if (scaledContent) {
-		scaledContent.style.transform = 'scale(1, 1)';
+		if (scaledEl) {
+			scaledEl.style.transform = 'scale(1, 1)';
 
-		const { width: contentWidth, height: contentHeight } = scaledContent.getBoundingClientRect();
-		const { width: wrapperWidth, height: wrapperHeight } = node.getBoundingClientRect();
+			const { width: contentWidth, height: contentHeight } = scaledEl.getBoundingClientRect();
+			const { width: wrapperWidth, height: wrapperHeight } = node.getBoundingClientRect();
 
-		const scaleAmountX = Math.min(
-			(0.95 * wrapperWidth) / contentWidth,
-			wrapperHeight / contentHeight
-		);
-		const scaleAmountY = scaleAmountX;
+			const scaleAmountX = Math.min(
+				(0.95 * wrapperWidth) / contentWidth,
+				wrapperHeight / contentHeight
+			);
+			const scaleAmountY = scaleAmountX;
 
-		if (scaleAmountX < 1) {
-			scaledContent.style.transform = `scale(${scaleAmountX}, ${scaleAmountY})`;
+			if (scaleAmountX < 1) {
+				scaledEl.style.transform = `scale(${scaleAmountX}, ${scaleAmountY})`;
+			}
+
+			scaledEl.style.visibility = 'visible';
 		}
+	};
 
-		scaledContent.style.visibility = 'visible';
-	}
+	window.addEventListener('resize', listener);
+	listener();
 
 	return {
-		destroy() {}
+		destroy() {
+			window.removeEventListener('resize', listener);
+		}
 	};
 };
