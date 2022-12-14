@@ -1,39 +1,24 @@
 import Operators from './operators';
-import type { TypedSupabaseClient } from '@supabase/auth-helpers-sveltekit';
-import type { definitions } from './types';
+import type { TypedSupabaseClient } from './utils';
+import type { Database } from './types';
 import wrap from './wrap';
 
 const table = 'objectives';
 
-export type Objective = definitions['objectives'];
-type Tag = {
-	id: definitions['tags']['id'];
-	label: definitions['tags']['label'];
-};
-
-export interface ObjectiveWithTags extends Objective {
-	tags: Tag[];
-}
+type ObjectiveInsert = Database['public']['Tables']['objectives']['Insert'];
 
 export default {
-	async all(client: TypedSupabaseClient): Promise<Objective[]> {
-		return wrap(client.from<Objective>(table).select());
+	async all(client: TypedSupabaseClient) {
+		return wrap(client.from(table).select());
 	},
 
 	// TODO: This probably needs to be more specific than Partial;
 	// e.g. a type with some fields required but others optional
-	async insert(
-		client: TypedSupabaseClient,
-		objectives: Partial<Objective> | Partial<Objective>[]
-	): Promise<any> {
+	async insert(client: TypedSupabaseClient, objectives: ObjectiveInsert | ObjectiveInsert[]) {
 		return wrap(client.from(table).insert(Array.isArray(objectives) ? objectives : [objectives]));
 	},
 
-	async search(
-		client: TypedSupabaseClient,
-		terms: string,
-		operator: Operators = Operators.AND
-	): Promise<ObjectiveWithTags[]> {
+	async search(client: TypedSupabaseClient, terms: string, operator: Operators = Operators.AND) {
 		const query = terms
 			.split(/\s+/)
 			.map((t) => `'${t}'`)
@@ -42,7 +27,7 @@ export default {
 		// TODO: add full text index for label + description
 		return wrap(
 			client
-				.from<ObjectiveWithTags>(table)
+				.from(table)
 				.select(
 					`
 				id,

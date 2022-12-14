@@ -1,7 +1,8 @@
 <svelte:options accessors={true} />
 
 <script lang="ts">
-	export let completion;
+	import type { GameCompletions } from '$lib/db/boards';
+	export let completion: GameCompletions;
 
 	// import { createEventDispatcher } from 'svelte';
 	// let shown = false;

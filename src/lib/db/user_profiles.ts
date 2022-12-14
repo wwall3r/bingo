@@ -1,3 +1,3 @@
-import type { definitions } from './types';
+import type { Database } from './types';
 
-export type UserProfile = definitions['user_profiles'];
+export type UserProfile = Database['public']['Tables']['user_profiles']['Row'];

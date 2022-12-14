@@ -1,6 +1,4 @@
-import type PostgrestFilterBuilder from '@supabase/postgrest-js';
-
-export default async <T>(cmd: () => PostgrestFilterBuilder<T>): Promise<T> => {
+export default async <T>(cmd: PromiseLike<{ data: T; error: unknown }>): Promise<T> => {
 	const { data, error } = await cmd;
 
 	if (error) {

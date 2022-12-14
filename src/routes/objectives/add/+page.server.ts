@@ -9,39 +9,47 @@ export const actions = {
 		withAuthenticatedSupabase(event, async (supabaseClient) => {
 			const formData = await event.request.formData();
 
-			const label = formData?.get('label');
-			const description = formData?.get('description');
+			const label = formData?.get('label')?.toString() || '';
+			const description = formData?.get('description')?.toString() || '';
 
 			if (!label) {
 				return fail(400, {
 					error: 'Please provide a label',
 					label,
-					description,
+					description
 				});
 			}
 
-			await Objectives.insert(supabaseClient, {label, description});
-			return { success: true };
+			await Objectives.insert(supabaseClient, { label, description });
+			return {
+				canSave: false,
+				label: '',
+				description: '',
+				success: true,
+				similar: null
+			};
 		}),
+
 	similar: async (event) =>
 		withAuthenticatedSupabase(event, async (supabaseClient) => {
 			const formData = await event.request.formData();
 
-			const label = formData?.get('label');
-			const description = formData?.get('description');
+			const label = formData?.get('label')?.toString() || '';
+			const description = formData?.get('description')?.toString() || '';
 
 			if (!label) {
 				return fail(400, {
 					error: 'Please provide a label',
 					label,
-					description,
+					description
 				});
 			}
 
-			const similar await Objectives.insert(supabaseClient, {label, description});
 			return {
 				canSave: true,
-				similar: await Objectives.search(supabaseClient, label, Operators.OR),
+				description,
+				label,
+				similar: await Objectives.search(supabaseClient, label, Operators.OR)
 			};
-		}),
+		})
 } satisfies Actions;

@@ -50,7 +50,7 @@
 							</span>
 						</div>
 					{/each}
-					{#if !form.similar.length}
+					{#if !form?.similar.length}
 						<div>No similar items were found.</div>
 					{/if}
 				</div>

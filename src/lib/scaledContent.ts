@@ -1,21 +1,24 @@
-export const scaledContent = (node) => {
-	const scaledContent = node.querySelector('.scaled-content');
-	scaledContent.style.transform = 'scale(1, 1)';
+export const scaledContent = (node: HTMLElement) => {
+	const scaledContent: HTMLElement | null = node.querySelector('.scaled-content');
 
-	const { width: contentWidth, height: contentHeight } = scaledContent.getBoundingClientRect();
-	const { width: wrapperWidth, height: wrapperHeight } = node.getBoundingClientRect();
+	if (scaledContent) {
+		scaledContent.style.transform = 'scale(1, 1)';
 
-	const scaleAmountX = Math.min(
-		(0.95 * wrapperWidth) / contentWidth,
-		wrapperHeight / contentHeight
-	);
-	const scaleAmountY = scaleAmountX;
+		const { width: contentWidth, height: contentHeight } = scaledContent.getBoundingClientRect();
+		const { width: wrapperWidth, height: wrapperHeight } = node.getBoundingClientRect();
 
-	if (scaleAmountX < 1) {
-		scaledContent.style.transform = `scale(${scaleAmountX}, ${scaleAmountY})`;
+		const scaleAmountX = Math.min(
+			(0.95 * wrapperWidth) / contentWidth,
+			wrapperHeight / contentHeight
+		);
+		const scaleAmountY = scaleAmountX;
+
+		if (scaleAmountX < 1) {
+			scaledContent.style.transform = `scale(${scaleAmountX}, ${scaleAmountY})`;
+		}
+
+		scaledContent.style.visibility = 'visible';
 	}
-
-	scaledContent.style.visibility = 'visible';
 
 	return {
 		destroy() {}

@@ -1,6 +1,7 @@
 <script lang="ts">
 	import type { PageData } from './$types';
 	import { fly } from 'svelte/transition';
+	import type { GameCompletions } from '$lib/db/boards';
 	import { scaledContent } from '$lib/scaledContent';
 	import CompletionDetails from '$lib/CompletionDetails.svelte';
 
@@ -8,7 +9,7 @@
 
 	$: board = data.board;
 
-	let completion;
+	let completion: GameCompletions;
 
 	// TODO: size is computable from board.completions.length, but that mucks
 	// up tailwind. Set manually?
@@ -20,7 +21,7 @@
 		delay: duration
 	};
 
-	const getTransitionOptions = (i) => {
+	const getTransitionOptions = (i: number) => {
 		const x = i % 5;
 		const y = Math.floor(i / 5);
 
@@ -30,7 +31,7 @@
 		});
 	};
 
-	const completionHandler = (c) => {
+	const completionHandler = (c: GameCompletions) => {
 		console.log('Button clicked for completion');
 		console.log(c);
 		completion = c;

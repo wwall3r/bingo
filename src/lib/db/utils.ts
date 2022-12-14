@@ -1,10 +1,12 @@
-import type { TypedSupabaseClient } from '@supabase/auth-helpers-sveltekit';
-import type { RequestEvent } from '@sveltejs/kit';
+import type { LoadEvent, RequestEvent, ServerLoadEvent } from '@sveltejs/kit';
+import { error } from '@sveltejs/kit';
 import { getSupabase } from '@supabase/auth-helpers-sveltekit';
 import { redirectToLogin } from '$lib/auth/redirects';
 
-export const withAuthenticatedSupabase = async (
-	event: RequestEvent,
+export type TypedSupabaseClient = Awaited<ReturnType<typeof getSupabase>>['supabaseClient'];
+
+export const withAuthenticatedSupabase = async <T>(
+	event: RequestEvent | ServerLoadEvent | LoadEvent,
 	cmd: (client: TypedSupabaseClient) => Promise<T>
 ) => {
 	const { session, supabaseClient } = await getSupabase(event);
@@ -21,5 +23,5 @@ export const withAuthenticatedSupabase = async (
 	}
 
 	// display friendlier error to the user
-	error(500, 'We could not load the page data');
+	throw error(500, 'We could not load the page data');
 };
