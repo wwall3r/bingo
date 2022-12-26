@@ -1,14 +1,6 @@
-# For Jason (ditch this section after you've updated):
+# Overview
 
-1. Ensure supabase is stopped
-1. Upgrade supabase cli to latest: probably via `brew upgrade`
-1. supabase start
-1. Update `.env` with the keys from the output of `supabase start`
-1. `./scripts/data.sh load`
-1. Update node to latest lts: `nvm install --lts`
-1. `corepack enable` (enable `pnpm` and `yarn` binaries delivered with node)
-1. `pnpm i`
-1. `pnpm dev`
+Bingo is a proof-of-concept leveraging the Supabase product to create an online game for event based versions of 'Bingo'.
 
 # Vision
 
@@ -113,3 +105,14 @@ The idea is to create multiple types of bingo games and share a game with indivi
 
 - Commit the changes `supabase db commit 'migration_name'`
 - Dump the data `scripts/data.sh dump`
+
+# Supabase
+
+There are multiple repositories for [Supabase|https://github.com/supabase/]
+
+## Supabase CLI
+
+[cli|https://github.com/supabase/cli] has the instructions to install the `supabase` command.
+
+- `supabase start` if you installed with brew or directly on linux with the deb file.
+- `npx supabase start` if you installed as local npm file. `npm install supabase --save-dev`
