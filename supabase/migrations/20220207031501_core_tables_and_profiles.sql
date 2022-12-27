@@ -37,11 +37,14 @@ CREATE OR REPLACE FUNCTION public.create_user_profile()
     RETURNS trigger
 AS $BODY$
 begin
-  insert into public.user_profiles (id, display_name)
-  values (new.id, 'New User');
-  return new;
+  INSERT INTO public.user_profiles (id, display_name, role_id)
+  VALUES (NEW.id, 'New User', (SELECT ID from public.roles WHERE label='player'));
+  RETURN NEW;
 end;
 $BODY$ LANGUAGE plpgsql SECURITY DEFINER;
+
+
+
 
 ALTER FUNCTION public.create_user_profile()
     OWNER TO postgres;
