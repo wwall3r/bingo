@@ -1,15 +1,16 @@
 <script lang="ts">
 	import type { PageData } from './$types';
 	import { fly } from 'svelte/transition';
-	import type { GameCompletions } from '$lib/db/boards';
 	import { scaledContent } from '$lib/scaledContent';
 	import CompletionDetails from '$lib/CompletionDetails.svelte';
+
+	import type { Completion } from '$lib/db/boards';
 
 	export let data: PageData;
 
 	$: board = data.board;
 
-	let completion: GameCompletions;
+	let completion: Completion;
 
 	// TODO: size is computable from board.completions.length, but that mucks
 	// up tailwind. Set manually?
@@ -31,34 +32,36 @@
 		});
 	};
 
-	const completionHandler = (c: GameCompletions) => {
+	const completionHandler = (c: Completion) => {
 		console.log('Button clicked for completion');
 		console.log(c);
 		completion = c;
 	};
 </script>
 
-<div
-	class="mt-2 mx-1 grid gap-2 grid-cols-5 grid-rows-5 md:max-w-prose md:mx-auto"
-	transition:fly={transitionOptions}
->
-	{#each board.completions as tile, i}
-		<button
-			aria-label={tile.objectives.label}
-			class="btn aspect-square h-auto"
-			class:btn-success={tile.state === 2}
-			use:scaledContent
-			on:click={() => {
-				completionHandler(tile);
-			}}
-			in:fly={getTransitionOptions(i)}
-		>
-			<span class="scaled-content">
-				{tile.objectives.label}
-			</span>
-		</button>
-	{/each}
-</div>
+{#if board}
+	<div
+		class="mt-2 mx-1 grid gap-2 grid-cols-5 grid-rows-5 md:max-w-prose md:mx-auto"
+		transition:fly={transitionOptions}
+	>
+		{#each board.completions as tile, i}
+			<button
+				aria-label={tile.objectives.label}
+				class="btn aspect-square h-auto"
+				class:btn-success={tile.state === 2}
+				use:scaledContent
+				on:click={() => {
+					completionHandler(tile);
+				}}
+				in:fly={getTransitionOptions(i)}
+			>
+				<span class="scaled-content">
+					{tile.objectives.label}
+				</span>
+			</button>
+		{/each}
+	</div>
+{/if}
 
 {#if completion}
 	<CompletionDetails {completion} />

@@ -40,6 +40,15 @@ export default {
 			`
 				)
 				.textSearch('label', query)
+				.returns<{
+					id: string;
+					label: string;
+					description?: string;
+					tags: {
+						id: string;
+						label: string;
+					}[];
+				}>()
 		);
 	}
 };

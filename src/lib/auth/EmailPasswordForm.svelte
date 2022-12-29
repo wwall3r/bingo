@@ -1,9 +1,16 @@
-<script>
+<script lang="ts">
 	import SlashIcon from 'svelte-feather-icons/src/icons/SlashIcon.svelte';
 	import { enhance } from '$app/forms';
 	import { page } from '$app/stores';
 
-	export let form;
+	interface Form {
+		error?: string;
+		values?: {
+			email: string;
+		};
+	}
+
+	export let form: Form | null;
 
 	$: redirect = $page.url.searchParams.get('redirect') || '';
 </script>

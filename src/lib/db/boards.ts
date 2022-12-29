@@ -3,6 +3,29 @@ import wrap from './wrap';
 
 const table = 'boards';
 
+// TODO: The goal is to remove this and have the query entirely typed
+// properly by the query itself. However, that's still got an issue
+// where it types joins as T || T[] instead of properly detecting whether
+// a relationship is 1-1 or 1-n.
+//
+// Until that time, we will override the detected type.
+//
+// See https://github.com/supabase/postgrest-js/issues/303 for more
+type ForceNestedJoin = {
+	id: string;
+	user_profiles: { display_name: string };
+	completions: {
+		id: string;
+		notes?: string;
+		state: number;
+		objectives: {
+			id: string;
+			label: string;
+			description?: string;
+		};
+	}[];
+};
+
 const allForGame = (client: TypedSupabaseClient, gameId: string) =>
 	wrap(
 		client
@@ -27,6 +50,7 @@ const allForGame = (client: TypedSupabaseClient, gameId: string) =>
 		`
 			)
 			.eq('games_boards.game_id', gameId)
+			.returns<ForceNestedJoin>()
 	);
 
 const one = (client: TypedSupabaseClient, boardId: string) =>
@@ -52,6 +76,7 @@ const one = (client: TypedSupabaseClient, boardId: string) =>
 			`
 			)
 			.eq('id', boardId)
+			.returns<ForceNestedJoin>()
 			.single()
 	);
 
@@ -67,6 +92,8 @@ export default {
 
 	async create(client: TypedSupabaseClient, gameId: string, numObjectives = 24) {
 		return wrap(
+			// see https://github.com/supabase/cli/issues/752
+			// @ts-ignore
 			client.rpc('create_board', {
 				p_game_id: gameId,
 				p_num_objectives: numObjectives
@@ -76,6 +103,9 @@ export default {
 };
 
 export type GameBoard = Awaited<ReturnType<typeof one>>;
+
+type Unarray<T> = T extends Array<infer U> ? U : T;
+export type Completion = Unarray<Exclude<GameBoard, null>['completions']>;
 
 const addFreeSpace = (board: GameBoard): GameBoard => {
 	// TODO: this should really be computed by either game size

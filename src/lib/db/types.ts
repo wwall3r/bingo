@@ -5,22 +5,22 @@ export interface Database {
 		Tables: {
 			boards: {
 				Row: {
-					user_id: string;
-					id: string;
 					created_at: string;
+					id: string;
 					updated_at: string;
+					user_id: string;
 				};
 				Insert: {
-					user_id: string;
-					id?: string;
 					created_at?: string;
+					id?: string;
 					updated_at?: string;
+					user_id: string;
 				};
 				Update: {
-					user_id?: string;
-					id?: string;
 					created_at?: string;
+					id?: string;
 					updated_at?: string;
+					user_id?: string;
 				};
 			};
 			boards_completions: {
@@ -39,91 +39,91 @@ export interface Database {
 			};
 			completion_states: {
 				Row: {
+					created_at: string | null;
 					id: number;
 					label: string;
-					created_at: string | null;
 					updated_at: string | null;
 				};
 				Insert: {
+					created_at?: string | null;
 					id?: number;
 					label: string;
-					created_at?: string | null;
 					updated_at?: string | null;
 				};
 				Update: {
+					created_at?: string | null;
 					id?: number;
 					label?: string;
-					created_at?: string | null;
 					updated_at?: string | null;
 				};
 			};
 			completions: {
 				Row: {
-					objective_id: string;
-					notes: string | null;
-					id: string;
 					created_at: string;
-					updated_at: string;
+					id: string;
+					notes: string | null;
+					objective_id: string;
 					state: number | null;
+					updated_at: string;
 				};
 				Insert: {
-					objective_id: string;
-					notes?: string | null;
-					id?: string;
 					created_at?: string;
-					updated_at?: string;
+					id?: string;
+					notes?: string | null;
+					objective_id: string;
 					state?: number | null;
+					updated_at?: string;
 				};
 				Update: {
-					objective_id?: string;
-					notes?: string | null;
-					id?: string;
 					created_at?: string;
-					updated_at?: string;
+					id?: string;
+					notes?: string | null;
+					objective_id?: string;
 					state?: number | null;
+					updated_at?: string;
 				};
 			};
 			games: {
 				Row: {
-					label: string;
-					description: string | null;
-					id: string;
 					board_size: number;
 					created_at: string | null;
-					updated_at: string | null;
+					description: string | null;
 					expires_at: string | null;
+					id: string;
+					label: string;
+					updated_at: string | null;
 				};
 				Insert: {
-					label: string;
-					description?: string | null;
-					id?: string;
 					board_size?: number;
 					created_at?: string | null;
-					updated_at?: string | null;
+					description?: string | null;
 					expires_at?: string | null;
+					id?: string;
+					label: string;
+					updated_at?: string | null;
 				};
 				Update: {
-					label?: string;
-					description?: string | null;
-					id?: string;
 					board_size?: number;
 					created_at?: string | null;
-					updated_at?: string | null;
+					description?: string | null;
 					expires_at?: string | null;
+					id?: string;
+					label?: string;
+					updated_at?: string | null;
 				};
 			};
 			games_boards: {
 				Row: {
-					game_id: string;
 					board_id: string;
+					game_id: string;
 				};
 				Insert: {
-					game_id: string;
 					board_id: string;
+					game_id: string;
 				};
 				Update: {
-					game_id?: string;
 					board_id?: string;
+					game_id?: string;
 				};
 			};
 			games_objectives: {
@@ -143,118 +143,118 @@ export interface Database {
 			games_users: {
 				Row: {
 					game_id: string;
-					user_id: string | null;
 					role_id: string;
+					user_id: string | null;
 				};
 				Insert: {
 					game_id: string;
-					user_id?: string | null;
 					role_id?: string;
+					user_id?: string | null;
 				};
 				Update: {
 					game_id?: string;
-					user_id?: string | null;
 					role_id?: string;
+					user_id?: string | null;
 				};
 			};
 			objectives: {
 				Row: {
-					label: string;
+					created_at: string | null;
 					description: string | null;
 					id: string;
-					created_at: string | null;
+					label: string;
 					updated_at: string;
 				};
 				Insert: {
-					label: string;
+					created_at?: string | null;
 					description?: string | null;
 					id?: string;
-					created_at?: string | null;
+					label: string;
 					updated_at?: string;
 				};
 				Update: {
-					label?: string;
+					created_at?: string | null;
 					description?: string | null;
 					id?: string;
-					created_at?: string | null;
+					label?: string;
 					updated_at?: string;
 				};
 			};
 			roles: {
 				Row: {
-					label: string;
+					created_at: string | null;
 					description: string | null;
 					id: string;
-					created_at: string | null;
+					label: string;
 				};
 				Insert: {
-					label: string;
+					created_at?: string | null;
 					description?: string | null;
 					id?: string;
-					created_at?: string | null;
+					label: string;
 				};
 				Update: {
-					label?: string;
+					created_at?: string | null;
 					description?: string | null;
 					id?: string;
-					created_at?: string | null;
+					label?: string;
 				};
 			};
 			tags: {
 				Row: {
-					label: string;
-					id: string;
 					created_at: string | null;
+					id: string;
+					label: string;
 					updated_at: string | null;
 				};
 				Insert: {
-					label: string;
-					id?: string;
 					created_at?: string | null;
+					id?: string;
+					label: string;
 					updated_at?: string | null;
 				};
 				Update: {
-					label?: string;
-					id?: string;
 					created_at?: string | null;
+					id?: string;
+					label?: string;
 					updated_at?: string | null;
 				};
 			};
 			tags_objectives: {
 				Row: {
-					tag_id: string;
 					objective_id: string;
+					tag_id: string;
 				};
 				Insert: {
-					tag_id: string;
 					objective_id: string;
+					tag_id: string;
 				};
 				Update: {
-					tag_id?: string;
 					objective_id?: string;
+					tag_id?: string;
 				};
 			};
 			user_profiles: {
 				Row: {
-					id: string;
-					display_name: string | null;
 					created_at: string;
-					updated_at: string;
+					display_name: string | null;
+					id: string;
 					role_id: string;
+					updated_at: string;
 				};
 				Insert: {
-					id: string;
-					display_name?: string | null;
 					created_at?: string;
-					updated_at?: string;
+					display_name?: string | null;
+					id: string;
 					role_id?: string;
+					updated_at?: string;
 				};
 				Update: {
-					id?: string;
-					display_name?: string | null;
 					created_at?: string;
-					updated_at?: string;
+					display_name?: string | null;
+					id?: string;
 					role_id?: string;
+					updated_at?: string;
 				};
 			};
 		};
