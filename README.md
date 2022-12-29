@@ -14,48 +14,6 @@ The idea is to create multiple types of bingo games and share a game with indivi
 1. Shared games ?
 1. Updates ?
 
-# Roles
-
-- anon: An unauthenticated user
-- player: An authenticated user
-- director: manages a game instance.
-- admin: a bingo maintainer and administrator with full control of all APIs and data
-
-# Use Cases
-
-## anon
-
-- Visit the site and see options/overview
-- Signup / Signin
-
-## admin
-
-- can disable players
-- can approve/CRUD a category
-- can approve/CRUD objectives to a category
-
-## director
-
-- creates a game instance
-- selects a board size
-- selects the category and filters objectives appropriate for the game instance
-- invites players or anonymous
-  - This may be a backend workflow which doesn't care. It either adds an existing player or sends an invitation
-  - consider security ramifications of revealing information)
-  - can find players or do they have to know e-mail addresses?
-- can view all board instances for their game instances
-- can promote players to directors for a game instance
-
-## players
-
-- have an alias / profile
-- view their board instances
-- send a link to their board
-- view others boards in a game instance
-- see updates to the game feed (assume no secret states)
-- proposes categories and objectives
-- update their board with a 'completion' of an objective
-- list games they are members of
 
 # Concepts
 
@@ -64,57 +22,3 @@ The idea is to create multiple types of bingo games and share a game with indivi
 # Goals
 
 1. Write an example that exercises the features in supabase.io
-
-# Tasks/Next Steps
-
-- [ ] Login: CSRF handling
-- [ ] Login: Progressive enhancement
-- [ ] Logout
-
-# Questions
-
-1. How are migrations handled? The migrations are created by making changes to the database and running `supabase db commit` which will create a new sql file in the migrations folder.
-2. How are updates shared? A restart of a local development instance had all the data go away. A seed data script was created to recreate data for testing. It can be run applying the sql.
-3. Native psql connection? This is listed in the docs.
-
-# Starting the application
-
-1. `supabase start` start the database
-1. `supabase db reset` recreates the database
-1. `scripts/data.sh load` loads the seed data. Requires PGHOST, PGPORT, PGDATABASE, PGUSER, PGPASSWORD in .env
-   1. Alternatively: `psql 'postgresql://postgres:postgres@localhost:54322/postgres' < supabase/seed_data/data.sql` load the seed data. Use [postgresql-client](https://www.postgresql.org/download/linux/ubuntu/)
-1. `pnpm dev` to start the application
-1. Test users - Password is `password`
-   1. admin@email.com
-   1. joe@email.com
-   1. jane@email.com
-
-## local developer locations
-
-1. [supabase](http://localhost:54323/project/default)
-1. [app](http://localhost:3000)
-
-# Database
-
-## navigation
-
-- `\?` : help
-- `\dt` : list tables, views, sequences
-- `SET search_path TO auth;` : set schema to auth
-- `\dn` : list schemas
-
-## databackup
-
-- Commit the changes `supabase db commit 'migration_name'`
-- Dump the data `scripts/data.sh dump`
-
-# Supabase
-
-There are multiple repositories for [Supabase|https://github.com/supabase/]
-
-## Supabase CLI
-
-[cli|https://github.com/supabase/cli] has the instructions to install the `supabase` command.
-
-- `supabase start` if you installed with brew or directly on linux with the deb file.
-- `npx supabase start` if you installed as local npm file. `npm install supabase --save-dev`
