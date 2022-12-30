@@ -2,6 +2,7 @@
 	import type { PageData } from './$types';
 	import { fly } from 'svelte/transition';
 	import { enhance } from '$app/forms';
+	import { afterNavigate } from '$app/navigation';
 	import { scaledContent } from '$lib/scaledContent';
 
 	export let data: PageData;
@@ -13,17 +14,23 @@
 	// up tailwind. Set manually?
 
 	// TODO: May want to drop the board and profile display name on here
-	const duration = 500;
-	const transitionOptions = {
+	let duration = 500;
+
+	$: transitionOptions = {
 		duration,
 		delay: duration
 	};
 
-	const getTransitionOptions = (i: number) => {
+	afterNavigate(({ from }) => {
+		duration = from === null ? 500 : 0;
+	});
+
+	const getTransitionOptions = (key: string, i: number) => {
 		const x = i % 5;
 		const y = Math.floor(i / 5);
 
 		return Object.assign({}, transitionOptions, {
+			key,
 			x: (2 - x) * 200,
 			y: (2 - y) * 200
 		});
@@ -39,7 +46,7 @@
 	</div>
 	<div
 		class="mt-3 mx-1 grid gap-2 grid-cols-5 grid-rows-5 md:max-w-prose md:mx-auto"
-		transition:fly={transitionOptions}
+		in:fly={transitionOptions}
 	>
 		{#each board.completions as completion, i}
 			<label
@@ -47,7 +54,7 @@
 				aria-label={completion.objectives.label}
 				class="btn aspect-square h-auto"
 				class:btn-success={completion.state === 2}
-				in:fly={getTransitionOptions(i)}
+				in:fly={getTransitionOptions(completion.id, i)}
 				use:scaledContent
 			>
 				<span class="scaled-content">
