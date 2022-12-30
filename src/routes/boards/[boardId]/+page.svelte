@@ -1,16 +1,13 @@
 <script lang="ts">
 	import type { PageData } from './$types';
 	import { fly } from 'svelte/transition';
+	import { enhance } from '$app/forms';
 	import { scaledContent } from '$lib/scaledContent';
-	import CompletionDetails from '$lib/CompletionDetails.svelte';
-
-	import type { Completion } from '$lib/db/boards';
+	import completion from '$lib/db/completion';
 
 	export let data: PageData;
 
 	$: board = data.board;
-
-	let completion: Completion;
 
 	// TODO: size is computable from board.completions.length, but that mucks
 	// up tailwind. Set manually?
@@ -31,12 +28,6 @@
 			y: (2 - y) * 200
 		});
 	};
-
-	const completionHandler = (c: Completion) => {
-		console.log('Button clicked for completion');
-		console.log(c);
-		completion = c;
-	};
 </script>
 
 {#if board}
@@ -44,25 +35,53 @@
 		class="mt-2 mx-1 grid gap-2 grid-cols-5 grid-rows-5 md:max-w-prose md:mx-auto"
 		transition:fly={transitionOptions}
 	>
-		{#each board.completions as tile, i}
-			<button
-				aria-label={tile.objectives.label}
+		{#each board.completions as completion, i}
+			<label
+				for={completion.id}
+				aria-label={completion.objectives.label}
 				class="btn aspect-square h-auto"
-				class:btn-success={tile.state === 2}
-				use:scaledContent
-				on:click={() => {
-					completionHandler(tile);
-				}}
+				class:btn-success={completion.state === 2}
 				in:fly={getTransitionOptions(i)}
+				use:scaledContent
 			>
 				<span class="scaled-content">
-					{tile.objectives.label}
+					{completion.objectives.label}
 				</span>
-			</button>
+			</label>
+
+			{#if completion.id !== 'free-space'}
+				<input type="checkbox" id={completion.id} class="modal-toggle" />
+
+				<label for={completion.id} class="modal cursor-pointer">
+					<div class="modal-box relative">
+						<h3 class="text-lg font-bold">{completion.objectives.label}</h3>
+						{#if completion.objectives.description}
+							<p class="py-4">{completion.objectives.description}</p>
+						{/if}
+						<div class="modal-action">
+							{#if data?.session?.user.id === board.user_profiles.id}
+								<label for={completion.id} class="btn">Cancel</label>
+								<form method="POST" action="?/toggle" use:enhance>
+									<input type="hidden" name="completionId" value={completion.id} />
+
+									<button
+										aria-label={completion.state === 2 ? 'Reset' : 'Mark Complete'}
+										class="btn"
+										class:btn-success={completion.state === 1}
+										class:btn-primary={completion.state === 2}
+									>
+										<label for={completion.id}>
+											{completion.state === 2 ? 'Reset' : 'Mark Complete'}
+										</label>
+									</button>
+								</form>
+							{:else}
+								<label for={completion.id} class="btn">Close</label>
+							{/if}
+						</div>
+					</div>
+				</label>
+			{/if}
 		{/each}
 	</div>
-{/if}
-
-{#if completion}
-	<CompletionDetails {completion} />
 {/if}

@@ -13,7 +13,7 @@ const table = 'boards';
 // See https://github.com/supabase/postgrest-js/issues/303 for more
 type ForceNestedJoin = {
 	id: string;
-	user_profiles: { display_name: string };
+	user_profiles: { id: string; display_name: string };
 	completions: {
 		id: string;
 		notes?: string;
@@ -34,6 +34,7 @@ const allForGame = (client: TypedSupabaseClient, gameId: string) =>
 				`
 			id,
 			user_profiles (
+				id,
 				display_name
 			),
 			completions (
@@ -61,6 +62,7 @@ const one = (client: TypedSupabaseClient, boardId: string) =>
 				`
 				id,
 				user_profiles (
+					id,
 					display_name
 				),
 				completions (
@@ -115,7 +117,7 @@ const addFreeSpace = (board: GameBoard): GameBoard => {
 
 	if (Array.isArray(completions)) {
 		completions.splice(12, 0, {
-			id: '-1',
+			id: 'free-space',
 			notes: "Don't you like free stuff?",
 			state: 2,
 			objectives: {
