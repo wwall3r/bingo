@@ -3,11 +3,11 @@
 	import { fly } from 'svelte/transition';
 	import { enhance } from '$app/forms';
 	import { scaledContent } from '$lib/scaledContent';
-	import completion from '$lib/db/completion';
 
 	export let data: PageData;
 
 	$: board = data.board;
+	$: game = data.game;
 
 	// TODO: size is computable from board.completions.length, but that mucks
 	// up tailwind. Set manually?
@@ -30,9 +30,15 @@
 	};
 </script>
 
-{#if board}
+{#if board && game}
+	<div class="mt-3 mx-1 flex justify-center md:max-w-prose md:mx-auto md:justify-start">
+		<h1 class="text-xl font-semibold">
+			<a class="link link-hover link-accent" href={`/games/${game.id}`}>{game.label}</a> &ndash;
+			{board.user_profiles.display_name}
+		</h1>
+	</div>
 	<div
-		class="mt-2 mx-1 grid gap-2 grid-cols-5 grid-rows-5 md:max-w-prose md:mx-auto"
+		class="mt-3 mx-1 grid gap-2 grid-cols-5 grid-rows-5 md:max-w-prose md:mx-auto"
 		transition:fly={transitionOptions}
 	>
 		{#each board.completions as completion, i}
@@ -64,13 +70,13 @@
 								<form method="POST" action="?/toggle" use:enhance>
 									<input type="hidden" name="completionId" value={completion.id} />
 
-									<button
-										aria-label={completion.state === 2 ? 'Reset' : 'Mark Complete'}
-										class="btn"
-										class:btn-success={completion.state === 1}
-										class:btn-primary={completion.state === 2}
-									>
-										<label for={completion.id} class="cursor-pointer">
+									<button aria-label={completion.state === 2 ? 'Reset' : 'Mark Complete'}>
+										<label
+											for={completion.id}
+											class="btn"
+											class:btn-success={completion.state === 1}
+											class:btn-primary={completion.state === 2}
+										>
 											{completion.state === 2 ? 'Reset' : 'Mark Complete'}
 										</label>
 									</button>
