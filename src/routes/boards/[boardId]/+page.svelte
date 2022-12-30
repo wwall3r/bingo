@@ -52,7 +52,7 @@
 			{#if completion.id !== 'free-space'}
 				<input type="checkbox" id={completion.id} class="modal-toggle" />
 
-				<label for={completion.id} class="modal cursor-pointer">
+				<label for={completion.id} class="modal">
 					<div class="modal-box relative">
 						<h3 class="text-lg font-bold">{completion.objectives.label}</h3>
 						{#if completion.objectives.description}
@@ -70,7 +70,7 @@
 										class:btn-success={completion.state === 1}
 										class:btn-primary={completion.state === 2}
 									>
-										<label for={completion.id}>
+										<label for={completion.id} class="cursor-pointer">
 											{completion.state === 2 ? 'Reset' : 'Mark Complete'}
 										</label>
 									</button>
