@@ -92,6 +92,21 @@ export default {
 		return addFreeSpace(await one(client, boardId));
 	},
 
+	async gameFor(client: TypedSupabaseClient, boardId: string) {
+		return wrap(
+			client
+				.from('games')
+				.select(
+					`
+					*,
+					games_boards!inner(game_id)
+				`
+				)
+				.eq('games_boards.board_id', boardId)
+				.single()
+		);
+	},
+
 	async create(client: TypedSupabaseClient, gameId: string, numObjectives = 24) {
 		return wrap(
 			// see https://github.com/supabase/cli/issues/752
