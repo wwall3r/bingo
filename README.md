@@ -15,10 +15,7 @@ The idea is to create multiple types of bingo games and share a game with indivi
 1. Updates ?
 
 
-# Concepts
-
-1. Categories are just tags on objectives. This allow reuse of objectives.
-
 # Goals
 
 1. Write an example that exercises the features in supabase.io
+1. Finish a project and deploy it for the world (at least for a second or two)
