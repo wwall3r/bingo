@@ -17,21 +17,12 @@ SET client_min_messages = warning;
 SET row_security = off;
 
 --
--- Data for Name: user_profiles; Type: TABLE DATA; Schema: public; Owner: postgres
---
-
-COPY public.user_profiles (id, created_at, updated_at, display_name, role_id) FROM stdin;
-7c147a5e-b9ab-4ff0-8c30-d4f4401b2675	2022-02-05 13:47:29+00	2022-02-05 13:47:29+00	Jane, Eater of Worlds	46dd06a8-d4f7-47d7-ab7c-cdd88671d0d0
-05098166-33f7-41c8-beef-452b2143d440	2022-02-05 13:48:24+00	2022-02-05 13:48:24+00	Joe the Destroyer	46dd06a8-d4f7-47d7-ab7c-cdd88671d0d0
-e63385d3-3fc1-450e-8f09-46f35cc9228b	2022-02-06 23:20:35.378+00	2022-02-06 23:20:35.378+00	JasonTheMighty	a354132a-565a-489c-8717-e596fe18219c
-4e015719-099e-485f-97fb-2569cb6aed76	2022-02-05 13:49:16+00	2022-02-05 13:49:16+00	Administrator	a354132a-565a-489c-8717-e596fe18219c
-ecf15eee-ddeb-40bc-a63e-a507bc26df52	2022-02-06 23:22:05.039+00	2022-02-06 23:22:05.039+00	Will	a354132a-565a-489c-8717-e596fe18219c
-\.
-
-
---
 -- Data for Name: users; Type: TABLE DATA; Schema: auth; Owner: supabase_auth_admin
 --
+
+SET SESSION AUTHORIZATION DEFAULT;
+
+ALTER TABLE auth.users DISABLE TRIGGER ALL;
 
 COPY auth.users (instance_id, id, aud, role, email, encrypted_password, email_confirmed_at, invited_at, confirmation_token, confirmation_sent_at, recovery_token, recovery_sent_at, email_change_token_new, email_change, email_change_sent_at, last_sign_in_at, raw_app_meta_data, raw_user_meta_data, is_super_admin, created_at, updated_at, phone, phone_confirmed_at, phone_change, phone_change_token, phone_change_sent_at, email_change_token_current, email_change_confirm_status, banned_until, reauthentication_token, reauthentication_sent_at) FROM stdin;
 00000000-0000-0000-0000-000000000000	05098166-33f7-41c8-beef-452b2143d440	authenticated	authenticated	joe@email.com	$2a$10$gS4cwayoaZmlvRp7UbYZJOwgKRNUbqGKnjW39xk4Xq/9VJzN5k8aW	2022-10-29 19:02:45.555745+00	\N		\N		\N			\N	2022-10-29 19:02:45.556944+00	{"provider": "email", "providers": ["email"]}	{}	\N	2022-10-29 19:02:45.55164+00	2022-10-29 19:02:45.558714+00	\N	\N			\N		0	\N		\N
@@ -42,9 +33,13 @@ COPY auth.users (instance_id, id, aud, role, email, encrypted_password, email_co
 \.
 
 
+ALTER TABLE auth.users ENABLE TRIGGER ALL;
+
 --
 -- Data for Name: identities; Type: TABLE DATA; Schema: auth; Owner: supabase_auth_admin
 --
+
+ALTER TABLE auth.identities DISABLE TRIGGER ALL;
 
 COPY auth.identities (id, user_id, identity_data, provider, last_sign_in_at, created_at, updated_at) FROM stdin;
 05098166-33f7-41c8-beef-452b2143d440	05098166-33f7-41c8-beef-452b2143d440	{"sub": "05098166-33f7-41c8-beef-452b2143d440"}	email	2022-10-29 19:02:45.55407+00	2022-10-29 19:02:45.554107+00	2022-10-29 19:02:45.554112+00
@@ -55,18 +50,43 @@ e63385d3-3fc1-450e-8f09-46f35cc9228b	e63385d3-3fc1-450e-8f09-46f35cc9228b	{"sub"
 \.
 
 
+ALTER TABLE auth.identities ENABLE TRIGGER ALL;
+
+--
+-- Data for Name: user_profiles; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+ALTER TABLE public.user_profiles DISABLE TRIGGER ALL;
+
+COPY public.user_profiles (id, created_at, updated_at, display_name, role_id) FROM stdin;
+7c147a5e-b9ab-4ff0-8c30-d4f4401b2675	2022-02-05 13:47:29+00	2022-02-05 13:47:29+00	Jane, Eater of Worlds	46dd06a8-d4f7-47d7-ab7c-cdd88671d0d0
+05098166-33f7-41c8-beef-452b2143d440	2022-02-05 13:48:24+00	2022-02-05 13:48:24+00	Joe the Destroyer	46dd06a8-d4f7-47d7-ab7c-cdd88671d0d0
+e63385d3-3fc1-450e-8f09-46f35cc9228b	2022-02-06 23:20:35.378+00	2022-02-06 23:20:35.378+00	JasonTheMighty	a354132a-565a-489c-8717-e596fe18219c
+4e015719-099e-485f-97fb-2569cb6aed76	2022-02-05 13:49:16+00	2022-02-05 13:49:16+00	Administrator	a354132a-565a-489c-8717-e596fe18219c
+ecf15eee-ddeb-40bc-a63e-a507bc26df52	2022-02-06 23:22:05.039+00	2022-02-06 23:22:05.039+00	Will	a354132a-565a-489c-8717-e596fe18219c
+\.
+
+
+ALTER TABLE public.user_profiles ENABLE TRIGGER ALL;
+
 --
 -- Data for Name: boards; Type: TABLE DATA; Schema: public; Owner: postgres
 --
+
+ALTER TABLE public.boards DISABLE TRIGGER ALL;
 
 COPY public.boards (id, created_at, updated_at, user_id) FROM stdin;
 6838ecc4-0e47-48f3-8189-b47d60202968	2022-12-30 09:17:11.336075+00	2022-12-30 09:17:11.336075+00	e63385d3-3fc1-450e-8f09-46f35cc9228b
 \.
 
 
+ALTER TABLE public.boards ENABLE TRIGGER ALL;
+
 --
 -- Data for Name: completion_states; Type: TABLE DATA; Schema: public; Owner: postgres
 --
+
+ALTER TABLE public.completion_states DISABLE TRIGGER ALL;
 
 COPY public.completion_states (id, created_at, updated_at, label) FROM stdin;
 1	2022-02-16 21:15:02+00	2022-02-16 21:15:02+00	incomplete
@@ -75,9 +95,13 @@ COPY public.completion_states (id, created_at, updated_at, label) FROM stdin;
 \.
 
 
+ALTER TABLE public.completion_states ENABLE TRIGGER ALL;
+
 --
 -- Data for Name: objectives; Type: TABLE DATA; Schema: public; Owner: postgres
 --
+
+ALTER TABLE public.objectives DISABLE TRIGGER ALL;
 
 COPY public.objectives (id, created_at, updated_at, label, description) FROM stdin;
 2e569ed6-93a6-4cd4-9ffa-3864b790bd49	2022-01-30 03:58:23+00	2022-01-30 03:58:23+00	Recovery Run	Do a recovery run at a 120% minute per mile pace. If your normal mile is 10 minutes, keep a 12 minute per mile pace.
@@ -108,9 +132,13 @@ c1df10ad-107c-4b95-b1b6-911a7fed0897	2022-01-30 04:20:57+00	2022-01-30 04:20:57+
 \.
 
 
+ALTER TABLE public.objectives ENABLE TRIGGER ALL;
+
 --
 -- Data for Name: completions; Type: TABLE DATA; Schema: public; Owner: postgres
 --
+
+ALTER TABLE public.completions DISABLE TRIGGER ALL;
 
 COPY public.completions (id, created_at, updated_at, objective_id, notes, state) FROM stdin;
 3d89ff20-5c12-4520-aff8-bb9bf9e48bd7	2022-12-30 09:17:11.336075+00	2022-12-30 09:17:11.336075+00	afd64a88-afd5-4a43-8f55-81af7bd62224	\N	1
@@ -140,9 +168,13 @@ a6d54a99-5973-409f-931b-99017e24878a	2022-12-30 09:17:11.336075+00	2022-12-30 09
 \.
 
 
+ALTER TABLE public.completions ENABLE TRIGGER ALL;
+
 --
 -- Data for Name: boards_completions; Type: TABLE DATA; Schema: public; Owner: postgres
 --
+
+ALTER TABLE public.boards_completions DISABLE TRIGGER ALL;
 
 COPY public.boards_completions (board_id, completion_id) FROM stdin;
 6838ecc4-0e47-48f3-8189-b47d60202968	06677335-1e22-4930-8b28-45720a5a2ba0
@@ -172,27 +204,39 @@ COPY public.boards_completions (board_id, completion_id) FROM stdin;
 \.
 
 
+ALTER TABLE public.boards_completions ENABLE TRIGGER ALL;
+
 --
 -- Data for Name: games; Type: TABLE DATA; Schema: public; Owner: postgres
 --
+
+ALTER TABLE public.games DISABLE TRIGGER ALL;
 
 COPY public.games (id, label, description, board_size, created_at, updated_at, expires_at) FROM stdin;
 408957cc-06bc-42a6-a005-4d48693ce578	The Running Man	A Bingo Game for Runners	5	2022-01-30 14:27:50+00	2022-10-29 19:17:27.988102+00	2023-10-29 19:17:27.988102+00
 \.
 
 
+ALTER TABLE public.games ENABLE TRIGGER ALL;
+
 --
 -- Data for Name: games_boards; Type: TABLE DATA; Schema: public; Owner: postgres
 --
+
+ALTER TABLE public.games_boards DISABLE TRIGGER ALL;
 
 COPY public.games_boards (game_id, board_id) FROM stdin;
 408957cc-06bc-42a6-a005-4d48693ce578	6838ecc4-0e47-48f3-8189-b47d60202968
 \.
 
 
+ALTER TABLE public.games_boards ENABLE TRIGGER ALL;
+
 --
 -- Data for Name: games_objectives; Type: TABLE DATA; Schema: public; Owner: postgres
 --
+
+ALTER TABLE public.games_objectives DISABLE TRIGGER ALL;
 
 COPY public.games_objectives (game_id, objective_id) FROM stdin;
 408957cc-06bc-42a6-a005-4d48693ce578	2e569ed6-93a6-4cd4-9ffa-3864b790bd49
@@ -223,9 +267,13 @@ COPY public.games_objectives (game_id, objective_id) FROM stdin;
 \.
 
 
+ALTER TABLE public.games_objectives ENABLE TRIGGER ALL;
+
 --
 -- Data for Name: games_users; Type: TABLE DATA; Schema: public; Owner: postgres
 --
+
+ALTER TABLE public.games_users DISABLE TRIGGER ALL;
 
 COPY public.games_users (game_id, user_id, role_id) FROM stdin;
 408957cc-06bc-42a6-a005-4d48693ce578	e63385d3-3fc1-450e-8f09-46f35cc9228b	91e5b01e-584e-4a02-b619-fef75fac22ac
@@ -239,18 +287,26 @@ COPY public.games_users (game_id, user_id, role_id) FROM stdin;
 \.
 
 
+ALTER TABLE public.games_users ENABLE TRIGGER ALL;
+
 --
 -- Data for Name: objective_packs; Type: TABLE DATA; Schema: public; Owner: postgres
 --
+
+ALTER TABLE public.objective_packs DISABLE TRIGGER ALL;
 
 COPY public.objective_packs (id, created_at, updated_at, label, description, user_id, published_at) FROM stdin;
 a20814dc-69d7-4ebb-88a6-999aad46e9bc	2023-01-01 23:43:32.813868+00	2023-01-01 23:43:32.813868+00	Running	A collection of objectives for a Running bingo game.	\N	2023-01-01 23:43:32.813868+00
 \.
 
 
+ALTER TABLE public.objective_packs ENABLE TRIGGER ALL;
+
 --
 -- Data for Name: objectives_objective_packs; Type: TABLE DATA; Schema: public; Owner: postgres
 --
+
+ALTER TABLE public.objectives_objective_packs DISABLE TRIGGER ALL;
 
 COPY public.objectives_objective_packs (objective_id, objective_pack_id) FROM stdin;
 2e569ed6-93a6-4cd4-9ffa-3864b790bd49	a20814dc-69d7-4ebb-88a6-999aad46e9bc
@@ -281,18 +337,26 @@ c1df10ad-107c-4b95-b1b6-911a7fed0897	a20814dc-69d7-4ebb-88a6-999aad46e9bc
 \.
 
 
+ALTER TABLE public.objectives_objective_packs ENABLE TRIGGER ALL;
+
 --
 -- Data for Name: tags; Type: TABLE DATA; Schema: public; Owner: postgres
 --
+
+ALTER TABLE public.tags DISABLE TRIGGER ALL;
 
 COPY public.tags (id, label, created_at, updated_at) FROM stdin;
 37fd9162-c822-44c4-a0ad-2c745656ca9d	Running	2022-01-30 14:48:20+00	2022-01-30 14:48:20+00
 \.
 
 
+ALTER TABLE public.tags ENABLE TRIGGER ALL;
+
 --
 -- Data for Name: tags_objectives; Type: TABLE DATA; Schema: public; Owner: postgres
 --
+
+ALTER TABLE public.tags_objectives DISABLE TRIGGER ALL;
 
 COPY public.tags_objectives (tag_id, objective_id) FROM stdin;
 37fd9162-c822-44c4-a0ad-2c745656ca9d	2e569ed6-93a6-4cd4-9ffa-3864b790bd49
@@ -322,6 +386,8 @@ COPY public.tags_objectives (tag_id, objective_id) FROM stdin;
 37fd9162-c822-44c4-a0ad-2c745656ca9d	29d90ab1-1ab7-4b35-80db-c3a05f12070b
 \.
 
+
+ALTER TABLE public.tags_objectives ENABLE TRIGGER ALL;
 
 --
 -- Name: completion_states_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
