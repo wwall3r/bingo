@@ -12,8 +12,6 @@ export default {
 		return wrap(client.from(table).select());
 	},
 
-	// TODO: This probably needs to be more specific than Partial;
-	// e.g. a type with some fields required but others optional
 	async insert(client: TypedSupabaseClient, objectives: ObjectiveInsert | ObjectiveInsert[]) {
 		return wrap(client.from(table).insert(Array.isArray(objectives) ? objectives : [objectives]));
 	},
