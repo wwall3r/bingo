@@ -9,20 +9,20 @@ CREATE POLICY "game members can read"
     FOR SELECT
     TO public
     USING ((id IN ( SELECT get_completions_for_user.completion_id
-   FROM get_completions_for_user() get_completions_for_user(board_id, game_id, user_id, completion_id))));
+   FROM get_completions_for_user() get_completions_for_user(card_id, game_id, user_id, completion_id))));
 
 CREATE POLICY "game members can read"
-    ON public.boards_completions
+    ON public.cards_completions
     AS PERMISSIVE
     FOR SELECT
     TO public
-    USING ((board_id IN ( SELECT get_completions_for_user.board_id
-   FROM get_completions_for_user() get_completions_for_user(board_id, game_id, user_id, completion_id))));
+    USING ((card_id IN ( SELECT get_completions_for_user.card_id
+   FROM get_completions_for_user() get_completions_for_user(card_id, game_id, user_id, completion_id))));
 
 CREATE POLICY "game members can read"
-    ON public.boards
+    ON public.cards
     AS PERMISSIVE
     FOR SELECT
     TO public
-    USING ((id IN ( SELECT get_completions_for_user.board_id
-   FROM get_completions_for_user() get_completions_for_user(board_id, game_id, user_id, completion_id))));
+    USING ((id IN ( SELECT get_completions_for_user.card_id
+   FROM get_completions_for_user() get_completions_for_user(card_id, game_id, user_id, completion_id))));

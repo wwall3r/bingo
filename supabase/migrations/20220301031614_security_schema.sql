@@ -7,7 +7,7 @@ CREATE TABLE IF NOT EXISTS system.user_permissions
     created_at timestamp with time zone NOT NULL DEFAULT now(),
     updated_at timestamp with time zone NOT NULL DEFAULT now(),
     game_credit integer DEFAULT 3,
-    board_credit integer DEFAULT 3,
+    card_credit integer DEFAULT 3,
     CONSTRAINT user_profile_pkey PRIMARY KEY (user_id),
     CONSTRAINT user_profile_user_id_fkey FOREIGN KEY (user_id) REFERENCES auth.users (id)
 )

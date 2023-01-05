@@ -7,13 +7,13 @@
 
 	export let data: PageData;
 
-	$: board = data.board;
+	$: card = data.card;
 	$: game = data.game;
 
-	// TODO: size is computable from board.completions.length, but that mucks
+	// TODO: size is computable from card.completions.length, but that mucks
 	// up tailwind. Set manually?
 
-	// TODO: May want to drop the board and profile display name on here
+	// TODO: May want to drop the card and profile display name on here
 	let duration = 500;
 
 	$: transitionOptions = {
@@ -37,18 +37,18 @@
 	};
 </script>
 
-{#if board && game}
+{#if card && game}
 	<div class="mt-3 mx-1 flex justify-center md:max-w-prose md:mx-auto md:justify-start">
 		<h1 class="text-xl font-semibold">
 			<a class="link link-hover link-accent" href={`/games/${game.id}`}>{game.label}</a> &ndash;
-			{board.user_profiles.display_name}
+			{card.user_profiles.display_name}
 		</h1>
 	</div>
 	<div
 		class="mt-3 mx-1 grid gap-2 grid-cols-5 grid-rows-5 md:max-w-prose md:mx-auto"
 		in:fly={transitionOptions}
 	>
-		{#each board.completions as completion, i}
+		{#each card.completions as completion, i}
 			<label
 				for={completion.id}
 				aria-label={completion.objectives.label}
@@ -72,7 +72,7 @@
 							<p class="py-4">{completion.objectives.description}</p>
 						{/if}
 						<div class="modal-action">
-							{#if data?.session?.user.id === board.user_profiles.id}
+							{#if data?.session?.user.id === card.user_profiles.id}
 								<label for={completion.id} class="btn">Cancel</label>
 								<form method="POST" action="?/toggle" use:enhance>
 									<input type="hidden" name="completionId" value={completion.id} />

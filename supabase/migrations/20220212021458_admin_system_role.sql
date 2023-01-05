@@ -32,7 +32,7 @@ GRANT EXECUTE ON FUNCTION public.system_role_id() TO postgres;
 GRANT EXECUTE ON FUNCTION public.system_role_id() TO service_role;
 
 
-ALTER TABLE IF EXISTS public.boards_completions
+ALTER TABLE IF EXISTS public.cards_completions
     ENABLE ROW LEVEL SECURITY;
 
 
@@ -42,7 +42,7 @@ CREATE POLICY "enabled all for admin" ON public.games AS PERMISSIVE FOR ALL TO p
   system_role_id() IN ( SELECT id FROM roles WHERE label = 'admin' )
 );
 
-CREATE POLICY "admin all" ON public.boards AS PERMISSIVE FOR ALL TO public USING (
+CREATE POLICY "admin all" ON public.cards AS PERMISSIVE FOR ALL TO public USING (
   ( system_role_id() IN (SELECT id FROM roles WHERE label = 'admin') )
 ) WITH CHECK (
   ( system_role_id() IN (SELECT id FROM roles WHERE label = 'admin') )
@@ -78,13 +78,13 @@ CREATE POLICY "admin all" ON public.user_profiles AS PERMISSIVE FOR ALL TO publi
   ( system_role_id() IN (SELECT id FROM roles WHERE label = 'admin') )
 );
 
-CREATE POLICY "admin all" ON public.boards_completions AS PERMISSIVE FOR ALL TO public USING (
+CREATE POLICY "admin all" ON public.cards_completions AS PERMISSIVE FOR ALL TO public USING (
   ( system_role_id() IN (SELECT id FROM roles WHERE label = 'admin') )
 ) WITH CHECK (
   ( system_role_id() IN (SELECT id FROM roles WHERE label = 'admin') )
 );
 
-CREATE POLICY "admin all" ON public.games_boards AS PERMISSIVE FOR ALL TO public USING (
+CREATE POLICY "admin all" ON public.games_cards AS PERMISSIVE FOR ALL TO public USING (
   ( system_role_id() IN (SELECT id FROM roles WHERE label = 'admin') )
 ) WITH CHECK (
   ( system_role_id() IN (SELECT id FROM roles WHERE label = 'admin') )

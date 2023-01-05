@@ -1,9 +1,9 @@
 import type { PageLoad } from './$types';
-import Boards from '$lib/db/boards';
+import Cards from '$lib/db/cards';
 import { withAuthenticatedSupabase } from '$lib/db/utils';
 
 export const load = (async (event) =>
 	withAuthenticatedSupabase(event, async (supabaseClient) => ({
-		game: await Boards.gameFor(supabaseClient, event.params.boardId),
-		board: await Boards.one(supabaseClient, event.params.boardId)
+		game: await Cards.gameFor(supabaseClient, event.params.cardId),
+		card: await Cards.one(supabaseClient, event.params.cardId)
 	}))) satisfies PageLoad;

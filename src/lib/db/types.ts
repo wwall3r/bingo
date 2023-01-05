@@ -3,7 +3,7 @@ export type Json = string | number | boolean | null | { [key: string]: Json } | 
 export interface Database {
 	public: {
 		Tables: {
-			boards: {
+			cards: {
 				Row: {
 					created_at: string;
 					id: string;
@@ -23,17 +23,17 @@ export interface Database {
 					user_id?: string;
 				};
 			};
-			boards_completions: {
+			cards_completions: {
 				Row: {
-					board_id: string;
+					card_id: string;
 					completion_id: string;
 				};
 				Insert: {
-					board_id: string;
+					card_id: string;
 					completion_id: string;
 				};
 				Update: {
-					board_id?: string;
+					card_id?: string;
 					completion_id?: string;
 				};
 			};
@@ -85,7 +85,7 @@ export interface Database {
 			};
 			games: {
 				Row: {
-					board_size: number;
+					card_size: number;
 					created_at: string | null;
 					description: string | null;
 					expires_at: string | null;
@@ -94,7 +94,7 @@ export interface Database {
 					updated_at: string | null;
 				};
 				Insert: {
-					board_size?: number;
+					card_size?: number;
 					created_at?: string | null;
 					description?: string | null;
 					expires_at?: string | null;
@@ -103,7 +103,7 @@ export interface Database {
 					updated_at?: string | null;
 				};
 				Update: {
-					board_size?: number;
+					card_size?: number;
 					created_at?: string | null;
 					description?: string | null;
 					expires_at?: string | null;
@@ -112,17 +112,17 @@ export interface Database {
 					updated_at?: string | null;
 				};
 			};
-			games_boards: {
+			games_cards: {
 				Row: {
-					board_id: string;
+					card_id: string;
 					game_id: string;
 				};
 				Insert: {
-					board_id: string;
+					card_id: string;
 					game_id: string;
 				};
 				Update: {
-					board_id?: string;
+					card_id?: string;
 					game_id?: string;
 				};
 			};
@@ -266,7 +266,7 @@ export interface Database {
 				Args: { p_user_id: string };
 				Returns: boolean;
 			};
-			create_board: {
+			create_card: {
 				Args: { p_game_id: string; p_user_id: string; p_num_objectives: number };
 				Returns: undefined;
 			};
@@ -281,7 +281,7 @@ export interface Database {
 			get_completions_for_user: {
 				Args: Record<PropertyKey, never>;
 				Returns: {
-					board_id: string;
+					card_id: string;
 					game_id: string;
 					user_id: string;
 					completion_id: string;
