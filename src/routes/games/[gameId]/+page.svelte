@@ -19,7 +19,7 @@
 		{#if data.cards}
 			{#each data.cards as card}
 				{#if card}
-					<a href="/cards/{card.id}">
+					<a class="block mb-2" href="/cards/{card.id}">
 						<div class="card card-side bg-base-200 hover shadow-xl">
 							<div class="card-body">
 								<h2 class="card-title">
