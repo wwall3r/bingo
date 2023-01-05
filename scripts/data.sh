@@ -24,8 +24,10 @@ function load_data {
 
 function dump_data {
   docker_postgres \
-    pg_dump --data-only \
+    pg_dump --data-only --disable-triggers \
     --table public.objectives \
+    --table public.objective_packs \
+    --table public.objectives_objective_packs \
     --table public.games \
     --table public.tags \
     --table public.boards \
