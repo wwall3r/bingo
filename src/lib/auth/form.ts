@@ -3,7 +3,7 @@ import { AuthApiError } from '@supabase/supabase-js';
 import { fail } from '@sveltejs/kit';
 import { redirectToPage } from './redirects';
 
-import type { LoadEvent, RequestEvent, ServerLoadEvent } from '@sveltejs/kit';
+import type { RequestEvent } from '@sveltejs/kit';
 
 export const getPasswordAction =
 	(method: 'signUp' | 'signInWithPassword') => async (event: RequestEvent) => {

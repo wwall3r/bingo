@@ -110,6 +110,7 @@ export default {
 	async create(client: TypedSupabaseClient, gameId: string, numObjectives = 24) {
 		return wrap(
 			// see https://github.com/supabase/cli/issues/752
+			// eslint-disable-next-line
 			// @ts-ignore
 			client.rpc('create_board', {
 				p_game_id: gameId,

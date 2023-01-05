@@ -1,6 +1,6 @@
 # Overview
 
-Bingo is a proof-of-concept leveraging the Supabase product to create an online game for event based versions of 'Bingo'. 
+Bingo is a proof-of-concept leveraging the Supabase product to create an online game for event based versions of 'Bingo'.
 
 ## [Visit the Wiki](https://github.com/wwall3r/bingo/wiki)
 
@@ -13,7 +13,6 @@ The idea is to create multiple types of bingo games and share a game with indivi
 1. Generate a board from those options
 1. Shared games ?
 1. Updates ?
-
 
 # Goals
 
