@@ -30,12 +30,12 @@ function dump_data {
     --table public.objectives_objective_packs \
     --table public.games \
     --table public.tags \
-    --table public.boards \
+    --table public.cards \
     --table public.completion_states \
     --table public.completions \
     --table public.user_profiles \
-    --table public.boards_completions \
-    --table public.games_boards \
+    --table public.cards_completions \
+    --table public.games_cards \
     --table public.games_objectives \
     --table public.games_users \
     --table public.tags_objectives \
