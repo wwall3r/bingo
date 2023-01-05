@@ -1,7 +1,7 @@
 import type { TypedSupabaseClient } from './utils';
 import wrap from './wrap';
 
-const table = 'boards';
+const table = 'cards';
 
 // TODO: The goal is to remove this and have the query entirely typed
 // properly by the query itself. However, that's still got an issue
@@ -47,14 +47,14 @@ const allForGame = (client: TypedSupabaseClient, gameId: string) =>
 					description
 				)
 			),
-			games_boards!inner(game_id)
+			games_cards!inner(game_id)
 		`
 			)
-			.eq('games_boards.game_id', gameId)
+			.eq('games_cards.game_id', gameId)
 			.returns<ForceNestedJoin>()
 	);
 
-const one = (client: TypedSupabaseClient, boardId: string) =>
+const one = (client: TypedSupabaseClient, cardId: string) =>
 	wrap(
 		client
 			.from(table)
@@ -77,7 +77,7 @@ const one = (client: TypedSupabaseClient, boardId: string) =>
 				)
 			`
 			)
-			.eq('id', boardId)
+			.eq('id', cardId)
 			.returns<ForceNestedJoin>()
 			.single()
 	);
@@ -88,21 +88,21 @@ export default {
 		return tiles?.map(addFreeSpace);
 	},
 
-	async one(client: TypedSupabaseClient, boardId: string) {
-		return addFreeSpace(await one(client, boardId));
+	async one(client: TypedSupabaseClient, cardId: string) {
+		return addFreeSpace(await one(client, cardId));
 	},
 
-	async gameFor(client: TypedSupabaseClient, boardId: string) {
+	async gameFor(client: TypedSupabaseClient, cardId: string) {
 		return wrap(
 			client
 				.from('games')
 				.select(
 					`
 					*,
-					games_boards!inner(game_id)
+					games_cards!inner(game_id)
 				`
 				)
-				.eq('games_boards.board_id', boardId)
+				.eq('games_cards.card_id', cardId)
 				.single()
 		);
 	},
@@ -112,7 +112,7 @@ export default {
 			// see https://github.com/supabase/cli/issues/752
 			// eslint-disable-next-line
 			// @ts-ignore
-			client.rpc('create_board', {
+			client.rpc('create_card', {
 				p_game_id: gameId,
 				p_num_objectives: numObjectives
 			})
@@ -120,16 +120,16 @@ export default {
 	}
 };
 
-export type GameBoard = Awaited<ReturnType<typeof one>>;
+export type GameCard = Awaited<ReturnType<typeof one>>;
 
 type Unarray<T> = T extends Array<infer U> ? U : T;
-export type Completion = Unarray<Exclude<GameBoard, null>['completions']>;
+export type Completion = Unarray<Exclude<GameCard, null>['completions']>;
 
-const addFreeSpace = (board: GameBoard): GameBoard => {
+const addFreeSpace = (card: GameCard): GameCard => {
 	// TODO: this should really be computed by either game size
-	// or number of board tiles, and should only be done for odd game sizes
+	// or number of card tiles, and should only be done for odd game sizes
 	// (e.g. 4^2 doesn't get a free space, but 5^2 does)
-	const completions = board?.completions;
+	const completions = card?.completions;
 
 	if (Array.isArray(completions)) {
 		completions.splice(12, 0, {
@@ -144,5 +144,5 @@ const addFreeSpace = (board: GameBoard): GameBoard => {
 		});
 	}
 
-	return board;
+	return card;
 };

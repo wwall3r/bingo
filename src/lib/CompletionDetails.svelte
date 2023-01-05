@@ -1,7 +1,7 @@
 <svelte:options accessors={true} />
 
 <script lang="ts">
-	import type { Completion } from '$lib/db/boards';
+	import type { Completion } from '$lib/db/cards';
 	export let completion: Completion;
 
 	// import { createEventDispatcher } from 'svelte';

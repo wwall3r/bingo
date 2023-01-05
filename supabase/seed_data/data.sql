@@ -70,17 +70,17 @@ ecf15eee-ddeb-40bc-a63e-a507bc26df52	2022-02-06 23:22:05.039+00	2022-02-06 23:22
 ALTER TABLE public.user_profiles ENABLE TRIGGER ALL;
 
 --
--- Data for Name: boards; Type: TABLE DATA; Schema: public; Owner: postgres
+-- Data for Name: cards; Type: TABLE DATA; Schema: public; Owner: postgres
 --
 
-ALTER TABLE public.boards DISABLE TRIGGER ALL;
+ALTER TABLE public.cards DISABLE TRIGGER ALL;
 
-COPY public.boards (id, created_at, updated_at, user_id) FROM stdin;
+COPY public.cards (id, created_at, updated_at, user_id) FROM stdin;
 6838ecc4-0e47-48f3-8189-b47d60202968	2022-12-30 09:17:11.336075+00	2022-12-30 09:17:11.336075+00	e63385d3-3fc1-450e-8f09-46f35cc9228b
 \.
 
 
-ALTER TABLE public.boards ENABLE TRIGGER ALL;
+ALTER TABLE public.cards ENABLE TRIGGER ALL;
 
 --
 -- Data for Name: completion_states; Type: TABLE DATA; Schema: public; Owner: postgres
@@ -171,12 +171,12 @@ a6d54a99-5973-409f-931b-99017e24878a	2022-12-30 09:17:11.336075+00	2022-12-30 09
 ALTER TABLE public.completions ENABLE TRIGGER ALL;
 
 --
--- Data for Name: boards_completions; Type: TABLE DATA; Schema: public; Owner: postgres
+-- Data for Name: cards_completions; Type: TABLE DATA; Schema: public; Owner: postgres
 --
 
-ALTER TABLE public.boards_completions DISABLE TRIGGER ALL;
+ALTER TABLE public.cards DISABLE TRIGGER ALL;
 
-COPY public.boards_completions (board_id, completion_id) FROM stdin;
+COPY public.cards_completions (card_id, completion_id) FROM stdin;
 6838ecc4-0e47-48f3-8189-b47d60202968	06677335-1e22-4930-8b28-45720a5a2ba0
 6838ecc4-0e47-48f3-8189-b47d60202968	3d89ff20-5c12-4520-aff8-bb9bf9e48bd7
 6838ecc4-0e47-48f3-8189-b47d60202968	f53275a7-6345-4200-af3f-41d7cf5e934d
@@ -204,7 +204,7 @@ COPY public.boards_completions (board_id, completion_id) FROM stdin;
 \.
 
 
-ALTER TABLE public.boards_completions ENABLE TRIGGER ALL;
+ALTER TABLE public.cards ENABLE TRIGGER ALL;
 
 --
 -- Data for Name: games; Type: TABLE DATA; Schema: public; Owner: postgres
@@ -212,7 +212,7 @@ ALTER TABLE public.boards_completions ENABLE TRIGGER ALL;
 
 ALTER TABLE public.games DISABLE TRIGGER ALL;
 
-COPY public.games (id, label, description, board_size, created_at, updated_at, expires_at) FROM stdin;
+COPY public.games (id, label, description, card_size, created_at, updated_at, expires_at) FROM stdin;
 408957cc-06bc-42a6-a005-4d48693ce578	The Running Man	A Bingo Game for Runners	5	2022-01-30 14:27:50+00	2022-10-29 19:17:27.988102+00	2023-10-29 19:17:27.988102+00
 \.
 
@@ -220,17 +220,14 @@ COPY public.games (id, label, description, board_size, created_at, updated_at, e
 ALTER TABLE public.games ENABLE TRIGGER ALL;
 
 --
--- Data for Name: games_boards; Type: TABLE DATA; Schema: public; Owner: postgres
+-- Data for Name: games_cards; Type: TABLE DATA; Schema: public; Owner: postgres
 --
 
-ALTER TABLE public.games_boards DISABLE TRIGGER ALL;
-
-COPY public.games_boards (game_id, board_id) FROM stdin;
-408957cc-06bc-42a6-a005-4d48693ce578	6838ecc4-0e47-48f3-8189-b47d60202968
+COPY public.games_cards (game_id, card_id) FROM stdin;
 \.
 
 
-ALTER TABLE public.games_boards ENABLE TRIGGER ALL;
+ALTER TABLE public.games_cards ENABLE TRIGGER ALL;
 
 --
 -- Data for Name: games_objectives; Type: TABLE DATA; Schema: public; Owner: postgres

@@ -1,12 +1,12 @@
 <script lang="ts">
-	import type { GameBoard } from './db/boards';
+	import type { GameCard } from './db/cards';
 
-	export let board: GameBoard;
+	export let card: GameCard;
 </script>
 
-{#if board && Array.isArray(board.completions)}
+{#if card && Array.isArray(card.completions)}
 	<div class="aspect-square grid gap-1 grid-cols-5 grid-rows-5">
-		{#each board.completions as tile}
+		{#each card.completions as tile}
 			<div
 				class="aspect-square w-3 h-3 shadow-lg text-info-content rounded border-2 border-info"
 				class:bg-success={tile.state === 2}

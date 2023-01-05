@@ -65,14 +65,14 @@ CREATE TRIGGER
     FOR EACH ROW
         EXECUTE PROCEDURE public.create_user_profile();
 
-CREATE TABLE IF NOT EXISTS public.boards
+CREATE TABLE IF NOT EXISTS public.cards
 (
     id uuid NOT NULL DEFAULT uuid_generate_v4(),
     created_at timestamp with time zone NOT NULL DEFAULT now(),
     updated_at timestamp with time zone NOT NULL DEFAULT now(),
     user_id uuid NOT NULL,
-    CONSTRAINT board_pkey PRIMARY KEY (id),
-    CONSTRAINT boards_user_id_fkey FOREIGN KEY (user_id)
+    CONSTRAINT card_pkey PRIMARY KEY (id),
+    CONSTRAINT cards_user_id_fkey FOREIGN KEY (user_id)
         REFERENCES public.user_profiles (id) MATCH SIMPLE
         ON UPDATE NO ACTION
         ON DELETE NO ACTION
@@ -80,21 +80,21 @@ CREATE TABLE IF NOT EXISTS public.boards
 
 TABLESPACE pg_default;
 
-ALTER TABLE IF EXISTS public.boards
+ALTER TABLE IF EXISTS public.cards
     OWNER to postgres;
 
-ALTER TABLE IF EXISTS public.boards
+ALTER TABLE IF EXISTS public.cards
     ENABLE ROW LEVEL SECURITY;
 
-GRANT ALL ON TABLE public.boards TO authenticated;
+GRANT ALL ON TABLE public.cards TO authenticated;
 
-GRANT ALL ON TABLE public.boards TO anon;
+GRANT ALL ON TABLE public.cards TO anon;
 
-GRANT ALL ON TABLE public.boards TO service_role;
+GRANT ALL ON TABLE public.cards TO service_role;
 
-GRANT ALL ON TABLE public.boards TO postgres;
+GRANT ALL ON TABLE public.cards TO postgres;
 
-COMMENT ON TABLE public.boards
+COMMENT ON TABLE public.cards
     IS 'An instance of a game';
 
 
@@ -125,7 +125,7 @@ GRANT ALL ON TABLE public.objectives TO postgres;
 GRANT ALL ON TABLE public.objectives TO service_role;
 
 COMMENT ON TABLE public.objectives
-    IS 'A single item to be used on a board';
+    IS 'A single item to be used on a card';
 
 CREATE TRIGGER handle_updated_at
     BEFORE UPDATE
@@ -167,16 +167,16 @@ GRANT ALL ON TABLE public.completions TO postgres;
 GRANT ALL ON TABLE public.completions TO service_role;
 
 
-CREATE TABLE IF NOT EXISTS public.boards_completions
+CREATE TABLE IF NOT EXISTS public.cards_completions
 (
-    board_id uuid NOT NULL,
+    card_id uuid NOT NULL,
     completion_id uuid NOT NULL,
-    CONSTRAINT boards_completions_pkey PRIMARY KEY (board_id, completion_id),
-    CONSTRAINT boards_completions_board_id_fkey FOREIGN KEY (board_id)
-        REFERENCES public.boards (id) MATCH SIMPLE
+    CONSTRAINT cards_completions_pkey PRIMARY KEY (card_id, completion_id),
+    CONSTRAINT cards_completions_card_id_fkey FOREIGN KEY (card_id)
+        REFERENCES public.cards (id) MATCH SIMPLE
         ON UPDATE NO ACTION
         ON DELETE NO ACTION,
-    CONSTRAINT boards_completions_completion_id_fkey FOREIGN KEY (completion_id)
+    CONSTRAINT cards_completions_completion_id_fkey FOREIGN KEY (completion_id)
         REFERENCES public.completions (id) MATCH SIMPLE
         ON UPDATE NO ACTION
         ON DELETE NO ACTION
@@ -184,23 +184,23 @@ CREATE TABLE IF NOT EXISTS public.boards_completions
 
 TABLESPACE pg_default;
 
-ALTER TABLE IF EXISTS public.boards_completions
+ALTER TABLE IF EXISTS public.cards_completions
     OWNER to postgres;
 
-GRANT ALL ON TABLE public.boards_completions TO authenticated;
+GRANT ALL ON TABLE public.cards_completions TO authenticated;
 
-GRANT ALL ON TABLE public.boards_completions TO anon;
+GRANT ALL ON TABLE public.cards_completions TO anon;
 
-GRANT ALL ON TABLE public.boards_completions TO service_role;
+GRANT ALL ON TABLE public.cards_completions TO service_role;
 
-GRANT ALL ON TABLE public.boards_completions TO postgres;
+GRANT ALL ON TABLE public.cards_completions TO postgres;
 
-COMMENT ON TABLE public.boards_completions
-    IS 'The association of boards to completions';
+COMMENT ON TABLE public.cards_completions
+    IS 'The association of cards to completions';
 
 
 COMMENT ON TABLE public.completions
-    IS 'The state of the objectives for a board';
+    IS 'The state of the objectives for a card';
 
 
 
@@ -209,7 +209,7 @@ CREATE TABLE IF NOT EXISTS public.games
     id uuid NOT NULL DEFAULT uuid_generate_v4(),
     label character varying COLLATE pg_catalog."default" NOT NULL,
     description text COLLATE pg_catalog."default",
-    board_size smallint NOT NULL DEFAULT '5'::smallint,
+    card_size smallint NOT NULL DEFAULT '5'::smallint,
     created_at timestamp with time zone DEFAULT now(),
     updated_at timestamp with time zone DEFAULT now(),
     expires_at timestamp with time zone DEFAULT (now() + '90 days'::interval),
@@ -308,18 +308,18 @@ GRANT ALL ON TABLE public.games_users TO postgres;
 GRANT ALL ON TABLE public.games_users TO service_role;
 
 COMMENT ON TABLE public.games_users
-    IS 'The audience of game. Those that are able to create or view boards. ';
+    IS 'The audience of game. Those that are able to create or view cards. ';
 
-CREATE TABLE IF NOT EXISTS public.games_boards
+CREATE TABLE IF NOT EXISTS public.games_cards
 (
     game_id uuid NOT NULL,
-    board_id uuid NOT NULL,
-    CONSTRAINT games_boards_pkey PRIMARY KEY (game_id, board_id),
-    CONSTRAINT games_boards_board_id_fkey FOREIGN KEY (board_id)
-        REFERENCES public.boards (id) MATCH SIMPLE
+    card_id uuid NOT NULL,
+    CONSTRAINT games_cards_pkey PRIMARY KEY (game_id, card_id),
+    CONSTRAINT games_cards_card_id_fkey FOREIGN KEY (card_id)
+        REFERENCES public.cards (id) MATCH SIMPLE
         ON UPDATE NO ACTION
         ON DELETE NO ACTION,
-    CONSTRAINT games_boards_game_id_fkey FOREIGN KEY (game_id)
+    CONSTRAINT games_cards_game_id_fkey FOREIGN KEY (game_id)
         REFERENCES public.games (id) MATCH SIMPLE
         ON UPDATE NO ACTION
         ON DELETE NO ACTION
@@ -327,22 +327,22 @@ CREATE TABLE IF NOT EXISTS public.games_boards
 
 TABLESPACE pg_default;
 
-ALTER TABLE IF EXISTS public.games_boards
+ALTER TABLE IF EXISTS public.games_cards
     OWNER to postgres;
 
-ALTER TABLE IF EXISTS public.games_boards
+ALTER TABLE IF EXISTS public.games_cards
     ENABLE ROW LEVEL SECURITY;
 
-GRANT ALL ON TABLE public.games_boards TO authenticated;
+GRANT ALL ON TABLE public.games_cards TO authenticated;
 
-GRANT ALL ON TABLE public.games_boards TO anon;
+GRANT ALL ON TABLE public.games_cards TO anon;
 
-GRANT ALL ON TABLE public.games_boards TO service_role;
+GRANT ALL ON TABLE public.games_cards TO service_role;
 
-GRANT ALL ON TABLE public.games_boards TO postgres;
+GRANT ALL ON TABLE public.games_cards TO postgres;
 
-COMMENT ON TABLE public.games_boards
-    IS 'One game can have multiple board instances';
+COMMENT ON TABLE public.games_cards
+    IS 'One game can have multiple card instances';
 
 CREATE TABLE IF NOT EXISTS public.tags
 (
@@ -445,7 +445,7 @@ GRANT EXECUTE ON FUNCTION public.is_member_of(uuid) TO service_role;
 
 -- POLICY
 CREATE POLICY "Enable ALL for users based on user_id"
-    ON public.boards
+    ON public.cards
     AS PERMISSIVE
     FOR ALL
     TO public
@@ -459,9 +459,9 @@ CREATE POLICY "completions - owners can execute ALL "
     TO public
     USING ((EXISTS ( SELECT 1
    FROM completions c,
-    boards b,
-    boards_completions bc
-  WHERE ((c.id = bc.completion_id) AND (b.id = bc.board_id) AND (auth.uid() = b.user_id)))));
+    cards b,
+    cards_completions bc
+  WHERE ((c.id = bc.completion_id) AND (b.id = bc.card_id) AND (auth.uid() = b.user_id)))));
 
 CREATE POLICY "game members can read"
     ON public.games
@@ -471,7 +471,7 @@ CREATE POLICY "game members can read"
     USING (is_member_of(id));
 
 CREATE POLICY "game members can read"
-    ON public.games_boards
+    ON public.games_cards
     AS PERMISSIVE
     FOR SELECT
     TO public

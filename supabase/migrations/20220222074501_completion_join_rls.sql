@@ -1,20 +1,20 @@
 CREATE OR REPLACE FUNCTION public.get_completions_for_user()
-    RETURNS TABLE (board_id uuid, game_id uuid, user_id uuid, completion_id uuid) AS
+    RETURNS TABLE (card_id uuid, game_id uuid, user_id uuid, completion_id uuid) AS
 $BODY$
     SELECT
-        gb.board_id,
+        gb.card_id,
         gb.game_id,
         b.user_id,
         bc.completion_id
     FROM
-        games_boards gb,
-        boards b,
-        boards_completions bc,
+        games_cards gb,
+        cards b,
+        cards_completions bc,
         completions c
     WHERE
         gb.game_id = any(get_user_games()) AND
-        b.id = gb.board_id AND
-        bc.board_id = gb.board_id AND
+        b.id = gb.card_id AND
+        bc.card_id = gb.card_id AND
         c.id = bc.completion_id;
     -- TODO: Jason, I saw you use something like this and was curious
     -- how it differed (or not) in plan from a more structured join syntax

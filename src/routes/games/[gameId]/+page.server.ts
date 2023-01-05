@@ -1,11 +1,11 @@
 import { withAuthenticatedSupabase } from '$lib/db/utils';
-import Boards from '$lib/db/boards';
+import Cards from '$lib/db/cards';
 import type { Actions } from './$types';
 
 export const actions = {
-	createBoard: async (event) =>
+	createCard: async (event) =>
 		withAuthenticatedSupabase(event, async (supabaseClient) => {
-			await Boards.create(supabaseClient, event.params.gameId);
+			await Cards.create(supabaseClient, event.params.gameId);
 			return { success: true };
 		})
 } satisfies Actions;

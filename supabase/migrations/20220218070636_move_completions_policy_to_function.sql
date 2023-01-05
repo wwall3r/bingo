@@ -3,10 +3,10 @@ $BODY$
 SELECT p_user_id IN (
     SELECT b.user_id
     FROM completions c,
-        boards b,
-        boards_completions bc
+        cards b,
+        cards_completions bc
     WHERE c.id = bc.completion_id
-        AND b.id = bc.board_id
+        AND b.id = bc.card_id
 );
 $BODY$ LANGUAGE sql SECURITY DEFINER;
 
