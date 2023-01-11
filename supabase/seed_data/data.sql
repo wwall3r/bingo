@@ -174,7 +174,7 @@ ALTER TABLE public.completions ENABLE TRIGGER ALL;
 -- Data for Name: cards_completions; Type: TABLE DATA; Schema: public; Owner: postgres
 --
 
-ALTER TABLE public.cards DISABLE TRIGGER ALL;
+ALTER TABLE public.cards_completions DISABLE TRIGGER ALL;
 
 COPY public.cards_completions (card_id, completion_id) FROM stdin;
 6838ecc4-0e47-48f3-8189-b47d60202968	06677335-1e22-4930-8b28-45720a5a2ba0
@@ -204,7 +204,7 @@ COPY public.cards_completions (card_id, completion_id) FROM stdin;
 \.
 
 
-ALTER TABLE public.cards ENABLE TRIGGER ALL;
+ALTER TABLE public.cards_completions ENABLE TRIGGER ALL;
 
 --
 -- Data for Name: games; Type: TABLE DATA; Schema: public; Owner: postgres
@@ -222,6 +222,8 @@ ALTER TABLE public.games ENABLE TRIGGER ALL;
 --
 -- Data for Name: games_cards; Type: TABLE DATA; Schema: public; Owner: postgres
 --
+
+ALTER TABLE public.games_cards DISABLE TRIGGER ALL;
 
 COPY public.games_cards (game_id, card_id) FROM stdin;
 \.
@@ -293,7 +295,7 @@ ALTER TABLE public.games_users ENABLE TRIGGER ALL;
 ALTER TABLE public.objective_packs DISABLE TRIGGER ALL;
 
 COPY public.objective_packs (id, created_at, updated_at, label, description, user_id, published_at) FROM stdin;
-a20814dc-69d7-4ebb-88a6-999aad46e9bc	2023-01-01 23:43:32.813868+00	2023-01-01 23:43:32.813868+00	Running	A collection of objectives for a Running bingo game.	\N	2023-01-01 23:43:32.813868+00
+a20814dc-69d7-4ebb-88a6-999aad46e9bc	2023-01-01 23:43:32+00	2023-01-01 23:43:32+00	Running	A collection of objectives for a Running bingo game.	e63385d3-3fc1-450e-8f09-46f35cc9228b	2023-01-01 23:43:32+00
 \.
 
 
