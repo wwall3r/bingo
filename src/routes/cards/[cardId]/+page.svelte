@@ -9,6 +9,7 @@
 
 	$: card = data.card;
 	$: game = data.game;
+	$: wins = data?.wins;
 
 	// TODO: size is computable from card.completions.length, but that mucks
 	// up tailwind. Set manually?
@@ -53,7 +54,9 @@
 				for={completion.id}
 				aria-label={completion.objectives.label}
 				class="btn aspect-square h-auto"
-				class:btn-success={completion.state === 2}
+				class:btn-primary={wins?.has(completion.id)}
+				class:animate-wiggle={wins?.has(completion.id)}
+				class:btn-success={!wins?.has(completion.id) && completion.state === 2}
 				in:fly={getTransitionOptions(completion.id, i)}
 				use:scaledContent
 			>

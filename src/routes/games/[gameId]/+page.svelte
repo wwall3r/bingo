@@ -5,6 +5,8 @@
 
 	export let data: PageData;
 
+	$: wins = data?.wins;
+
 	// TODO: cards/score is a better first UI than players. The list of all players
 	// should be accessible but not prevalent.
 </script>
@@ -27,7 +29,7 @@
 								</h2>
 							</div>
 							<div class="mr-3 absolute top-0 right-0 bottom-0 flex items-center justify-center">
-								<CardMini {card} />
+								<CardMini {card} {wins} />
 							</div>
 						</div>
 					</a>
