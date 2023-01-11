@@ -170,51 +170,7 @@ export const getWinningCompletions = (
 	set: Set<string> = new Set()
 ): Set<string> => {
 	const size = getCardSize(card);
-
-	const completions = card?.completions;
-	if (!Array.isArray(completions)) {
-		console.warn(
-			'Tried to get winning completions on a non-existing card or a card without completions'
-		);
-		return set;
-	}
-
-	if (!size) {
-		console.warn('Tried to get winning completions on a card with a size of 0');
-		return set;
-	}
-
-	if (completions.length !== size * size) {
-		console.warn('Tried to get winning completions on a card which is not square');
-		return set;
-	}
-
-	// iterate all spaces and compute the length of each possible line
-	const lines: Record<string, string[]> = {};
-
-	for (let x = 0; x < size; x++) {
-		for (let y = 0; y < size; y++) {
-			const completion = completions[y * size + x];
-
-			if (completion.state === 2) {
-				// columns
-				addCompletionToLines(lines, 'x' + x, completion.id);
-
-				// rows
-				addCompletionToLines(lines, 'y' + y, completion.id);
-
-				// first diagonal
-				if (x === y) {
-					addCompletionToLines(lines, 'd1', completion.id);
-				}
-
-				// second diagonal
-				if (x === size - y - 1) {
-					addCompletionToLines(lines, 'd2', completion.id);
-				}
-			}
-		}
-	}
+	const lines = computeLines(card, size);
 
 	// now see if any lines have a length equal to the card size
 	return Object.entries(lines).reduce((ids, [, value]) => {
@@ -224,6 +180,71 @@ export const getWinningCompletions = (
 
 		return ids;
 	}, set);
+};
+
+const computeLines = (card: GameCard, size: number = -1): Record<string, string[]> => {
+	if (size < 0) {
+		size = getCardSize(card);
+	}
+
+	const completions = card?.completions;
+
+	// iterate all spaces and compute the length of each possible line
+	const lines: Record<string, string[]> = {};
+
+	if (!validateCard(card, size)) {
+		return lines;
+	}
+
+	if (completions) {
+		for (let x = 0; x < size; x++) {
+			for (let y = 0; y < size; y++) {
+				const completion = completions[y * size + x];
+
+				if (completion.state === 2) {
+					// columns
+					addCompletionToLines(lines, 'x' + x, completion.id);
+
+					// rows
+					addCompletionToLines(lines, 'y' + y, completion.id);
+
+					// first diagonal
+					if (x === y) {
+						addCompletionToLines(lines, 'd1', completion.id);
+					}
+
+					// second diagonal
+					if (x === size - y - 1) {
+						addCompletionToLines(lines, 'd2', completion.id);
+					}
+				}
+			}
+		}
+	}
+
+	return lines;
+};
+
+const validateCard = (card: GameCard, size: number): boolean => {
+	const completions = card?.completions;
+	let error = false;
+
+	if (!Array.isArray(completions)) {
+		console.warn('card is non-existant or contains no completions', card);
+		error = true;
+	}
+
+	if (!size) {
+		console.warn('card size is zero', card);
+		error = true;
+	}
+
+	if (completions?.length !== size * size) {
+		console.warn('card is not square', card);
+		error = true;
+	}
+
+	return error;
 };
 
 const addCompletionToLines = (lines: Record<string, string[]>, line: string, id: string) => {

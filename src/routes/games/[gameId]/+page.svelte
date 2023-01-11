@@ -5,7 +5,7 @@
 
 	export let data: PageData;
 
-	$: wins = data?.wins;
+	$: wins = data.wins;
 
 	// TODO: cards/score is a better first UI than players. The list of all players
 	// should be accessible but not prevalent.
