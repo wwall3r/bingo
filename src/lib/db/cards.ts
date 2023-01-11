@@ -173,9 +173,9 @@ export const getWinningCompletions = (
 	const lines = computeLines(card, size);
 
 	// now see if any lines have a length equal to the card size
-	return Object.entries(lines).reduce((ids, [, value]) => {
-		if (value.length === size) {
-			value.forEach(ids.add, ids);
+	return Object.entries(lines).reduce((ids, [, line]) => {
+		if (line.length === size) {
+			line.forEach(ids.add, ids);
 		}
 
 		return ids;
