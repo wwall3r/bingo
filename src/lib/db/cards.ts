@@ -244,7 +244,7 @@ const validateCard = (card: GameCard, size: number): boolean => {
 		error = true;
 	}
 
-	return error;
+	return !error;
 };
 
 const addCompletionToLines = (lines: Record<string, string[]>, line: string, id: string) => {
