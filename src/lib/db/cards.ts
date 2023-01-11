@@ -126,22 +126,27 @@ type Unarray<T> = T extends Array<infer U> ? U : T;
 export type Completion = Unarray<Exclude<GameCard, null>['completions']>;
 
 const addFreeSpace = (card: GameCard): GameCard => {
-	// TODO: this should really be computed by either game size
-	// or number of card tiles, and should only be done for odd game sizes
-	// (e.g. 4^2 doesn't get a free space, but 5^2 does)
 	const completions = card?.completions;
 
 	if (Array.isArray(completions)) {
-		completions.splice(12, 0, {
-			id: 'free-space',
-			notes: "Don't you like free stuff?",
-			state: 2,
-			objectives: {
-				id: '-1',
-				description: 'Free as in beer',
-				label: 'Free Space'
-			}
-		});
+		let sqRoot = Math.sqrt(completions.length);
+
+		if (!Number.isInteger(sqRoot)) {
+			sqRoot = Math.sqrt(completions.length + 1);
+		}
+
+		if (sqRoot % 2 === 1) {
+			completions.splice(completions.length / 2, 0, {
+				id: 'free-space',
+				notes: "Don't you like free stuff?",
+				state: 2,
+				objectives: {
+					id: '-1',
+					description: 'Free as in beer',
+					label: 'Free Space'
+				}
+			});
+		}
 	}
 
 	return card;
