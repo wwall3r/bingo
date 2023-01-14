@@ -44,8 +44,6 @@ end;
 $BODY$ LANGUAGE plpgsql SECURITY DEFINER;
 
 
-
-
 ALTER FUNCTION public.create_user_profile()
     OWNER TO postgres;
 
@@ -64,6 +62,7 @@ CREATE TRIGGER
     AFTER INSERT ON auth.users
     FOR EACH ROW
         EXECUTE PROCEDURE public.create_user_profile();
+
 
 CREATE TABLE IF NOT EXISTS public.cards
 (
@@ -413,6 +412,106 @@ GRANT ALL ON TABLE public.tags_objectives TO postgres;
 COMMENT ON TABLE public.tags_objectives
     IS 'Associates a tag to an objective';
 
+CREATE TABLE IF NOT EXISTS public.scores
+(
+    card_id uuid NOT NULL,
+    score integer NOT NULL,
+    CONSTRAINT cards_scores_assoc_pkey PRIMARY KEY (card_id),
+    CONSTRAINT cards_scores_assoc_card_id_fkey FOREIGN KEY (card_id)
+        REFERENCES public.cards (id) MATCH SIMPLE
+            ON UPDATE NO ACTION
+            ON DELETE NO ACTION
+)
+
+TABLESPACE pg_default;
+
+ALTER TABLE IF EXISTS public.scores
+    OWNER to postgres;
+
+ALTER TABLE IF EXISTS public.scores
+    ENABLE ROW LEVEL SECURITY;
+
+GRANT ALL ON TABLE public.scores TO authenticated;
+
+GRANT ALL ON TABLE public.scores TO anon;
+
+GRANT ALL ON TABLE public.scores TO service_role;
+
+GRANT ALL ON TABLE public.scores TO postgres;
+
+COMMENT ON TABLE public.scores
+    IS 'associates a score to a card';
+
+CREATE OR REPLACE FUNCTION public.score_card()
+    RETURNS trigger
+AS $BODY$
+declare
+    l_card_id cards.id % TYPE;
+    l_score integer;
+begin
+    SELECT card_id INTO l_card_id FROM cards_completions WHERE completion_id = NEW.id;
+
+    CREATE TEMPORARY TABLE card_grid ON COMMIT DROP AS
+    SELECT row_number() over () - 1 as position, -1 as y, -1 as x, false as d1, false as d2, * FROM (
+        SELECT c.id, c.state
+        FROM completions c, cards_completions cc
+        WHERE cc.completion_id = c.id AND cc.card_id = l_card_id
+        ORDER BY c.id DESC
+    ) t1;
+
+    -- make room for free space
+    UPDATE card_grid SET position = position + 1 WHERE position >= 12;
+
+    -- insert free space
+    INSERT INTO card_grid (position, state)
+    VALUES (12, 2);
+
+    -- update x/y
+    update card_grid set x = mod(position, 5), y = position / 5;
+
+    -- update diagonals
+    update card_grid set d1 = x = y, d2 = x = 5 - y - 1;
+
+    -- row scores
+    CREATE TEMPORARY TABLE card_score ON COMMIT DROP AS
+    SELECT max(count) as score FROM (SELECT x, count(x) FROM card_grid WHERE state = 2 GROUP BY x) tx;
+
+    -- column scores
+    INSERT INTO card_score
+    SELECT max(count) as score FROM (SELECT y, count(y) FROM card_grid WHERE state = 2 GROUP BY y) ty;
+
+    -- first diagonal score
+    INSERT INTO card_score
+    SELECT count(d1) as score FROM card_grid WHERE state = 2 AND d1 = true;
+
+    -- second diagonal score
+    INSERT INTO card_score
+    SELECT count(d2) as score FROM card_grid WHERE state = 2 AND d2 = true;
+
+    SELECT max(score) INTO l_score FROM card_score;
+
+    -- upsert score into scores table
+    INSERT INTO scores (card_id, score)
+    VALUES (l_card_id, l_score)
+    ON CONFLICT (card_id)
+    DO UPDATE
+    SET score = l_score;
+
+    RETURN NEW;
+end;
+$BODY$ LANGUAGE plpgsql SECURITY DEFINER;
+
+GRANT EXECUTE ON FUNCTION public.score_card() TO postgres;
+
+GRANT EXECUTE ON FUNCTION public.score_card() TO PUBLIC;
+
+GRANT EXECUTE ON FUNCTION public.score_card() TO service_role;
+
+CREATE TRIGGER
+    update_score_on_completion
+    AFTER UPDATE ON public.completions
+    FOR EACH ROW
+        EXECUTE PROCEDURE public.score_card();
 
 CREATE OR REPLACE FUNCTION public.is_member_of(
 	_game_id uuid)
@@ -504,8 +603,16 @@ CREATE POLICY "Enable update for authenticated users only"
     FOR UPDATE
     TO public
     WITH CHECK ((auth.role() = 'authenticated'::text));
+
 CREATE POLICY "objectives - authenticated users can read"
     ON public.objectives
+    AS PERMISSIVE
+    FOR SELECT
+    TO public
+    USING ((auth.role() = 'authenticated'::text));
+
+CREATE POLICY "scores - authenticated users can read"
+    ON public.scores
     AS PERMISSIVE
     FOR SELECT
     TO public
