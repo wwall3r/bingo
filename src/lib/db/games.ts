@@ -9,7 +9,20 @@ export default {
 	},
 
 	async one(client: TypedSupabaseClient, gameId: string) {
-		return wrap(client.from(table).select().eq('id', gameId).single());
+		return wrap(
+			client
+				.from(table)
+				.select(
+					`
+					id,
+					label,
+					description,
+					card_size
+				`
+				)
+				.eq('id', gameId)
+				.single()
+		);
 	},
 
 	async members(client: TypedSupabaseClient, gameId: string) {
@@ -24,6 +37,7 @@ export default {
 				`
 				)
 				.eq('games_users.game_id', gameId)
+				.order('display_name', { ascending: true })
 		);
 	}
 };

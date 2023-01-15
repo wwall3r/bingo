@@ -14,9 +14,14 @@ const table = 'cards';
 type ForceNestedJoin = {
 	id: string;
 	user_profiles: { id: string; display_name: string };
+	scores: {
+		score: number;
+	};
+};
+
+type WithCompletions = {
 	completions: {
 		id: string;
-		notes?: string;
 		state: number;
 		objectives: {
 			id: string;
@@ -32,26 +37,19 @@ const allForGame = (client: TypedSupabaseClient, gameId: string) =>
 			.from(table)
 			.select(
 				`
-			id,
-			user_profiles (
 				id,
-				display_name
-			),
-			completions (
-				id,
-				notes,
-				state,
-				objectives (
+				games_cards!inner(card_id),
+				user_profiles (
 					id,
-					label,
-					description
+					display_name
+				),
+				scores (
+					score
 				)
-			),
-			games_cards!inner(game_id)
-		`
+			`
 			)
 			.eq('games_cards.game_id', gameId)
-			.order('id', { foreignTable: 'completions', ascending: false })
+			.order('score', { foreignTable: 'scores', ascending: false })
 			.returns<ForceNestedJoin>()
 	);
 
@@ -66,9 +64,32 @@ const one = (client: TypedSupabaseClient, cardId: string) =>
 					id,
 					display_name
 				),
+				scores (
+					score
+				)
+			`
+			)
+			.eq('id', cardId)
+			.returns<ForceNestedJoin>()
+			.single()
+	);
+
+const oneComplete = (client: TypedSupabaseClient, cardId: string) =>
+	wrap(
+		client
+			.from(table)
+			.select(
+				`
+				id,
+				user_profiles (
+					id,
+					display_name
+				),
+				scores (
+					score
+				),
 				completions (
 					id,
-					notes,
 					state,
 					objectives (
 						id,
@@ -80,18 +101,16 @@ const one = (client: TypedSupabaseClient, cardId: string) =>
 			)
 			.eq('id', cardId)
 			.order('id', { foreignTable: 'completions', ascending: false })
-			.returns<ForceNestedJoin>()
+			.returns<ForceNestedJoin & WithCompletions>()
 			.single()
 	);
 
 export default {
-	async allForGame(client: TypedSupabaseClient, gameId: string) {
-		const tiles = await allForGame(client, gameId);
-		return tiles?.map(addFreeSpace);
-	},
+	allForGame,
+	one,
 
-	async one(client: TypedSupabaseClient, cardId: string) {
-		return addFreeSpace(await one(client, cardId));
+	async oneComplete(client: TypedSupabaseClient, cardId: string) {
+		return addFreeSpace(await oneComplete(client, cardId));
 	},
 
 	async gameFor(client: TypedSupabaseClient, cardId: string) {
@@ -122,7 +141,7 @@ export default {
 	}
 };
 
-export type GameCard = Awaited<ReturnType<typeof one>>;
+export type GameCard = Awaited<ReturnType<typeof oneComplete>>;
 
 type Unarray<T> = T extends Array<infer U> ? U : T;
 export type Completion = Unarray<Exclude<GameCard, null>['completions']>;
@@ -149,7 +168,6 @@ const addFreeSpace = (card: GameCard): GameCard => {
 	if (size % 2 === 1) {
 		card?.completions.splice(card?.completions.length / 2, 0, {
 			id: 'free-space',
-			notes: "Don't you like free stuff?",
 			state: 2,
 			objectives: {
 				id: '-1',
