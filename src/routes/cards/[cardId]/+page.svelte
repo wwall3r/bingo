@@ -39,7 +39,7 @@
 </script>
 
 {#if card && game}
-	<div class="mt-3 mx-1 flex justify-center md:max-w-prose md:mx-auto md:justify-start">
+	<div class="mt-3 mx-1 flex md:max-w-prose md:mx-auto">
 		<h1 class="text-xl font-semibold">
 			<a class="link link-hover link-accent" href={`/games/${game.id}`}>{game.label}</a> &ndash;
 			{card.user_profiles.display_name}
