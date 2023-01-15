@@ -9,7 +9,7 @@
 
 	// This is a progressive enhancement which allows clicking from the whole row
 	const handleCardClick = (evt: Event) => {
-		(evt.target as HTMLElement).querySelector('a')?.click();
+		(evt.currentTarget as HTMLElement).querySelector('a')?.click();
 	};
 </script>
 
