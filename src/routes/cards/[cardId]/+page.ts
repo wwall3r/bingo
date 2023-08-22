@@ -4,7 +4,7 @@ import { withAuthenticatedSupabase } from '$lib/db/utils';
 
 export const load = (async (event) =>
 	withAuthenticatedSupabase(event, async (supabaseClient) => {
-		const card = await Cards.one(supabaseClient, event.params.cardId);
+		const card = await Cards.oneComplete(supabaseClient, event.params.cardId);
 
 		return {
 			game: await Cards.gameFor(supabaseClient, event.params.cardId),
